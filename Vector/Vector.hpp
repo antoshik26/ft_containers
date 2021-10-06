@@ -3,10 +3,10 @@
 #include <memory>
 #include <iostream>
 #include <string>
+#include "IteratorVector.hpp"
 
-template<class T, class Allocator = std::allocator<T>>
-template< class InputIt >
-class Vector : public IteratorVector
+template<typename T, class Allocator = std::allocator<T> >
+class Vector : public IteratorVector<T>
 {
 	private:
 		T* array;
@@ -26,9 +26,9 @@ class Vector : public IteratorVector
 		Vector();
 		Vector(const size_t n);
 		Vector(size_t count, const T& value, const Allocator& alloc);
-		// vector( const vector& other, const Allocator& alloc );
-		// vector( vector&& other );
-		// vector( vector&& other, const Allocator& alloc );
+		// Vector( const vector& other, const Allocator& alloc );
+		// Vector( vector&& other );
+		// Vector( vector&& other, const Allocator& alloc );
 		~Vector();
 
 		// Vector &operator=(const Vector obj);
@@ -46,8 +46,8 @@ class Vector : public IteratorVector
 		// void assign( std::initializer_list<T> ilist );
 		// allocator_type get_allocator() const;
 		
-		iterator begin();
-		iterator end();
+		IteratorVector<T> begin();
+		IteratorVector<T> end();
 		// reverse_iterator rbegin();
 		// reverse_iterator rend();
 

@@ -10,6 +10,7 @@ class IteratorVector
 	private:
 		T* obj;
 	public:
+		IteratorVector();
 		IteratorVector(T* first);
 		~IteratorVector();
 		T &operator+(int n);

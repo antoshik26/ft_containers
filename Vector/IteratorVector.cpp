@@ -1,64 +1,76 @@
 #include "IteratorVector.hpp"
 
-IteratorVector::IteratorVector()
+template <typename T>
+IteratorVector<T>::IteratorVector()
 {
 	obj = NULL;
 }
 
-IteratorVector::IteratorVector(*T first)
+template <typename T>
+IteratorVector<T>::IteratorVector(T* first)
 {
 	obj = first;
 }
 
-IteratorVector::~IteratorVector()
+template <typename T>
+IteratorVector<T>::~IteratorVector()
 {
 }
 
-T &IteratorVector::operator+(int n)
+template <typename T>
+T &IteratorVector<T>::operator+(int n)
 {
 	return *(obj + n);
 }
 
-T &IteratorVector::operator-(int n)
+template <typename T>
+T &IteratorVector<T>::operator-(int n)
 {
 	return *(obj - n);
 }
 
-T &IteratorVector::operator++(int)
+template <typename T>
+T &IteratorVector<T>::operator++(int)
 {
 	return (*obj++);
 }
 
-T &IteratorVector::operator--(int)
+template <typename T>
+T &IteratorVector<T>::operator--(int)
 {
 	return(*obj--);
 }
 
-T &IteratorVector::operator++()
+template <typename T>
+T &IteratorVector<T>::operator++()
 {
 	return (++*obj);
 }
 
-T &IteratorVector::operator--()
+template <typename T>
+T &IteratorVector<T>::operator--()
 {
 	return (--*obj);
 }
 
-bool IteratorVector::operator!=(const IteratorVector &it)
+template <typename T>
+bool IteratorVector<T>::operator!=(const IteratorVector &it)
 {
 	if (obj != it)
 		return(true);
 	return(false);
 }
 
-bool IteratorVector::operator==(const IteratorVector &it)
+template <typename T>
+bool IteratorVector<T>::operator==(const IteratorVector &it)
 {
-	if (obj == if)
+	if (obj == it)
 		return(true);
 	return(false);
 }
 
-T &IteratorVector::operator*()
+template <typename T>
+T &IteratorVector<T>::operator*()
 {
 	return(*obj);
 }
