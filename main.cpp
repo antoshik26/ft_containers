@@ -1,4 +1,8 @@
-#include "Map.hpp"
-#include "Stack.hpp"
-#include "Vector.hpp"
+// #include "Map.hpp"
+// #include "Stack.hpp"
+// #include "Vector.hpp"
 
+int main()
+{
+	return(0);
+}
