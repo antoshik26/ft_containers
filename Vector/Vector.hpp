@@ -10,7 +10,7 @@ class Vector : public IteratorVector<T>
 {
 	private:
 		T* array;
-		const Allocator *_alloc;
+		Allocator _alloc;
 		size_t _n;
 		class ExceptionFirst : public std::exception
 		{
@@ -24,11 +24,11 @@ class Vector : public IteratorVector<T>
 		};
 	public:
 		Vector();
-		Vector(const size_t n);
-		Vector(size_t count, const T& value, const Allocator& alloc);
-		// Vector( const vector& other, const Allocator& alloc );
-		// Vector( vector&& other );
-		// Vector( vector&& other, const Allocator& alloc );
+		explicit Vector(const Allocator& alloc = Allocator());
+		explicit Vector(size_t count, const T& value = T(), const Allocator& alloc = Allocator());
+		template< class InputIt >
+		Vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
+		Vector( const Vector& other );
 		~Vector();
 
 		// Vector &operator=(const Vector obj);

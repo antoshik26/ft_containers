@@ -1,28 +1,56 @@
 #include "Vector.hpp"
 #include "IteratorVector.hpp"
 
-template<typename T>
-Vector<T>::Vector()
+template <typename T, class Allocator>
+Vector<T, Allocator>::Vector()
 {
-
+	_n = 0;
+	_alloc = Allocator(); 	
+	array = _alloc.allocate(_n);
 }
 
-// Vector::Vector(const Allocator& alloc);
+template <typename T, class Allocator>
+Vector<T, Allocator>::Vector( const Allocator& alloc)
+{
+	alloc = std::allocator<T>();
+	_n = 0;
+	_alloc = alloc;
+	array = _alloc.allocate(_n);
+}
+
+template <typename T, class Allocator>
+Vector<T, Allocator>::Vector(std::size_t count, const T& value, const Allocator& alloc)
+{
+	int i = 0;
+
+	_n = count;
+	_alloc = alloc;
+	array = _alloc.allocate(_n);
+	while (i < _n)
+	{
+		array[i] = value[i]; //не глубокое копирование
+		i++;
+	}
+}
+
+// template< class InputIt >
+// template <typename T, class Allocator>
+// Vector<T, Allocator>::Vector(InputIt first, InputIt last, const Allocator& alloc = Allocator())
 // {
-// 	_alloc = alloc;
+
 // }
 
-// Vector(std::size_t count, const T& value, const Allocator& alloc)
+// template <typename T, class Allocator>
+// Vector<T, Allocator>Vector( const Vector& other )
 // {
-// 	_n = count;
-// 	T = value;
-// 	_alloc = alloc;
+	
 // }
 
-// Vector::~Vector()
-// {
-// 	_alloc.deallocate(T, _alloc); 
-// }
+template <typename T, class Allocator>
+Vector<T, Allocator>::~Vector()
+{
+	_alloc.deallocate(array, _alloc); 
+}
 
 // IteratorVector Vector::begin()
 // {

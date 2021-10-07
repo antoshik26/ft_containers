@@ -1,6 +1,6 @@
 NAME = ft_containers
 CC = clang++
-FLAGS = -Wall -Wextra -Werror -std=c++98.
+FLAGS = -Wall -Wextra -Werror -std=c++98
 INCLUDE = -I Vector Stack Map
 MAP  = ./MAP
 STACK = ./Stack
