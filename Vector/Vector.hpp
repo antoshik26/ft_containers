@@ -225,12 +225,13 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 		{
 			for(size_t i = 0; i < _n; i++)
 			{
-				array[i] = 0;
+				_alloc.destroy(&array[i]);
 			}
+			_n = 0;
 		}
 
-		// iterator insert( iterator pos, const T& value );
-		// iterator insert( const_iterator pos, T&& value );
+		IteratorVector<T>  insert( IteratorVector<T> pos, const T& value );
+		// IteratorVector<T>  insert( const_iterator pos, T&& value );
 		// void insert( iterator pos, size_type count, const T& value );
 		// void insert( iterator pos, InputIt first, InputIt last );
 		// constexpr iterator insert( const_iterator pos, InputIt first, InputIt last );
@@ -266,7 +267,7 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 					throw Vector::ExceptionPushBack();
 				else
 				{
-					array[_n] = NULL;
+					_alloc.destroy(array[_n]);
 					_n--;					
 				}
 			}
@@ -278,7 +279,10 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 
 		// void resize( size_type count );
 		// void resize( size_type count, T value = T() );
-		// void swap( vector& other );
+		// void swap( vector& other )
+		// {
+
+		// }
 
 		void realocateVec(size_t new_size)
 		{

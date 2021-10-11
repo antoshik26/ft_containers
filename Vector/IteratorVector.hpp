@@ -10,9 +10,14 @@ class IteratorVector
 	private:
 		T* obj;
 	public:
-		IteratorVector();
+		IteratorVector()
+		{
+			obj = NULL;
+		}
 		IteratorVector(T* first);
-		~IteratorVector();
+		~IteratorVector()
+		{
+		}
 		T &operator+(int n);
 		T &operator-(int n);
 		T &operator++(int);

@@ -1,10 +1,10 @@
 #include "IteratorVector.hpp"
 
-template <typename T>
-IteratorVector<T>::IteratorVector()
-{
-	obj = NULL;
-}
+// template <typename T>
+// IteratorVector<T>::IteratorVector()
+// {
+// 	obj = NULL;
+// }
 
 template <typename T>
 IteratorVector<T>::IteratorVector(T* first)
@@ -12,10 +12,10 @@ IteratorVector<T>::IteratorVector(T* first)
 	obj = first;
 }
 
-template <typename T>
-IteratorVector<T>::~IteratorVector()
-{
-}
+// template <typename T>
+// IteratorVector<T>::~IteratorVector()
+// {
+// }
 
 template <typename T>
 T &IteratorVector<T>::operator+(int n)

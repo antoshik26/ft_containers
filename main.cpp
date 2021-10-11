@@ -6,8 +6,11 @@ int main()
 {
 	try
 	{
+		
 		size_t i = 0;
 		Vector<int> a(10);
+		IteratorVector<int> c;
+		IteratorVector<int> b;
 		// std::cout << a.max_size() << std::endl;
 		a.push_back(15);
 		a.push_back(12);
