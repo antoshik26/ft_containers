@@ -56,14 +56,14 @@ class ReversIteratorVector
 
 		bool operator!=(const ReversIteratorVector &it)
 		{
-			if (obj != it)
+			if (obj != it.obj)
 				return(true);
 			return(false);
 		}
 
 		bool operator==(const ReversIteratorVector &it)
 		{
-			if (obj == it)
+			if (obj == it.obj)
 				return(true);
 			return(false);
 		}

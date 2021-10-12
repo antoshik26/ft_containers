@@ -89,20 +89,65 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			_alloc.deallocate(array, _size_alloc); 
 		}
 
-		// Vector &operator=(const Vector obj);
-		// Vector &operator=( vector&& other );
-		// Vector &operator=( std::initializer_list<T> ilist );
-		// bool &operator!=(const Vector obj1, const Vector obj2);
-		// bool &operator==(const Vector obj1, const Vector obj2);
-		// bool &operator<(const Vector obj1, const Vector obj2);
-		// bool &operator>(const Vector obj1, const Vector obj2);
-		// bool &operator<=(const Vector obj1, const Vector obj2);
-		// bool &operator>=(const Vector obj1, const Vector obj2);
+		Vector &operator=(const Vector obj)
+		{
+			_alloc = obj._alloc;
+			_size_alloc = obj._size_alloc;
+			_n = obj._n;
+			array = _alloc.allocate(_size_alloc);
+			for (size_t i = 0; i < _n; i++)
+			{
+    			_alloc.construct(&array[i]);
+				array[i] = obj.get_data(i);
+			}
+			return (*this);
+		}
 
-		// void assign( size_type count, const T& value );
-		// void assign( InputIt first, InputIt last );
-		// void assign( std::initializer_list<T> ilist );
-		// allocator_type get_allocator() const;
+		T get_data(size_t i)
+		{
+			return (array[i]);
+		}
+
+		// friends bool &operator!=(const Vector obj1, const Vector obj2)
+		// {
+
+		// }
+
+		// friends bool &operator==(const Vector obj1, const Vector obj2)
+		// {
+
+		// }
+
+		// friends bool &operator<(const Vector obj1, const Vector obj2)
+		// {
+
+		// }
+
+		// friends bool &operator>(const Vector obj1, const Vector obj2)
+		// {
+
+		// }
+
+		// friends bool &operator<=(const Vector obj1, const Vector obj2)
+		// {
+
+		// }
+
+		// friends bool &operator>=(const Vector obj1, const Vector obj2)
+		// {
+
+		// }
+
+		// void assign( size_type count, const T& value )
+		// {
+
+		// }
+
+		// template< class InputIt >
+		// void assign( InputIt first, InputIt last )
+		// {
+
+		// }
 		
 		IteratorVector<T> begin()
 		{
@@ -200,26 +245,40 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			}				
 		}
 
-		// size_t capacity() const
-		// {
+		size_t capacity() const
+		{
+			return (_size_alloc);
+		}
 
-		// }
+		bool empty() const
+		{
+			if (_n == 0)
+				return (true);
+			else
+				return (false);
+		}
 
-		// bool empty() const
-		// {
-
-		// }
-
-		// void resize( size_type count )
-		// {
-
-		// }
-		// void resize( size_type count, T value = T() ); ?
-
-		// void shrink_to_fit()
-		// {
-
-		// }
+		void resize(size_t count)
+		{
+			T* new_vec = _alloc.allocate(count);
+			for (size_t i = 0; i < _n; ++i)
+                    _alloc.construct(&new_vec[i], array[i]);
+			realocateVec(count);
+			if (count < _n)
+				_n = count;
+			for (size_t i = 0; i < _n; i++)
+				 _alloc.construct(array[i], &new_vec[i]);
+		}
+		
+		void resize(size_t count, T value = T())
+		{
+			if (count > _size_alloc)
+                    realocateVec(count);
+                while (count > _n)
+                    push_back(value);
+                while (count < _n)
+                    pop_back();
+		}
 
 		void clear()
 		{
@@ -230,19 +289,47 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			_n = 0;
 		}
 
-		IteratorVector<T>  insert(IteratorVector<T> pos, const T& value)
-		{
+		// IteratorVector<T>  insert(IteratorVector<T> pos, const T& value)
+		// {
+			
+		// }
 
+		void insert(IteratorVector<T> pos, size_t count, const T& value )
+		{
+			size_t i = pos - begin();
+			// size_t k = end() - pos;
+			if (static_cast<size_t>(pos + count) > _size_alloc)
+				realocateVec(pos + count);
+			IteratorVector<T> new_pos(&array[i]);
+			for (size_t j = 0; j < pos - end(); j--)
+			{
+				_alloc.construct(&array[j + 1], array[j]);
+				_alloc.destroy(&array[j]);
+				// array[j] = array[j + 1];
+			}
+			// (void)value;
+			for (size_t j = 0; j < count; j++)
+			{
+				_alloc.construct(&array[new_pos + j], value);
+				_n++;
+			}	
 		}
-		// IteratorVector<T>  insert( const_iterator pos, T&& value );
-		// void insert( iterator pos, size_type count, const T& value );
-		// void insert( iterator pos, InputIt first, InputIt last );
-		// constexpr iterator insert( const_iterator pos, InputIt first, InputIt last );
-		// iterator insert( const_iterator pos, std::initializer_list<T> ilist );
-		// iterator emplace( const_iterator pos, Args&&... args );
-		// iterator erase( iterator pos );
-		// iterator erase( iterator first, iterator last );
-		// void emplace_back( Args&&... args );
+
+		// template< class InputIt >
+		// void insert( iterator pos, InputIt first, InputIt last )
+		// {
+
+		// }
+
+		// iterator erase( iterator pos )
+		// {
+
+		// }
+
+		// iterator erase( iterator first, iterator last )
+		// {
+
+		// }
 
 		void push_back( const T& value )
 		{
@@ -280,9 +367,7 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			}
 		}
 
-		// void resize( size_type count );
-		// void resize( size_type count, T value = T() );
-		// void swap( vector& other )
+		// void swap(Vector& other)
 		// {
 
 		// }
@@ -292,7 +377,6 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			T* new_vec = _alloc.allocate(new_size);
 			for (size_t i = 0; i < new_size; i++)
 				_alloc.construct(&new_vec[i], array[i]);
-			// _alloc.deallocate(array, _size_alloc);
 			this->~Vector();
 			_size_alloc = new_size;
 			array = new_vec;
