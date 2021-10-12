@@ -301,18 +301,35 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			if (static_cast<size_t>(pos + count) > _size_alloc)
 				realocateVec(pos + count);
 			IteratorVector<T> new_pos(&array[i]);
-			for (size_t j = 0; j < pos - end(); j--)
+			std::cout << i << std::endl;
+			for (size_t j = (_n - 1); j > i - 1 ; j--)
 			{
-				_alloc.construct(&array[j + 1], array[j]);
+
+				_alloc.construct(&array[j + count], array[j]);
+				std::cout << array[j + count] << std::endl;
+				std::cout << j + count << std::endl;
 				_alloc.destroy(&array[j]);
-				// array[j] = array[j + 1];
 			}
+			// size_t z = 0;
+			// while (z < _n + 5)
+			// {
+			// 	std::cout << array[z] << " ";
+			// 	z++;
+			// }
+			// std::cout << std::endl;
 			// (void)value;
 			for (size_t j = 0; j < count; j++)
 			{
-				_alloc.construct(&array[new_pos + j], value);
+				_alloc.construct(&array[i + j], value);
 				_n++;
-			}	
+			}
+			// z = 0;
+			// while (z < _n + 5)
+			// {
+			// 	std::cout << array[z] << " ";
+			// 	z++;
+			// }
+			// std::cout << std::endl;
 		}
 
 		// template< class InputIt >

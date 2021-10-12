@@ -38,12 +38,14 @@ int main()
 		const int d[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 		c = a.begin();
 		c++;
-		a.insert(c, 1, d[0]);
+		a.insert(c, 2, d[0]);
 		std::cout << "Avter insert ";
-		while(c != b)
+		i = 0;
+		std::cout <<  a.size() <<std::endl;
+		while(i < a.size())
 		{
-			std::cout << *c << " ";
-			c++;
+			std::cout << a[i] << " ";
+			i++;
 		}
 		std::cout << std::endl;
 		a.clear();
