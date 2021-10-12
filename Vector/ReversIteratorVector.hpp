@@ -10,19 +10,68 @@ class ReversIteratorVector
 	private:
 		T* obj;
 	public:
-		ReversIteratorVector();
-		ReversIteratorVector(T* first);
-		~ReversIteratorVector();
-		T &operator+(int n);
-		T &operator-(int n);
-		T &operator++(int);
-		T &operator--(int);
-		T &operator++();
-		T &operator--();
+		ReversIteratorVector()
+		{
+			obj = NULL;
+		}
 
-		bool operator!=(const ReversIteratorVector &it);
-		bool operator==(const ReversIteratorVector &it);
-		T &operator*();
+		ReversIteratorVector(T* first)
+		{
+			obj = first;
+		}
+
+		~ReversIteratorVector()
+		{
+		}
+		
+		T &operator+(int n)
+		{
+			return *(obj + n);
+		}
+		
+		T &operator-(int n)
+		{
+			return *(obj - n);
+		}
+		
+		T &operator++(int)
+		{
+			return (*obj++);
+		}
+		
+		T &operator--(int)
+		{
+			return(*obj--);
+		}
+		
+		T &operator++()
+		{
+			return (++*obj);
+		}
+		
+		T &operator--()
+		{
+			return (--*obj);
+		}
+
+		bool operator!=(const ReversIteratorVector &it)
+		{
+			if (obj != it)
+				return(true);
+			return(false);
+		}
+
+		bool operator==(const ReversIteratorVector &it)
+		{
+			if (obj == it)
+				return(true);
+			return(false);
+		}
+
+		T &operator*()
+		{
+			return(*obj);
+		}
 
 };
 

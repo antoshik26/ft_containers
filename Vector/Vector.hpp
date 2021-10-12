@@ -230,7 +230,10 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			_n = 0;
 		}
 
-		IteratorVector<T>  insert( IteratorVector<T> pos, const T& value );
+		IteratorVector<T>  insert(IteratorVector<T> pos, const T& value)
+		{
+
+		}
 		// IteratorVector<T>  insert( const_iterator pos, T&& value );
 		// void insert( iterator pos, size_type count, const T& value );
 		// void insert( iterator pos, InputIt first, InputIt last );

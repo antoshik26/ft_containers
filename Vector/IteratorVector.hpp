@@ -14,20 +14,64 @@ class IteratorVector
 		{
 			obj = NULL;
 		}
-		IteratorVector(T* first);
+
+		IteratorVector(T* first)
+		{
+			obj = first;
+		}
+
 		~IteratorVector()
 		{
 		}
-		T &operator+(int n);
-		T &operator-(int n);
-		T &operator++(int);
-		T &operator--(int);
-		T &operator++();
-		T &operator--();
 
-		bool operator!=(const IteratorVector &it);
-		bool operator==(const IteratorVector &it);
-		T &operator*();
+		T &operator+(int n)
+		{
+			return *(obj + n);
+		}
+
+		T &operator-(int n)
+		{
+			return *(obj - n);
+		}
+
+		T &operator++(int)
+		{
+			return (*obj++);
+		}
+
+		T &operator--(int)
+		{
+			return(*obj--);
+		}
+
+		T &operator++()
+		{
+			return (++*obj);
+		}
+
+		T &operator--()
+		{
+			return (--*obj);
+		}
+
+		bool operator!=(const IteratorVector &it)
+		{
+			if (obj != it)
+				return(true);
+			return(false);
+		}
+
+		bool operator==(const IteratorVector &it)
+		{
+			if (obj == it)
+				return(true);
+			return(false);
+		}
+
+		T &operator*()
+		{
+			return(*obj);
+		}
 };
 
 #endif
