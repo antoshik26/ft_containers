@@ -108,46 +108,109 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			return (array[i]);
 		}
 
-		// friends bool &operator!=(const Vector obj1, const Vector obj2)
-		// {
+		friend bool operator!=(const Vector obj1, const Vector obj2)
+		{
+			if (obj1._n != obj2._n)
+				return (true);
+			for (size_t i = 0; i < obj1._n; i++)
+			{
+				if (obj1.array[i] != obj2.array[i])
+					return (true);
+			}
+			return (false);
+		}
 
-		// }
+		friend bool operator==(const Vector obj1, const Vector obj2)
+		{
+			if (obj1._n != obj2._n)
+				return (false);
+			for (size_t i = 0; i < obj1._n; i++)
+			{
+				if (obj1.array[i] != obj2.array[i])
+					return (false);
+			}
+			return (true); 
+		}
 
-		// friends bool &operator==(const Vector obj1, const Vector obj2)
-		// {
+		friend bool operator<(const Vector obj1, const Vector obj2)
+		{
+			if (obj1._n < obj2._n)
+				return (true);
+			if (obj1._n > obj2._n)
+				return (false);
+			for (size_t i = 0; i < obj1._n; i++)
+			{
+				if (obj1.array[i] > obj2.array[i])
+					return (false);
+			}
+			return (true);
+		}
 
-		// }
+		friend bool operator>(const Vector obj1, const Vector obj2)
+		{
+			if (obj1._n > obj2._n)
+				return (true);
+			if (obj1._n < obj2._n)
+				return (false);
+			for (size_t i = 0; i < obj1._n; i++)
+			{
+				if (obj1.array[i] < obj2.array[i])
+					return (false);
+			}
+			return (true);
+		}
 
-		// friends bool &operator<(const Vector obj1, const Vector obj2)
-		// {
+		friend bool operator<=(const Vector obj1, const Vector obj2)
+		{
+			if (obj1._n < obj2._n)
+				return (true);
+			if (obj1._n > obj2._n)
+				return (false);
+			for (size_t i = 0; i < obj1._n; i++)
+			{
+				if (obj1.array[i] > obj2.array[i])
+					return (false);
+			}
+			return (true);
+		}
 
-		// }
+		friend bool operator>=(const Vector obj1, const Vector obj2)
+		{
+			if (obj1._n > obj1._n)
+				return (true);
+			if (obj1._n < obj2._n)
+				return (false);
+			for (size_t i = 0; i < obj2._n; i++)
+			{
+				if (obj1.array[i] < obj2.array[i])
+					return (false);
+			}
+			return (true);
+		}
 
-		// friends bool &operator>(const Vector obj1, const Vector obj2)
-		// {
+		void assign(size_t count, const T& value )
+		{
+			clear();
+			if (_size_alloc < count)
+				realocateVec(count);
+			for (size_t i = 0; i < count; i++)
+				_alloc.construct(value);
+			_n = count;
+		}
 
-		// }
-
-		// friends bool &operator<=(const Vector obj1, const Vector obj2)
-		// {
-
-		// }
-
-		// friends bool &operator>=(const Vector obj1, const Vector obj2)
-		// {
-
-		// }
-
-		// void assign( size_type count, const T& value )
-		// {
-
-		// }
-
-		// template< class InputIt >
-		// void assign( InputIt first, InputIt last )
-		// {
-
-		// }
+		template< class InputIt >
+		void assign( InputIt first, InputIt last )
+		{
+			clear();
+			size_t count = first - last;
+			if (_size_alloc < count)
+				realocateVec(count);
+			for (size_t i = 0; i < count; i++)
+			{
+				_alloc.construct(*first);
+				first++;
+			} 
+		}
 		
 		IteratorVector<T> begin()
 		{
@@ -289,25 +352,33 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			_n = 0;
 		}
 
-		// IteratorVector<T>  insert(IteratorVector<T> pos, const T& value)
-		// {
-			
-		// }
+		IteratorVector<T>  insert(IteratorVector<T> pos, const T& value) //проверить
+		{
+			size_t i = pos - begin();
+			if ((_n + 1) > _size_alloc)
+				realocateVec(_n + 1);
+			for (size_t j = (_n - 1); j > i - 1; j--)
+			{
+				_alloc.construct(&array[j + 1], array[j]);
+				_alloc.destroy(&array[j]);
+			}
+			_alloc.construct(array[i] + 1, value);
+		}
 
 		void insert(IteratorVector<T> pos, size_t count, const T& value )
 		{
 			size_t i = pos - begin();
 			// size_t k = end() - pos;
-			if (static_cast<size_t>(pos + count) > _size_alloc)
-				realocateVec(pos + count);
-			IteratorVector<T> new_pos(&array[i]);
-			std::cout << i << std::endl;
+			if (static_cast<size_t>(_n + count) > _size_alloc)
+				realocateVec(_n + count);
+			// IteratorVector<T> new_pos(&array[i]);
+			// std::cout << i << std::endl;
 			for (size_t j = (_n - 1); j > i - 1 ; j--)
 			{
 
 				_alloc.construct(&array[j + count], array[j]);
-				std::cout << array[j + count] << std::endl;
-				std::cout << j + count << std::endl;
+				// std::cout << array[j + count] << std::endl;
+				// std::cout << j + count << std::endl;
 				_alloc.destroy(&array[j]);
 			}
 			// size_t z = 0;
@@ -332,21 +403,51 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			// std::cout << std::endl;
 		}
 
-		// template< class InputIt >
-		// void insert( iterator pos, InputIt first, InputIt last )
-		// {
+		template< class InputIt >
+		void insert( InputIt pos, InputIt first, InputIt last ) //проверить
+		{
+			size_t i = pos - begin();
+			size_t count = last - first;
+			if ((_n + count) < _size_alloc)
+				realocateVec(_n + count);
+			for (size_t j = (_n - 1); j > i - 1; j--)
+			{
+				_alloc.construct(&array[j + count], array[j]);
+				_alloc.destroy(&array[j]);
+			}
+			for (size_t j = 0; j < count; j++)
+			{
+				_alloc.construct(array[j + i], &(*first));
+				first++;
+			}
+			_n = _n + count;
+		}
 
-		// }
+		IteratorVector<T> erase(IteratorVector<T> pos) //проверить
+		{
+			size_t k = pos - begin();
+			_n--;
+			_alloc.destroy(array[k]);
+			for (size_t i = k; i < k + (end() - k) - 1; i++)
+			{
+				_alloc.construct(array[i], array[i + 1]);
+				_alloc.destroy(&array[i + 1]);
+			}
+		}
 
-		// iterator erase( iterator pos )
-		// {
-
-		// }
-
-		// iterator erase( iterator first, iterator last )
-		// {
-
-		// }
+		IteratorVector<T> erase(IteratorVector<T> first, IteratorVector<T> last) //проверить
+		{
+			size_t k = first - begin();
+			size_t count = first - last;
+			_n = _n - count;
+			for (size_t i = 0; i < count; i++)
+				_alloc.destroy(array[i]);
+			for (size_t i = k; i < k + (end() - k - count); i++)
+			{
+				_alloc.construct(array[i], array[i + count]);
+				_alloc.destroy(array[i + count]);
+			}
+		}
 
 		void push_back( const T& value )
 		{
@@ -384,10 +485,18 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			}
 		}
 
-		// void swap(Vector& other)
-		// {
+		friend void swap (Vector& x, Vector& y)
+		{
+			x.swap(y);
+		}
 
-		// }
+		template <typename U>
+		friend void swap(U& a, U&b)
+		{
+			U tmp = a;
+			a = b;
+			b = tmp;
+		}
 
 		void realocateVec(size_t new_size)
 		{
