@@ -1,5 +1,5 @@
 // #include "Map.hpp"
-// #include "Stack.hpp"
+#include "./Stack/Stack.hpp"
 #include "./Vector/Vector.hpp"
 
 int main()
