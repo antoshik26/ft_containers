@@ -1,7 +1,7 @@
 #ifndef LESS_HPP
 #define LESS_HPP
 
-template<typename T >
+template<class T >
 struct less
 { 
 	int operator() (const T& obj1, const T& obj2) const

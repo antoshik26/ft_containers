@@ -7,7 +7,7 @@
 #include "IteratorMap.hpp"
 #include "ReversIteratorMap.hpp"
 #include "Less.hpp"
-#include  "Pair.hpp"
+#include "Pair.hpp"
 
 template<
     class Key,
@@ -19,7 +19,7 @@ class Map
 {
 	private:
 		Allocator _alloc;
-		const Compare& _comp;
+	 	Compare _comp;
 		size_t _size_struct;
 		size_t _size_alloc;
 		struct Node_or_leaf_map
