@@ -18,10 +18,10 @@ OBJS = ${SRCS:.cpp=.o}
 all:	${NAME}
 
 ${NAME}:	${OBJS}
-			${CC} ${FLAGS} ${INCLUDE} -o ${NAME} ${OBJS}
+				${CC} -g ${FLAGS} ${INCLUDE} -o ${NAME} ${OBJS}
 
 test:			
-			${CC} ${FLAGS} ${INCLUDE} ${Vector}/IteratorVector.cpp ${Vector}/Vector.cpp main.cpp 
+				${CC} -g main.cpp
 
 clean:
 				-rm -rf ${OBJS}
@@ -32,4 +32,4 @@ fclean:
 re:				fclean all
 
 .PHONY:
-				all clean fclean re
+				all clean fclean re test

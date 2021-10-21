@@ -8,37 +8,96 @@
 template<class T, class Container = Vector<T> >
 class Stack
 {
-	// private:
-	
-	// public:
-	// 	Stack() : Stack(Container()) { }
-	// 	explicit Stack( const Container& cont = Container() )
-	// 	explicit Stack( Container&& cont );
-	// 	Stack( const Stack& other );
-	// 	Stack( Stack&& other );
-	// 	~Stack();
+	private:
+		Container obj;
+	public:
+		// Stack() : Stack(Container()) 
+		// {
+		// }
 
-	// 	Stack& operator=( const Stack& other );
-	// 	Stack& operator=( Stack&& other );
+		explicit Stack( const Container& cont = Container() )
+		{
+			obj = cont;
+		}
 
-	// 	reference top();
-	// 	const_reference top() const;
+		Stack( const Stack& other )
+		{
+			obj = other;
+		}
+
+		~Stack()
+		{	
+		}
+
+		Stack& operator=( const Stack& other )
+		{
+			obj = other;
+		}
+
+		T top()
+		{
+			return (obj.array[obj._n]);
+		}
+
+		T top() const
+		{
+			return (obj.array[obj._n]);
+		}
 		
-	// 	bool empty() const;
-	// 	size_type size() const;
+		bool empty() const
+		{
+			return (obj.empty());
+		}
 
-	// 	void push( const value_type& value );
-	// 	void push( value_type&& value );
-	// 	void pop();
-	// 	// void swap( stack& other ) noexcept(/* see below */);
+		size_t size() const
+		{
+			return (obj.size());
+		}
+
+		void push( const T& value )
+		{
+			obj.push(value);	
+		}
+
+		void pop()
+		{
+			obj.pop();
+		}
+
+		void swap(Stack& other )
+		{
+			obj.swap(other);
+		}
 		
-	// 	bool operator==( const std::stack<T,Container>& lhs, const std::stack<T,Container>& rhs );
-	// 	bool operator!=( const std::stack<T,Container>& lhs, const std::stack<T,Container>& rhs );
-	// 	bool operator<( const std::stack<T,Container>& lhs, const std::stack<T,Container>& rhs );
-	// 	bool operator<=( const std::stack<T,Container>& lhs, const std::stack<T,Container>& rhs );
-	// 	bool operator>( const std::stack<T,Container>& lhs, const std::stack<T,Container>& rhs );
-	// 	bool operator>=( const std::stack<T,Container>& lhs, const std::stack<T,Container>& rhs );
-	// 	std::compare_three_way_result_t<Container> operator<=>( const std::stack<T,Container>& lhs, const std::stack<T,Container>& rhs );
+		friend bool operator==( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
+		{
+			return (lhs.obj == rhs.obj);
+		}
+
+		friend bool operator!=( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
+		{
+			return (lhs.obj != rhs.obj);
+		}
+
+		friend bool operator<( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
+		{
+			return (lhs.obj < rhs.obj);
+		}
+
+		friend bool operator<=( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
+		{
+			return (lhs.obj <= rhs.obj);
+		}
+
+		friend bool operator>( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
+		{
+			return (lhs.obj > rhs.obj);
+		}
+
+		friend bool operator>=( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
+		{
+			return (lhs.obj >= rhs.obj);
+		}
 };
 
 #endif
