@@ -6,7 +6,7 @@
 template <typename A1, typename A2>
 class Pair
 {
-	private:
+	public:
 		A1 first;
 		A2 second;
 	public:
@@ -24,8 +24,8 @@ class Pair
 
 		Pair(const Pair <A1, A2> &elem)
 		{
-			first = copy(elem.first);
-			second = copy(elem.second);
+			first = elem.first;
+			second = elem.second;
 		}
 
 		~Pair()

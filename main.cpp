@@ -73,8 +73,12 @@ int main()
 	{
 		Map<int, int> a;
 		std::map<int, int> b;
+
+		Pair<int, int> c(1, 2);
+		Pair<IteratorMap<int>, bool> ret;
 		std::cout << a.max_size() << std::endl;
 		std::cout << b.max_size() << std::endl;
+		ret = a.insert(c);
 	}
 	catch(std::exception& e)
 	{

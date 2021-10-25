@@ -1,10 +1,10 @@
-#ifndef ITERATORMAP_HPP
-#define ITERATORMAP_HPP
+#ifndef ITERATORREDBLACKMAP_HPP
+#define ITERATORREDBLACKMAP_HPP
 #include <iostream>
 #include <memory>
 
 template<class T>
-class IteratorMap
+class IteratorRedBlackMap
 {
 	private:
 		T* obj;
@@ -22,12 +22,6 @@ class IteratorMap
 		~IteratorMap()
 		{
 		}
-
-		// IteratorMap<T> operator=(T obj)
-		// {
-		// 	this->obj = &obj;
-		// 	return (*this);
-		// }
 
 		// T& operator+(int n)
 		// {

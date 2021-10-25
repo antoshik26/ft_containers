@@ -1,34 +1,27 @@
-#ifndef ITERATORMAP_HPP
-#define ITERATORMAP_HPP
+#ifndef REVERSITERATORREDBLACKMAP_HPP
+#define REVERSITERATORREDBLACKMAP_HPP
 #include <iostream>
 #include <memory>
 
 template<class T>
-class IteratorMap
+class ReversIteratorRedBlackMap
 {
 	private:
 		T* obj;
 	public:
-		IteratorMap()
+		ReversIteratorMap()
 		{
 			obj = NULL;
 		}
 
-		IteratorMap(T* first)
+		ReversIteratorMap(T* first)
 		{
 			obj = first;
 		}
 
-		~IteratorMap()
+		~ReversIteratorMap()
 		{
 		}
-
-		// IteratorMap<T> operator=(T obj)
-		// {
-		// 	this->obj = &obj;
-		// 	return (*this);
-		// }
-
 		// T& operator+(int n)
 		// {
 		// 	return *(obj + n);
@@ -99,5 +92,4 @@ class IteratorMap
 		// 	return(*obj);
 		// }
 };
-
 #endif
