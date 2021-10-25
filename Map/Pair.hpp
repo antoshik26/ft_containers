@@ -21,8 +21,9 @@ class Pair
 			first = v1;
 			second = v2;
 		}
-
-		Pair(const Pair <A1, A2> &elem)
+		
+		template <typename U, typename V>
+		Pair(const Pair <U, V> &elem)
 		{
 			first = elem.first;
 			second = elem.second;
@@ -30,6 +31,16 @@ class Pair
 
 		~Pair()
 		{
+		}
+
+		Pair& operator=(const Pair& assign)
+		{
+			if (this != &assign)
+			{
+				first = assign.first;
+				second = assign.second;
+			}
+			return (*this);
 		}
 		// make_pair
 };

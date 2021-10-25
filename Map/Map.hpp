@@ -23,15 +23,14 @@ template<
     class Key,
     class T,
     class Compare = less<Key>, 
-    class Allocator = std::allocator<std::pair<const Key, T> >
+    class Allocator = std::allocator<Pair</*const*/ Key, T> >
 >
 class Map
 {
-	private:
+	public:
 		struct Node_or_leaf_map
 		{
-			T obj;
-			Key key;
+			Pair</*const*/ Key, T> value;
 			Node_or_leaf_map *right;
 			Node_or_leaf_map *left;
 			Node_or_leaf_map *root;
@@ -67,6 +66,7 @@ class Map
 				}
 		};
 	public:
+		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     IteratorMap;
 		// Map()
 		// {
 			
@@ -77,41 +77,40 @@ class Map
 			_size_alloc = 0;
 			_alloc = alloc;
 			_comp = comp;
+			Node = NULL;
 		}
 		
 		~Map()
 		{
 			Node_or_leaf_map* tmp1;
-			Node_or_leaf_map* tmp2;
+			// Node_or_leaf_map* tmp2;
 
 			tmp1 = Node;
 			if (tmp1 != NULL)
 			{
-				while (tmp1)
-				{
-					while (tmp1) 
-					{
-						tmp2 = tmp1->left;
-						if (tmp2 == NULL)
-							tmp2 = tmp1->right;
-						if (tmp2 == NULL)
-						{
-							// _alloc.destroy(tmp2->obj);
-							// _alloc.destroy(tmp2->key);
-							tmp1 = NULL;
-						}					
-						else
-						{
-							// _alloc.destroy(tmp2->obj);
-							// _alloc.destroy(tmp2->key);
-							tmp2 = NULL;
-						}
-						tmp1 = tmp2;
-					}
-					tmp1 = Node;
-				}
+				// while (tmp1)
+				// {
+				// 	while (tmp1) 
+				// 	{
+				// 		tmp2 = tmp1->left;
+				// 		if (tmp2 == NULL)
+				// 			tmp2 = tmp1->right;
+				// 		if (tmp2 == NULL)
+				// 		{
+				// 			_alloc.destroy(&tmp2->value);
+				// 			tmp1 = NULL;
+				// 		}					
+				// 		else
+				// 		{
+				// 			_alloc.destroy(&tmp2->value);
+				// 			tmp2 = NULL;
+				// 		}
+				// 		tmp1 = tmp2;
+				// 	}
+				// 	tmp1 = Node;
+				// } вечный цикл
 			}	
-			// _alloc.deallocate(Node, _size_struct); 
+			// _alloc.deallocate((Node_or_leaf_map*)Node, _size_struct); 
 		}
 		
 // 		map& operator=( const map& other );
@@ -139,12 +138,12 @@ class Map
 					{
 						tmp2 = tmp1;
 						if (_comp(tmp2->key, key) == 1)
-							tmp1 = tmp2->left;
+							tmp1 = tmp2->right;
 						else
 						{
 							if (_comp(tmp2->key, key) == 0)
 								return (tmp2);
-							tmp1 = tmp2->right;
+							tmp1 = tmp2->left;
 						}
 					}
 					throw Map::ExceptionAt();
@@ -160,13 +159,13 @@ class Map
 		{
 			Node_or_leaf_map tmp1;
 			Node_or_leaf_map tmp2;
-
+			Pair<const Key, T> value(key, 0);
+			
 			tmp1 = Node;
 			if (Node == NULL)
 			{
 				Node = _alloc.allocate(1);
-				_alloc.construct(Node->key, key);
-				_alloc.construct(Node->obj, NULL);
+				_alloc.construct(&Node->value, value);
 				Node->left = NULL;
 				Node->right = NULL;
 				Node->root = NULL;
@@ -188,10 +187,9 @@ class Map
 						tmp1 = tmp2->right;
 					}
 				}
-				*tmp1 = _alloc.allocate(1);
-				_alloc.construct(tmp1->key, key);
-				_alloc.construct(tmp1->obj, NULL);
-				_alloc.construct(tmp1->root, tmp2);
+				*Node = _alloc.allocate(1);
+				_alloc.construct(&Node->value, value);
+				tmp1->root = tmp2;
 				tmp1->left = NULL;
 				tmp1->right = NULL;
 				tmp1->collor = 0; //while brown
@@ -200,14 +198,14 @@ class Map
 			}
 		}
 
-		IteratorMap<T> begin()
+		IteratorMap begin()
 		{
-			Node_or_leaf_map tmp1;
-			Node_or_leaf_map tmp2;
-			IteratorMap<T> it;
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			IteratorMap it;
 
-			tmp1 = *this->Node_or_leaf_map;
-			if (*this->Node_or_leaf_map == NULL)
+			tmp1 = Node;
+			if (Node)
 			{
 				return (it);
 			}
@@ -218,15 +216,16 @@ class Map
 					tmp2 = tmp1;
 					tmp1 = tmp2->left;
 				}
-				return (it(tmp2));
+				IteratorMap it2(tmp1, tmp2, _comp);
+				return (it2);
 			}
 		}
 
-		IteratorMap<T> end()
+		IteratorMap end()
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap<T> it;
+			IteratorMap it;
 
 			tmp1 = Node;
 			if (Node == NULL)
@@ -240,7 +239,8 @@ class Map
 					tmp2 = tmp1;
 					tmp1 = tmp2->right;
 				}
-				return (it(tmp2));
+				IteratorMap it2(tmp1, tmp2, _comp);
+				return (it2);
 			}
 		}
 
@@ -269,25 +269,25 @@ class Map
 
 		// void clear();
 
-		Pair<IteratorMap<T>, bool> insert(/*const*/ Pair</*const*/ Key, T>& value)
+		Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value)
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			Pair<IteratorMap<T>, bool> ret;
-			IteratorMap<T> iteratorNode;
+			Pair<IteratorMap, bool> ret;
+			IteratorMap iteratorNode;
 
 			tmp1 = Node;
 			if (Node == NULL)
 			{
-				// Node = _alloc.allocate(1);
-				// _alloc.construct(Node->key, value.first);
-				// _alloc.construct(Node->obj, value.second);
+				Node = (Node_or_leaf_map*)_alloc.allocate(1);
+				_alloc.construct(&Node->value, value);
 				Node->left = NULL;
 				Node->right = NULL;
 				Node->root = NULL;
 				Node->collor = 0; //while brown
 				// iteratorNode(Node);
-				// ret = std::make_pair(iterator, false);
+				ret.first = iteratorNode;
+				ret.second = true;
 				_size_struct++;
 				return (ret);
 			}
@@ -296,19 +296,18 @@ class Map
 				while (tmp1 != NULL)
 				{
 					tmp2 = tmp1;
-					if (_comp(tmp2->obj, value.second) == 1)
+					if (_comp(tmp2->value.first, value.first) == 1)
 						tmp1 = tmp2->left;
 					else
 					{
-						if (_comp(tmp2->obj, value.second) == 0)
+						if (_comp(tmp2->value.first, value.first) == 0)
 							return (ret); 
 						tmp1 = tmp2->right;
 					}
 				}
-				// tmp1 = _alloc.allocate(1);
-				// _alloc.construct(tmp1->key, value->ket);
-				// _alloc.construct(tmp1->obj, value->T);
-				// _alloc.construct(tmp1->root, tmp2);
+				tmp1 = (Node_or_leaf_map*)_alloc.allocate(1);
+				_alloc.construct(&Node->value, value);
+				tmp1->root = tmp2;
 				tmp1->left = NULL;
 				tmp1->right = NULL;
 				tmp1->collor = 0; //while brown
@@ -337,11 +336,11 @@ class Map
 				while (tmp1 != NULL)
 				{
 					tmp2 = tmp1;
-					if (_comp(tmp2->obj, key) == 1)
+					if (_comp(tmp2->value.first, key) == 1)
 						tmp1 = tmp2->left;
 					else
 					{
-						if (_comp(tmp2->obj, key) == 0)
+						if (_comp(tmp2->value.first, key) == 0)
 							return (1); 
 						tmp1 = tmp2->right;
 					}
@@ -350,31 +349,31 @@ class Map
 			return (0);
 		}
 		
-		IteratorMap<T> find( const Key& key )
+		IteratorMap find( const Key& key )
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap<T> iterator;
+			IteratorMap iteratorNode;
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
-				return (iterator());
+				return (iteratorNode());
 			else
 			{
 				while (tmp1 != NULL)
 				{
 					tmp2 = tmp1;
-					if (_comp(tmp2->obj, key) == 1)
+					if (_comp(tmp2->value.first, key) == 1)
 						tmp1 = tmp2->left;
 					else
 					{
-						if (_comp(tmp2->obj, key) == 0)
-							return (iterator(tmp2)); 
+						if (_comp(tmp2->value.first, key) == 0)
+							return (iteratorNode(tmp2)); 
 						tmp1 = tmp2->right;
 					}
 				}
 			}
-			return (iterator());
+			return (iteratorNode());
 		}
 		
 		// const_iterator find( const Key& key ) const
@@ -382,11 +381,11 @@ class Map
 
 		// }
 
-		Pair<IteratorMap<T>, IteratorMap<T> > equal_range(const Key& key)
+		Pair<IteratorMap, IteratorMap> equal_range(const Key& key)
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap<T> iterator;
+			IteratorMap iterator;
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
@@ -411,11 +410,11 @@ class Map
 
 		// std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
 
-		IteratorMap<T> lower_bound( const Key& key )
+		IteratorMap lower_bound( const Key& key )
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap<T> iterator;
+			IteratorMap iterator;
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
@@ -436,11 +435,11 @@ class Map
 
 		// const_iterator lower_bound( const Key& key ) const;
 
-		IteratorMap<T> upper_bound( const Key& key )
+		IteratorMap upper_bound( const Key& key )
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap<T> iterator;
+			IteratorMap iterator;
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)

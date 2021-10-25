@@ -1,6 +1,9 @@
 #include "./Map/Map.hpp"
 #include "./Stack/Stack.hpp"
 #include "./Vector/Vector.hpp"
+#include "./Map/IteratorMap.hpp"
+#include "./Map/Less.hpp"
+#include "./Map/Pair.hpp"
 #include <map>
 
 // int main()
@@ -74,11 +77,15 @@ int main()
 		Map<int, int> a;
 		std::map<int, int> b;
 
-		Pair<int, int> c(1, 2);
-		Pair<IteratorMap<int>, bool> ret;
+		const Pair</*const*/ int, int> c(1, 2);
+		// Pair<IteratorMap<int, int, less<int>, void*>, bool> ret;
+		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d;
 		std::cout << a.max_size() << std::endl;
 		std::cout << b.max_size() << std::endl;
-		ret = a.insert(c);
+		a.insert(c);
+		d = a.begin();
+		std::cout << a.size() << std::endl;
+		std::cout << a.count(1) << std::endl;
 	}
 	catch(std::exception& e)
 	{

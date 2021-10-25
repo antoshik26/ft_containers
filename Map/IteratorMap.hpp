@@ -2,32 +2,42 @@
 #define ITERATORMAP_HPP
 #include <iostream>
 #include <memory>
+#include "Map.hpp"
 
-template<class T>
+// template<class T>
+template<class Key, class T, class Compare, typename Node_or_leaf_map>
 class IteratorMap
 {
 	private:
-		T* obj;
+		Node_or_leaf_map* _node;
+		Compare _comp;
+		Node_or_leaf_map* _lastElem;
+		// T* obj;
 	public:
-		IteratorMap()
+		IteratorMap(Node_or_leaf_map* node = 0, Node_or_leaf_map* lastElem = 0, const Compare& comp = Compare())
 		{
-			obj = NULL;
+                _node = node;
+				_lastElem = lastElem;
+				_comp = comp;
 		}
 
-		IteratorMap(T* first)
-		{
-			obj = first;
-		}
+		// IteratorMap(Node_or_leaf_map* node, Node_or_leaf_map* lastElem, const Compare& comp)
+		// {
+		// 	_node = node;
+		// 	_lastElem = lastElem;
+		// 	_comp = comp;
+		// }
 
 		~IteratorMap()
 		{
 		}
 
-		// IteratorMap<T> operator=(T obj)
-		// {
-		// 	this->obj = &obj;
-		// 	return (*this);
-		// }
+		IteratorMap operator=(IteratorMap obj)
+		{
+			(void)obj;
+			// this->obj = &obj;
+			return (*this);
+		}
 
 		// T& operator+(int n)
 		// {
