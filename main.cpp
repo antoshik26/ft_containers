@@ -77,12 +77,25 @@ int main()
 		Map<int, int> a;
 		std::map<int, int> b;
 
-		const Pair</*const*/ int, int> c(1, 2);
+		const Pair</*const*/ int, int> c1(4, 1);
+		const Pair</*const*/ int, int> c2(3, 2);
+		const Pair</*const*/ int, int> c3(5, 3);
+		const Pair</*const*/ int, int> c4(2, 4);
+		const Pair</*const*/ int, int> c5(1, 5);
+		const Pair</*const*/ int, int> c6(6, 6);
+		const Pair</*const*/ int, int> c7(7, 7);
 		// Pair<IteratorMap<int, int, less<int>, void*>, bool> ret;
 		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d;
+		
 		std::cout << a.max_size() << std::endl;
 		std::cout << b.max_size() << std::endl;
-		a.insert(c);
+		a.insert(c1);
+		// a.insert(c2);
+		// a.insert(c3);
+		// a.insert(c4);
+		// a.insert(c5);
+		// a.insert(c6);
+		// a.insert(c7);
 		d = a.begin();
 		std::cout << a.size() << std::endl;
 		std::cout << a.count(1) << std::endl;
