@@ -36,9 +36,16 @@ class Map
 			Node_or_leaf_map *root;
 			int collor;
 			
-			Node_or_leaf_map()
+			Node_or_leaf_map(const Pair</*const*/ Key, T>& value, )
 			{
-			} 
+				std::cout << "1" << std::endl;
+			}
+			// Node_or_leaf_map()
+			// {	
+			// }
+			// Node_or_leaf_map()
+			// {	
+			// }
 		};
 		Allocator _alloc;
 	 	Compare _comp;
@@ -87,12 +94,12 @@ class Map
 		
 		~Map()
 		{
-			Node_or_leaf_map* tmp1;
+			// Node_or_leaf_map* tmp1;
 			// Node_or_leaf_map* tmp2;
 
-			tmp1 = Node;
-			if (tmp1 != NULL)
-			{
+			// tmp1 = Node;
+			// if (tmp1 != NULL)
+			// {
 				// while (tmp1)
 				// {
 				// 	while (tmp1) 
@@ -114,7 +121,7 @@ class Map
 				// 	}
 				// 	tmp1 = Node;
 				// } вечный цикл
-			}	
+			// }	
 			// _alloc.deallocate((Node_or_leaf_map*)Node, _size_struct); 
 		}
 		
@@ -279,55 +286,57 @@ class Map
 		Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value)
 		{
 			Node_or_leaf_map* tmp1;
-			Node_or_leaf_map* tmp2;
+			// Node_or_leaf_map* tmp2;
 			Pair<IteratorMap, bool> ret;
 			IteratorMap iteratorNode;
-
+			
+			(void)value;
 			tmp1 = Node;
 			if (Node == NULL)
 			{
 				node_allocator a;
 				// std::allocator<Pair</*const*/ Key, T>::template rebind<Node_or_leaf_map>::other a;
 				Node = (Node_or_leaf_map*)a.allocate(1);
-				a.construct(Node->right);
+				std::cout << "1" << std::endl;
+				a.construct(Node, value, 0, 0, 0, 0);
 				// _alloc.construct(&Node->value, value);
-				_alloc.construct(&Node->value, value);
+				// _alloc.construct(&Node->value, value);
 				// _alloc.construct((void *)&Node->left, NULL);
-				Node->left = 0;
-				Node->right = 0;
-				Node->root = 0;
-				Node->collor = 0; //while brown
+				// Node->left = 0;
+				// Node->right = 0;
+				// Node->root = 0;
+				// Node->collor = 0; //while brown
 				// iteratorNode(Node);
 				ret.first = iteratorNode;
 				ret.second = true;
 				_size_struct++;
 				return (ret);
 			}
-			else
-			{
-				// tmp1->left = Node;
-				while (tmp1 != NULL)
-				{
-					tmp2 = tmp1;
-					if (_comp(tmp2->value.first, value.first) == 1)
-						tmp1 = tmp2->left;
-					else
-					{
-						if (_comp(tmp2->value.first, value.first) == 0)
-							return (ret); 
-						tmp1 = tmp2->right;
-					}
-				}
-				tmp1 = Node;
-				tmp2 = (Node_or_leaf_map*)_alloc.allocate(1);
-				_alloc.construct(&tmp2->value, value);
-				tmp2->root = tmp2;
-				tmp2->left = NULL;
-				tmp2->right = NULL;
-				tmp2->collor = 0; //while brown
-				tmp1 = tmp2;
-				_size_struct++;
-			}
+			// else
+			// {
+			// 	// tmp1->left = Node;
+			// 	while (tmp1 != NULL)
+			// 	{
+			// 		tmp2 = tmp1;
+			// 		if (_comp(tmp2->value.first, value.first) == 1)
+			// 			tmp1 = tmp2->left;
+			// 		else
+			// 		{
+			// 			if (_comp(tmp2->value.first, value.first) == 0)
+			// 				return (ret); 
+			// 			tmp1 = tmp2->right;
+			// 		}
+			// 	}
+			// 	tmp1 = Node;
+			// 	tmp2 = (Node_or_leaf_map*)_alloc.allocate(1);
+			// 	_alloc.construct(&tmp2->value, value);
+			// 	tmp2->root = tmp2;
+			// 	tmp2->left = NULL;
+			// 	tmp2->right = NULL;
+			// 	tmp2->collor = 0; //while brown
+			// 	tmp1 = tmp2;
+			// 	_size_struct++;
+			// }
 			return (ret);
 		}
 

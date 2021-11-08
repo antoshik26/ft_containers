@@ -96,9 +96,9 @@ int main()
 		// a.insert(c5);
 		// a.insert(c6);
 		// a.insert(c7);
-		d = a.begin();
-		std::cout << a.size() << std::endl;
-		std::cout << a.count(1) << std::endl;
+		// d = a.begin();
+		// std::cout << a.size() << std::endl;
+		// std::cout << a.count(1) << std::endl;
 	}
 	catch(std::exception& e)
 	{
