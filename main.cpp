@@ -85,20 +85,26 @@ int main()
 		const Pair</*const*/ int, int> c6(6, 6);
 		const Pair</*const*/ int, int> c7(7, 7);
 		// Pair<IteratorMap<int, int, less<int>, void*>, bool> ret;
-		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d;
+		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d1;
+		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d2;
 		
 		std::cout << a.max_size() << std::endl;
 		std::cout << b.max_size() << std::endl;
 		a.insert(c1);
-		// a.insert(c2);
-		// a.insert(c3);
-		// a.insert(c4);
-		// a.insert(c5);
-		// a.insert(c6);
-		// a.insert(c7);
-		// d = a.begin();
-		// std::cout << a.size() << std::endl;
-		// std::cout << a.count(1) << std::endl;
+		a.insert(c2);
+		a.insert(c3);
+		a.insert(c4);
+		a.insert(c5);
+		a.insert(c6);
+		a.insert(c7);
+		d1 = a.begin();
+		d2 = a.end();
+		// for (int i = 0; d1 != d2; i++, d1++)
+		{
+			std::cout << (*d1).first << " "  << (*d1).second << std::endl;
+		}
+		std::cout << a.size() << std::endl;
+		std::cout << a.count(3) << std::endl;
 	}
 	catch(std::exception& e)
 	{

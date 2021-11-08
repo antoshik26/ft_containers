@@ -36,9 +36,20 @@ class Map
 			Node_or_leaf_map *root;
 			int collor;
 			
-			Node_or_leaf_map(const Pair</*const*/ Key, T>& value, )
+			Node_or_leaf_map(const Pair</*const*/ Key, T>& value/*, Node_or_leaf_map* right, Node_or_leaf_map* left, Node_or_leaf_map* root, int collor*/)
 			{
-				std::cout << "1" << std::endl;
+				// std::cout << "1" << std::endl;
+				this->value = value;
+				// this->right = right;
+				// this->left = left;
+				// this->root = root;
+				// this->collor = collor;
+				// std::cout << "2" << std::endl;
+			}
+			Node_or_leaf_map& operator=(const Node_or_leaf_map& other)
+			{
+				(void)other;
+				std::cout << "3" << std::endl;
 			}
 			// Node_or_leaf_map()
 			// {	
@@ -171,18 +182,29 @@ class Map
 		{
 			Node_or_leaf_map tmp1;
 			Node_or_leaf_map tmp2;
+			node_allocator a;
 			// Pair<const Key, T> value(key, 0);
 			
 			tmp1 = Node;
 			if (Node == NULL)
 			{
-				Node = _alloc.allocate(1);
-				_alloc.construct(&Node->value.first, key);
-				_alloc.construct(&Node->value.second, 0);
-				Node->left = NULL;
-				Node->right = NULL;
-				Node->root = NULL;
-				Node->collor = 0; //while brown
+				// Node = _alloc.allocate(1);
+				// _alloc.construct(&Node->value.first, key);
+				// _alloc.construct(&Node->value.second, 0);
+				// Node->left = NULL;
+				// Node->right = NULL;
+				// Node->root = NULL;
+				// Node->collor = 0; //while brown
+				// _size_struct++;
+				Node = (Node_or_leaf_map*)a.allocate(1);
+				Node->value(key, 0);
+				Node->left = 0;
+				Node->right = 0;
+				Node->root = 0;
+				Node->collor = 0;
+				// iteratorNode(Node);
+				// ret.first = iteratorNode;
+				// ret.second = true;
 				_size_struct++;
 				return(*this);
 			}
@@ -200,15 +222,21 @@ class Map
 						tmp1 = tmp2->right;
 					}
 				}
-				*Node = _alloc.allocate(1);
-				_alloc.construct(&Node->value.first, key);
-				_alloc.construct(&Node->value.second, 0);
-				tmp1->root = tmp2;
-				tmp1->left = NULL;
-				tmp1->right = NULL;
-				tmp1->collor = 0; //while brown
+				Node_or_leaf_map* tmp3;
+				tmp3 = (Node_or_leaf_map*)a.allocate(1);
+				tmp3->value(key, 0);
+				tmp3->root = tmp2;
+				tmp3->left = NULL;
+				tmp3->right = NULL;
+				tmp3->collor = 0; //while brown
+				// Node->left = tmp3;
+				if (_comp(tmp2->value.first, key) == 1)
+					tmp2->left = tmp3;
+				else
+					tmp2->right = tmp3;
+				// tmp2 = tmp3;
 				_size_struct++;
-				return (tmp1);
+				return (tmp3);
 			}
 		}
 
@@ -219,7 +247,7 @@ class Map
 			IteratorMap it;
 
 			tmp1 = Node;
-			if (Node)
+			if (Node == NULL)
 			{
 				return (it);
 			}
@@ -230,7 +258,7 @@ class Map
 					tmp2 = tmp1;
 					tmp1 = tmp2->left;
 				}
-				IteratorMap it2(tmp1, tmp2, _comp);
+				IteratorMap it2(tmp2, tmp2->root, _comp);
 				return (it2);
 			}
 		}
@@ -253,7 +281,7 @@ class Map
 					tmp2 = tmp1;
 					tmp1 = tmp2->right;
 				}
-				IteratorMap it2(tmp1, tmp2, _comp);
+				IteratorMap it2(tmp2, tmp2->root, _comp);
 				return (it2);
 			}
 		}
@@ -286,61 +314,57 @@ class Map
 		Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value)
 		{
 			Node_or_leaf_map* tmp1;
-			// Node_or_leaf_map* tmp2;
+			Node_or_leaf_map* tmp2;
 			Pair<IteratorMap, bool> ret;
 			IteratorMap iteratorNode;
+			node_allocator a;
 			
-			(void)value;
 			tmp1 = Node;
 			if (Node == NULL)
-			{
-				node_allocator a;
-				// std::allocator<Pair</*const*/ Key, T>::template rebind<Node_or_leaf_map>::other a;
+			{	
 				Node = (Node_or_leaf_map*)a.allocate(1);
-				std::cout << "1" << std::endl;
-				a.construct(Node, value, 0, 0, 0, 0);
-				// _alloc.construct(&Node->value, value);
-				// _alloc.construct(&Node->value, value);
-				// _alloc.construct((void *)&Node->left, NULL);
-				// Node->left = 0;
-				// Node->right = 0;
-				// Node->root = 0;
-				// Node->collor = 0; //while brown
+				a.construct(Node, value);
+				Node->left = 0;
+				Node->right = 0;
+				Node->root = 0;
+				Node->collor = 0;
 				// iteratorNode(Node);
 				ret.first = iteratorNode;
 				ret.second = true;
 				_size_struct++;
 				return (ret);
 			}
-			// else
-			// {
-			// 	// tmp1->left = Node;
-			// 	while (tmp1 != NULL)
-			// 	{
-			// 		tmp2 = tmp1;
-			// 		if (_comp(tmp2->value.first, value.first) == 1)
-			// 			tmp1 = tmp2->left;
-			// 		else
-			// 		{
-			// 			if (_comp(tmp2->value.first, value.first) == 0)
-			// 				return (ret); 
-			// 			tmp1 = tmp2->right;
-			// 		}
-			// 	}
-			// 	tmp1 = Node;
-			// 	tmp2 = (Node_or_leaf_map*)_alloc.allocate(1);
-			// 	_alloc.construct(&tmp2->value, value);
-			// 	tmp2->root = tmp2;
-			// 	tmp2->left = NULL;
-			// 	tmp2->right = NULL;
-			// 	tmp2->collor = 0; //while brown
-			// 	tmp1 = tmp2;
-			// 	_size_struct++;
-			// }
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					if (_comp(tmp2->value.first, value.first) == 1)
+						tmp1 = tmp2->left;
+					else
+					{
+						if (_comp(tmp2->value.first, value.first) == 0)
+							return (ret); 
+						tmp1 = tmp2->right;
+					}
+				}
+				Node_or_leaf_map* tmp3;
+				tmp3 = (Node_or_leaf_map*)a.allocate(1);
+				a.construct(tmp3, value);
+				tmp3->root = tmp2;
+				tmp3->left = NULL;
+				tmp3->right = NULL;
+				tmp3->collor = 0; //while brown
+				if (_comp(tmp2->value.first, value.first) == 1)
+					tmp2->left = tmp3;
+				else
+					tmp2->right = tmp3;
+				_size_struct++;
+			}
 			return (ret);
 		}
 
-		// iterator insert( iterator hint, const value_type& value );
+		// IteratorMap insert( IteratorMap hint, const Pair</*const*/ Key, T>& value );
 
 		// 	void erase( iterator pos );
 		// 	void erase( iterator first, iterator last );
@@ -538,6 +562,10 @@ class Map
 		//     }
 		//     print(t->r, ++u);                       //С помощью рекурсии посещаем правое поддерево
 		// }
-		
+// 		func inorderTraversal(x : Node):
+//    			if (x != null)
+//       			inorderTraversal(x.left)
+//       			print x.key
+//       			inorderTraversal(x.right)
 };
 #endif
