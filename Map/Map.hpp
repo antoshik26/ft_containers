@@ -9,16 +9,6 @@
 #include "Less.hpp"
 #include "Pair.hpp"
 
-// struct Node_or_leaf_map
-// {
-// 	T obj;
-// 	Key key;
-// 	Node_or_leaf_map *right;
-// 	Node_or_leaf_map *left;
-// 	Node_or_leaf_map *root;
-// 	int collor;
-// };
-
 template<
     class Key,
     class T,
@@ -51,12 +41,6 @@ class Map
 				(void)other;
 				std::cout << "3" << std::endl;
 			}
-			// Node_or_leaf_map()
-			// {	
-			// }
-			// Node_or_leaf_map()
-			// {	
-			// }
 		};
 		Allocator _alloc;
 	 	Compare _comp;
@@ -89,11 +73,8 @@ class Map
 		};
 	public:
 		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     IteratorMap;
-		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other  node_allocator;
-		// Map()
-		// {
-			
-		// }
+		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other  Node_allocator;
+
 		Map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
 		{
 			_size_struct = 0;
@@ -136,7 +117,51 @@ class Map
 			// _alloc.deallocate((Node_or_leaf_map*)Node, _size_struct); 
 		}
 		
-// 		map& operator=( const map& other );
+		Map& operator=(const Map& other)
+		{
+			Node_allocator alloc_node;
+			Node_or_leaf_map* Copy_Node; 
+			_alloc = other._alloc;
+			_comp = other._comp;
+			_size_struct = other._size_struct;
+			_size_alloc = other._size_alloc;
+
+			(void)alloc_node;
+			(void)Copy_Node;
+			Node_or_leaf_map* lastNode = NULL;
+			Node_or_leaf_map* Node = other.Node;
+			while (Node != NULL)
+			{
+				if (lastNode == Node->root)
+				{
+					if (Node->left != NULL)
+					{
+						lastNode = Node;
+						Node = Node->left;
+						continue;
+					}
+					else
+						lastNode = NULL;
+				}
+				if (lastNode == Node->left)
+				{
+					//создание нового нода
+					if (Node->right != NULL)
+					{
+						lastNode = Node;
+						Node = Node->right;
+						continue;
+					}
+					else
+						lastNode = NULL;
+				}
+				if (lastNode == Node->right)
+				{
+					lastNode = Node;
+					Node = Node->root;
+				}
+			}
+		}
 		
 		Allocator get_allocator() const
 		{
@@ -182,7 +207,7 @@ class Map
 		{
 			Node_or_leaf_map tmp1;
 			Node_or_leaf_map tmp2;
-			node_allocator a;
+			Node_allocator a;
 			// Pair<const Key, T> value(key, 0);
 			
 			tmp1 = Node;
@@ -317,7 +342,7 @@ class Map
 			Node_or_leaf_map* tmp2;
 			Pair<IteratorMap, bool> ret;
 			IteratorMap iteratorNode;
-			node_allocator a;
+			Node_allocator a;
 			
 			tmp1 = Node;
 			if (Node == NULL)
@@ -364,12 +389,27 @@ class Map
 			return (ret);
 		}
 
-		// IteratorMap insert( IteratorMap hint, const Pair</*const*/ Key, T>& value );
+		// IteratorMap insert( IteratorMap hint, const Pair</*const*/ Key, T>& value )
+		// {
 
-		// 	void erase( iterator pos );
-		// 	void erase( iterator first, iterator last );
-		// 	size_t erase( const key_type& key );
-		// 	void swap( map& other );
+		// }
+
+		// void erase(IteratorMap pos )
+		// {
+
+		// }
+
+		// void erase( IteratorMap first, IteratorMap last )
+		// {
+
+		// }
+
+		// size_t erase(const Key& key)
+		// {
+
+		// }
+
+			// void swap( map& other );
 		
 		size_t count( const Key& key ) const
 		{
@@ -397,7 +437,7 @@ class Map
 			return (0);
 		}
 		
-		IteratorMap find( const Key& key )
+		IteratorMap find(const Key& key )
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -405,7 +445,9 @@ class Map
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
+			{
 				return (iteratorNode());
+			}
 			else
 			{
 				while (tmp1 != NULL)
@@ -535,37 +577,8 @@ class Map
 		// template< class Key, class T, class Compare, class Alloc >
 		// bool operator>=( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
 
-		// void push(Key a, Node_or_leaf_map **t)
-		// {
-		//     if ((*t) == NULL)                   //Если дерева не существует
-		//     {
-		//         (*t) = new Node_or_leaf_map;                //Выделяем память
-		//         (*t)->info = a;                 //Кладем в выделенное место аргумент a
-		//         (*t)->l = (*t)->r = NULL;       //Очищаем память для следующего роста
-		//         return;                         //Заложили семечко, выходим
-		//     }
-		//        //Дерево есть
-		//         if (a > (*t)->info) push(a, &(*t)->r); //Если аргумент а больше чем текущий элемент, кладем его вправо
-		//         else push(a, &(*t)->l);         //Иначе кладем его влево
-		// }
+		private:
+
 		
-		// /*ФУНКЦИЯ ОТОБРАЖЕНИЯ ДЕРЕВА НА ЭКРАНЕ*/
-		// void print (Node_or_leaf_map *t, Key u)
-		// {
-		//     if (t == NULL) return;                  //Если дерево пустое, то отображать нечего, выходим
-		//     else //Иначе
-		//     {
-		//         print(t->l, ++u);                   //С помощью рекурсивного посещаем левое поддерево
-		//         for (int i=0; i<u; ++i) std::cout << "|";
-		//         std::cout << t->info << std::endl;            //И показываем элемент
-		//         u--;
-		//     }
-		//     print(t->r, ++u);                       //С помощью рекурсии посещаем правое поддерево
-		// }
-// 		func inorderTraversal(x : Node):
-//    			if (x != null)
-//       			inorderTraversal(x.left)
-//       			print x.key
-//       			inorderTraversal(x.right)
 };
 #endif
