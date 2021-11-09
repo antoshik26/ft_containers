@@ -47,6 +47,7 @@ class Map
 		size_t _size_struct;
 		size_t _size_alloc;
 		Node_or_leaf_map* Node;
+		// Node_allocator _alloc_node;
 		class ExceptionReserve : public std::exception
 		{
 			public:
@@ -86,6 +87,8 @@ class Map
 		
 		~Map()
 		{
+			// clear();
+
 			// Node_or_leaf_map* tmp1;
 			// Node_or_leaf_map* tmp2;
 
@@ -334,7 +337,10 @@ class Map
 			return (max_size);
 		}
 
-		// void clear();
+		void clear()
+		{
+			erase(begin(), end());
+		}
 
 		Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value)
 		{
@@ -394,22 +400,82 @@ class Map
 
 		// }
 
-		// void erase(IteratorMap pos )
-		// {
+		void erase(IteratorMap pos)
+		{
+			Node_allocator _alloc_node;
+			Node_or_leaf_map* tmp;
+			tmp = pos._node->root;
+			if (tmp->right == NULL && tmp->left == NULL) //нет подлистьев
+			{
+				if (tmp->left == pos->_node)
+				{
+					_alloc.destroy(pos->_node);
+					tmp->left = NULL;
+				}
 
-		// }
+				if (tmp->right == pos->node)
+				{
+					_alloc_node.destroy(pos->node);
+					tmp->right = NULL;
+				}
+			}
+			if (tmp->right == NULL || tmp->left == NULL) //есть подлистья
+			{
+				if (tmp->left == NULL)
+				{
+					if (tmp->left == pos->_node)
+					{
+						tmp->left = pos->_node->right;
+					}
+					else
+					{
+						tmp->right = pos->_node->right;
+					}
+					pos->_node->root = tmp;
+				}
+				else
+				{
+					if (tmp->left == pos->_node)
+					{
+						tmp->left = pos->_node->left;
+					}
+					else
+					{
+						tmp->right = pos->_node->left;
+					}
+					pos->_node->root = tmp;
+				}
+			}
+			if (tmp->right != NULL && tmp->left != NULL) //есть два подлиста
+			{
+				Node_or_leaf_map* tmp2 = NULL; //(next)
+				pos->_node->first = tmp->value->first;
+				pos->_node->second = tmp->value->second;
+				if (tmp2->parent->left == tmp2)
+				{
+					tmp2->parent->left == tmp2->right;
+					if (tmp2->right != NULL)
+						tmp2->right->parent = tmp2->parent;
+				}
+				else
+				{
+					tmp2->parent->right = tmp2->right;
+					if (tmp->right != NULL)
+						tmp2->right->parent = tmp2->parent;
+				}
+			}
+		}
 
-		// void erase( IteratorMap first, IteratorMap last )
-		// {
-
-		// }
-
-		// size_t erase(const Key& key)
-		// {
-
-		// }
-
-			// void swap( map& other );
+		void erase( IteratorMap first, IteratorMap last )
+		{
+			while (first != last)
+			{
+				erase(first);
+				first++;
+			}
+		}
+		
+		// void swap( map& other );
 		
 		size_t count( const Key& key ) const
 		{
@@ -578,7 +644,34 @@ class Map
 		// bool operator>=( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
 
 		private:
+			template <typename U>
+            void swap(U& a, U& b)
+            {
+                U tmp = a;
+                a = b;
+                b = tmp;
+            }
 
-		
+			Node_or_leaf_map* searchMaxNode(Node_or_leaf_map *node) const
+            {
+				if (node && node->right)
+					searchMaxNode(node->right);
+				return (node);
+            }
+
+			Node_or_leaf_map* searchMinNode(Node_or_leaf_map *node) const
+            {
+				if (node && node->left)
+					searchMinNode(node->left);
+				return (node);
+            }
+		// Node next(x : Node):
+			// 	if x.right != null
+			// 		return minimum(x.right)
+			// 	y = x.parent
+			// 	while y != null and x == y.right
+			// 		x = y
+			// 		y = y.parent
+			// 	return y
 };
 #endif
