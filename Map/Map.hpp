@@ -74,6 +74,7 @@ class Map
 		};
 	public:
 		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     IteratorMap;
+		typedef ReversIteratorMap<Key, T, Compare, Node_or_leaf_map> ReversIteratorMap;
 		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other  Node_allocator;
 
 		Map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
@@ -272,7 +273,7 @@ class Map
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap it;
+			IteratorMap it = NULL;
 
 			tmp1 = Node;
 			if (Node == NULL)
@@ -295,6 +296,29 @@ class Map
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
+			IteratorMap it = NULL;
+
+			tmp1 = Node;
+			if (Node == NULL)
+			{
+				return (it);
+			}
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					tmp1 = tmp2->right;
+				}
+				IteratorMap it2(tmp2, tmp2->root, _comp);
+				return (it2);
+			}
+		}
+
+		ReversIteratorMap rbegin()
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
 			IteratorMap it;
 
 			tmp1 = Node;
@@ -314,8 +338,28 @@ class Map
 			}
 		}
 
-		// reverse_iterator rbegin();
-		// reverse_iterator rend();
+		ReversIteratorMap rend()
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			IteratorMap it = NULL;
+
+			tmp1 = Node;
+			if (Node == NULL)
+			{
+				return (it);
+			}
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					tmp1 = tmp2->left;
+				}
+				IteratorMap it2(tmp2, tmp2->root, _comp);
+				return (it2);
+			}
+		}
 
 		bool empty() const
 		{
@@ -395,13 +439,13 @@ class Map
 			return (ret);
 		}
 
-		IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value)
+		IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value) //не работает и не заработает
 		{
 			if (hint->node->value->first > value->first)
 			{
 				IteratorMap prev(hint);
 				--prev;
-				while (prev != end() && prev->node->value->first >= val->first)
+				while (prev != end() && prev->node->value->first >= value->first)
 				{
 					hint--;
 					prev--;
@@ -411,7 +455,7 @@ class Map
 			{
 				IteratorMap next(hint);
                 ++next;
-				while (next != begin() && prev->node->first <= val->first)
+				while (next != begin() && next->node->first <= value->first)
 				{
 					++hint;
 					++next;
@@ -421,6 +465,17 @@ class Map
 				return (hint);
 			_size_struct = _size_struct + 1;
 			//создание нода 
+			Node_allocator a;
+			Node_or_leaf_map* newNode;
+
+			newNode = a.allocate(1);
+			a.construct(newNode, value);
+			newNode->root = hint->_node;
+			newNode->left = NULL;
+			newNode->right = NULL;
+			newNode->collor = 0;
+			IteratorMap iteratorNewNode(newNode, newNode->root, _comp);
+			return (iteratorNewNode);
 		}
 
 		void erase(IteratorMap pos)
