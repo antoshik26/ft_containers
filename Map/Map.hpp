@@ -395,10 +395,33 @@ class Map
 			return (ret);
 		}
 
-		// IteratorMap insert( IteratorMap hint, const Pair</*const*/ Key, T>& value )
-		// {
-
-		// }
+		IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value)
+		{
+			if (hint->node->value->first > value->first)
+			{
+				IteratorMap prev(hint);
+				--prev;
+				while (prev != end() && prev->node->value->first >= val->first)
+				{
+					hint--;
+					prev--;
+				}
+			}
+			if (hint->node->value->first < value->first)
+			{
+				IteratorMap next(hint);
+                ++next;
+				while (next != begin() && prev->node->first <= val->first)
+				{
+					++hint;
+					++next;
+				}
+			}
+			if (hint != end() && value->first == hint->_node->value->first)
+				return (hint);
+			_size_struct = _size_struct + 1;
+			//создание нода 
+		}
 
 		void erase(IteratorMap pos)
 		{
