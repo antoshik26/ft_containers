@@ -134,6 +134,11 @@ class IteratorMap
 			return (res);
 		}
 
+		Node_or_leaf_map* get_node()
+		{
+			return (_node);
+		}
+
 		bool operator!=(const IteratorMap &it)
 		{
 				if (_node != it._node)

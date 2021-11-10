@@ -75,8 +75,11 @@ int main()
 	try
 	{
 		Map<int, int> a;
+		Map<int, int> a2;
 		std::map<int, int> b;
 
+		// Pair</*const*/ int, int> c1;
+		// Pair</*const*/ int, int> c2(50000000, 1);
 		const Pair</*const*/ int, int> c1(4, 1);
 		const Pair</*const*/ int, int> c2(3, 2);
 		const Pair</*const*/ int, int> c3(5, 3);
@@ -84,9 +87,17 @@ int main()
 		const Pair</*const*/ int, int> c5(1, 5);
 		const Pair</*const*/ int, int> c6(6, 6);
 		const Pair</*const*/ int, int> c7(7, 7);
+		// a.insert(c2);
+		// for (int i = 0; i < 50; i++)
+		// {
+		// 	c1.first = rand();
+		// 	c1.second = rand();
+		// 	a.insert(c1);
+		// }
 		// Pair<IteratorMap<int, int, less<int>, void*>, bool> ret;
 		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d1;
 		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d2;
+		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d3;
 		
 		std::cout << a.max_size() << std::endl;
 		std::cout << b.max_size() << std::endl;
@@ -99,10 +110,20 @@ int main()
 		a.insert(c7);
 		d1 = a.begin();
 		d2 = a.end();
+		d3 = a.find(6);
+		std::cout << (*d3).first << " " << (*d3).second << std::endl;
+		a.erase(d3);
 		// for (int i = 0; d1 != d2; i++, d1++)
 		{
 			std::cout << (*d1).first << " "  << (*d1).second << std::endl;
 		}
+		a2 = a;
+		// d1 = a2.begin();
+		// d2 = a2.end();
+		// for (int i = 0; d1 != d2; i++, d1++)
+		// {
+		// 	std::cout << (*d1).first << " "  << (*d1).second << std::endl;
+		// }
 		std::cout << a.size() << std::endl;
 		std::cout << a.count(3) << std::endl;
 	}

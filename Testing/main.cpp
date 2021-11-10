@@ -79,14 +79,23 @@
 int main()
 {
 	std::map<int, double> a;
+	std::map<int, double> a2;
 	std::pair<int, double> b(1, 1.1);
+	std::pair<int, double> b2(1, 1.1);
 	std::pair<int, double> c(4, 1.2);
+	std::pair<int, double> c2(4, 1.2);
 	std::pair<int, double> d(3, 1.1);
+	std::pair<int, double> d2(3, 1.1);
 	std::pair<int, double> e(5, 1.5);
+	std::pair<int, double> e2(5, 1.5);
 	a.insert(b);
 	a.insert(c);
 	a.insert(e);
 	a.insert(d);
+	a2.insert(b);
+	a2.insert(c);
+	a2.insert(e2);
+	a2.insert(d);
 	// std::cout << a << std::endl;
 	// std::map<int, double>::iterator it2
 	// std::map<int, double>::iterator it3;
@@ -109,6 +118,8 @@ int main()
 	{
 		std::cout << i << " " << it->first << " " << it->second << std::endl; 
 	}
+	if (a == a2)
+		std::cout << "равно" << std::endl;
 	std::cout << a.max_size() << std::endl;
 	std::cout << sizeof(double) << std::endl;
 	std::cout << sizeof(int) << std::endl;

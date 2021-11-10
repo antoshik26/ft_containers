@@ -41,13 +41,18 @@ class Map
 				(void)other;
 				std::cout << "3" << std::endl;
 			}
-		};
+		};		
+	public:
+		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     IteratorMap;
+		typedef ReversIteratorMap<Key, T, Compare, Node_or_leaf_map> ReversIteratorMap;
+		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other  Node_allocator;
+
 		Allocator _alloc;
 	 	Compare _comp;
 		size_t _size_struct;
 		size_t _size_alloc;
 		Node_or_leaf_map* Node;
-		// Node_allocator _alloc_node;
+		Node_allocator _alloc_node;
 		class ExceptionReserve : public std::exception
 		{
 			public:
@@ -72,10 +77,6 @@ class Map
 					return ("3");
 				}
 		};
-	public:
-		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     IteratorMap;
-		typedef ReversIteratorMap<Key, T, Compare, Node_or_leaf_map> ReversIteratorMap;
-		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other  Node_allocator;
 
 		Map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
 		{
@@ -130,8 +131,6 @@ class Map
 			_size_struct = other._size_struct;
 			_size_alloc = other._size_alloc;
 
-			(void)alloc_node;
-			(void)Copy_Node;
 			Node_or_leaf_map* lastNode = NULL;
 			Node_or_leaf_map* Node = other.Node;
 			while (Node != NULL)
@@ -149,7 +148,13 @@ class Map
 				}
 				if (lastNode == Node->left)
 				{
-					//создание нового нода
+					std::cout << Node->value.first << " " << Node->value.second << std::endl;
+					Copy_Node = alloc_node.allocate(1);
+					alloc_node.construct(Copy_Node, Node->value);
+					Copy_Node->right = NULL;
+					Copy_Node->left = NULL;
+					Copy_Node->root = NULL; //изменить на предыдущий добавляемый элемент
+					Copy_Node->collor = other.Node->collor;
 					if (Node->right != NULL)
 					{
 						lastNode = Node;
@@ -165,6 +170,7 @@ class Map
 					Node = Node->root;
 				}
 			}
+			return (*this);
 		}
 		
 		Allocator get_allocator() const
@@ -482,18 +488,19 @@ class Map
 		{
 			Node_allocator _alloc_node;
 			Node_or_leaf_map* tmp;
-			tmp = pos._node->root;
+			Node_or_leaf_map* pos2 = pos.get_node();
+			tmp = pos.get_node()->root;
 			if (tmp->right == NULL && tmp->left == NULL) //нет подлистьев
 			{
-				if (tmp->left == pos->_node)
+				if (tmp->left == pos2)
 				{
-					_alloc.destroy(pos->_node);
+					// _alloc.destroy(pos2);
 					tmp->left = NULL;
 				}
 
-				if (tmp->right == pos->node)
+				if (tmp->right == pos2)
 				{
-					_alloc_node.destroy(pos->node);
+					// _alloc_node.destroy(pos2);
 					tmp->right = NULL;
 				}
 			}
@@ -501,47 +508,48 @@ class Map
 			{
 				if (tmp->left == NULL)
 				{
-					if (tmp->left == pos->_node)
+					if (tmp->left == pos2)
 					{
-						tmp->left = pos->_node->right;
+						tmp->left = pos2->right;
 					}
 					else
 					{
-						tmp->right = pos->_node->right;
+						tmp->right = pos2->right;
 					}
-					pos->_node->root = tmp;
+					pos2->right->root = tmp;
 				}
 				else
 				{
-					if (tmp->left == pos->_node)
+					if (tmp->left == pos2)
 					{
-						tmp->left = pos->_node->left;
+						tmp->left = pos2->left;
 					}
 					else
 					{
-						tmp->right = pos->_node->left;
+						tmp->right = pos2->left;
 					}
-					pos->_node->root = tmp;
+					pos2->left->root = tmp;
 				}
 			}
 			if (tmp->right != NULL && tmp->left != NULL) //есть два подлиста
 			{
 				Node_or_leaf_map* tmp2 = NULL; //(next)
-				pos->_node->first = tmp->value->first;
-				pos->_node->second = tmp->value->second;
-				if (tmp2->parent->left == tmp2)
+				pos2->value.first = tmp->value.first;
+				pos2->value.second = tmp->value.second;
+				if (tmp2->root->left == tmp2)
 				{
-					tmp2->parent->left == tmp2->right;
+					tmp2->root->left = tmp2->right;
 					if (tmp2->right != NULL)
-						tmp2->right->parent = tmp2->parent;
+						tmp2->right->root = tmp2->root;
 				}
 				else
 				{
-					tmp2->parent->right = tmp2->right;
+					tmp2->root->right = tmp2->right;
 					if (tmp->right != NULL)
-						tmp2->right->parent = tmp2->parent;
+						tmp2->right->root = tmp2->root;
 				}
 			}
+			_size_struct--;
 		}
 
 		void erase( IteratorMap first, IteratorMap last )
@@ -585,12 +593,11 @@ class Map
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap iteratorNode;
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
 			{
-				return (iteratorNode());
+				return (NULL);
 			}
 			else
 			{
@@ -602,12 +609,15 @@ class Map
 					else
 					{
 						if (_comp(tmp2->value.first, key) == 0)
-							return (iteratorNode(tmp2)); 
+						{
+							IteratorMap iteratorNode(tmp2, tmp1, _comp);
+							return (iteratorNode);
+						}
 						tmp1 = tmp2->right;
 					}
 				}
 			}
-			return (iteratorNode());
+			return (NULL);
 		}
 		
 		// const_iterator find( const Key& key ) const
@@ -703,23 +713,156 @@ class Map
 			return (_comp);
 		}
 
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator==(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs);
+		
+		friend bool operator==(const Map& lhs, const Map& rhs)
+		{
+			// (void)lhs;
+			// (void)rhs;
+			Node_or_leaf_map* lastElemlhs = NULL;
+			Node_or_leaf_map* lastElemrhs = NULL;
+			
+			if (lhs->_size_struct != rhs->_size_struct)
+				return (false);
+			while(lhs->Node != NULL || rhs->Node != NULL)
+			{
+				if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
+				{
+					if (lhs->Node->left != NULL && rhs->Node->left != NULL)
+					{
+						lastElemlhs = lhs->Node;
+						lhs->Node = lhs->Node->Left;
+						lastElemrhs = rhs->Node;
+						rhs->Node = rhs->Node->left;
+						continue;
+					}
+					else
+					{
+						lastElemlhs = NULL;
+						lastElemrhs = NULL;
+					}
+				}
+				if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
+				{
+					if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
+						return (false);
+					if (lhs->Node->right != NULL && rhs->Node->right != NULL)
+					{
+						lastElemlhs = lhs->Node;
+						lhs->Node = lhs->Node->right;
+						lastElemrhs = rhs->Node;
+						rhs->Node = rhs->Node->right;
+						continue;
+					}
+					else
+					{
+						lastElemlhs = NULL;
+						lastElemrhs = NULL;
+					}
+				}
+				if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
+				{
+					lastElemlhs = lhs->Node;
+					lhs->Node = lhs->Node.root;
+					lastElemrhs = rhs->Node;
+					rhs->Node = rhs->Node->right;
+				}
+			}
+			if (lhs->Node != NULL || rhs->Node != NULL)
+			{
+				return (false);
+			}
+			return (true);
+		}
 
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator!=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs);
+		
+		friend bool operator!=(const Map& lhs, const Map& rhs)
+		{
+			// (void)lhs;
+			// (void)rhs;
+			Node_or_leaf_map* lastElemlhs = NULL;
+			Node_or_leaf_map* lastElemrhs = NULL;
+			
+			if (lhs->_size_struct != rhs->_size_struct)
+				return (true);
+			while(lhs->Node != NULL || rhs->Node != NULL)
+			{
+				if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
+				{
+					if (lhs->Node->left != NULL && rhs->Node->left != NULL)
+					{
+						lastElemlhs = lhs->Node;
+						lhs->Node = lhs->Node->Left;
+						lastElemrhs = rhs->Node;
+						rhs->Node = rhs->Node->left;
+						continue;
+					}
+					else
+					{
+						lastElemlhs = NULL;
+						lastElemrhs = NULL;
+					}
+				}
+				if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
+				{
+					if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
+						return (true);
+					if (lhs->Node->right != NULL && rhs->Node->right != NULL)
+					{
+						lastElemlhs = lhs->Node;
+						lhs->Node = lhs->Node->right;
+						lastElemrhs = rhs->Node;
+						rhs->Node = rhs->Node->right;
+						continue;
+					}
+					else
+					{
+						lastElemlhs = NULL;
+						lastElemrhs = NULL;
+					}
+				}
+				if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
+				{
+					lastElemlhs = lhs->Node;
+					lhs->Node = lhs->Node.root;
+					lastElemrhs = rhs->Node;
+					rhs->Node = rhs->Node->right;
+				}
+			}
+			if (lhs->Node != NULL || rhs->Node != NULL)
+			{
+				return (true);
+			}
+			return (false);
+		}
 
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator<(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs);
+		friend bool operator<(const Map& lhs, const Map& rhs)
+		{
+			(void)lhs;
+			(void)rhs;
+			return (true);
+		}
 
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator<=(const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs);
+		
+		friend bool operator<=(const Map& lhs, const Map& rhs)
+		{
+			(void)lhs;
+			(void)rhs;
+			return (true);
+		}
 
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator>( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+		friend bool operator>(const Map& lhs, const Map& rhs)
+		{
+			(void)lhs;
+			(void)rhs;
+			return (true);
+		}
 
-		// template< class Key, class T, class Compare, class Alloc >
-		// bool operator>=( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+		friend bool operator>=(const Map& lhs, const Map& rhs)
+		{
+			(void)lhs;
+			(void)rhs;
+			return (true);
+		}
 
 		private:
 			template <typename U>
@@ -743,13 +886,42 @@ class Map
 					searchMinNode(node->left);
 				return (node);
             }
-		// Node next(x : Node):
-			// 	if x.right != null
-			// 		return minimum(x.right)
-			// 	y = x.parent
-			// 	while y != null and x == y.right
-			// 		x = y
-			// 		y = y.parent
-			// 	return y
+
+			// void Walk(Node_or_leaf_map node)
+			// {
+			// 	Node_or_leaf_map lastNode = NULL;
+			// 	while (node != NULL)
+			// 	{
+			// 		if (lastNode == node.root)
+			// 		{
+			// 			if (node.left != NULL)
+			// 			{
+			// 				lastNode = node;
+			// 				node = node.left;
+			// 				continue;
+			// 			}
+			// 			else
+			// 				lastNode = NULL;
+			// 		}
+			// 		if (lastNode == node.left)
+			// 		{
+			// 			Output(node);
+
+			// 			if (node.right != NULL)
+			// 			{
+			// 				lastNode = node;
+			// 				node = node.right;
+			// 				continue;
+			// 			}
+			// 			else
+			// 				lastNode = NULL;
+			// 		}
+			// 		if (lastNode == node.right)
+			// 		{
+			// 			lastNode = node;
+			// 			node = node.root;
+			// 		}
+			// 	}
+			// }
 };
 #endif
