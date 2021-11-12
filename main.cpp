@@ -98,6 +98,7 @@ int main()
 		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d1;
 		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d2;
 		IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> d3;
+		Pair<IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map>, IteratorMap<int, int, less<int>, Map<int, int, less<int>, std::allocator<Pair<int, int> > >::Node_or_leaf_map> > combo;
 		
 		std::cout << a.max_size() << std::endl;
 		std::cout << b.max_size() << std::endl;
@@ -110,12 +111,18 @@ int main()
 		a.insert(c7);
 		d1 = a.begin();
 		d2 = a.end();
-		d3 = a.find(6);
+		for (size_t i = 0; i < a.size(); i++, d1++)
+		{
+			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
+		}
+		d3 = a.find(5);
 		std::cout << (*d3).first << " " << (*d3).second << std::endl;
 		a.erase(d3);
-		// for (int i = 0; d1 != d2; i++, d1++)
+		d1 = a.begin();
+		d2 = a.end();
+		for (size_t i = 0; i < a.size(); i++, d1++)
 		{
-			std::cout << (*d1).first << " "  << (*d1).second << std::endl;
+			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
 		}
 		a2 = a;
 		// d1 = a2.begin();
@@ -124,8 +131,25 @@ int main()
 		// {
 		// 	std::cout << (*d1).first << " "  << (*d1).second << std::endl;
 		// }
-		std::cout << a.size() << std::endl;
-		std::cout << a.count(3) << std::endl;
+		d1 = a.begin();
+		d2 = a.end();
+		std::cout << std::endl;
+		a[5] = 3563;
+		a[2] = 5678;
+		for (size_t i = 0; i < a.size(); i++, d2--)
+		{
+			std::cout << "int i = " <<  i << " first = " <<  (*d2).first << " second = "  << (*d2).second << std::endl;
+		}
+		combo = a.equal_range(5);
+		d3 = combo.first;
+		std::cout << "first = " <<  (*d3).first << " second = "  << (*d3).second << std::endl;
+		d3 = combo.second;
+		std::cout << "first = " <<  (*d3).first << " second = "  << (*d3).second << std::endl;
+		d3 = a.lower_bound(2);
+		std::cout << "first = " <<  (*d3).first << " second = "  << (*d3).second << std::endl;
+		std::cout << "Value from key 7 = " << a.at(7) <<std::endl; 
+		std::cout << "Size_map = " << a.size() << std::endl;
+		std::cout << "Count elem in key 3 = " << a.count(3) << std::endl;
 	}
 	catch(std::exception& e)
 	{

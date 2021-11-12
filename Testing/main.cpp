@@ -114,7 +114,8 @@ int main()
 		j++;
 	}
 	std::map<int, double>::iterator it = a.begin();
-	for (int i = 0; it != a.end(); it++, i++)
+	std::cout << a.size() << std::endl;
+	for (int i = 0; i < a.size(); it++, i++)
 	{
 		std::cout << i << " " << it->first << " " << it->second << std::endl; 
 	}

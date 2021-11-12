@@ -78,7 +78,7 @@ class Map
 				}
 		};
 
-		Map(const Compare& comp = Compare(), const Allocator& alloc = Allocator())
+		Map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()) //работает
 		{
 			_size_struct = 0;
 			_size_alloc = 0;
@@ -89,8 +89,7 @@ class Map
 		
 		~Map()
 		{
-			// clear();
-
+			// clear(); //не работает clear();
 			// Node_or_leaf_map* tmp1;
 			// Node_or_leaf_map* tmp2;
 
@@ -122,7 +121,7 @@ class Map
 			// _alloc.deallocate((Node_or_leaf_map*)Node, _size_struct); 
 		}
 		
-		Map& operator=(const Map& other)
+		Map& operator=(const Map& other) //не работает
 		{
 			Node_allocator alloc_node;
 			Node_or_leaf_map* Copy_Node; 
@@ -148,7 +147,7 @@ class Map
 				}
 				if (lastNode == Node->left)
 				{
-					std::cout << Node->value.first << " " << Node->value.second << std::endl;
+					// std::cout << Node->value.first << " " << Node->value.second << std::endl;
 					Copy_Node = alloc_node.allocate(1);
 					alloc_node.construct(Copy_Node, Node->value);
 					Copy_Node->right = NULL;
@@ -173,12 +172,12 @@ class Map
 			return (*this);
 		}
 		
-		Allocator get_allocator() const
+		Allocator get_allocator() const //работает
 		{
 			return (_alloc);
 		}
 
-		T& at(const Key& key)
+		T& at(const Key& key) //работает
 		{
 			try
 			{
@@ -196,12 +195,12 @@ class Map
 					{
 						tmp2 = tmp1;
 						if (_comp(tmp2->value.first, key) == 1)
-							tmp1 = tmp2->right;
+							tmp1 = tmp2->left;
 						else
 						{
 							if (_comp(tmp2->value.first, key) == 0)
-								return (tmp2);
-							tmp1 = tmp2->left;
+								return (tmp2->value.second);
+							tmp1 = tmp2->right;
 						}
 					}
 					throw Map::ExceptionAt();
@@ -213,35 +212,24 @@ class Map
 			}
 		}
 
-		T& operator[](const Key& key)
+		T& operator[](Key key) //работает
 		{
-			Node_or_leaf_map tmp1;
-			Node_or_leaf_map tmp2;
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
 			Node_allocator a;
-			// Pair<const Key, T> value(key, 0);
+			Pair<Key, T> value(key, 0);
 			
 			tmp1 = Node;
 			if (Node == NULL)
 			{
-				// Node = _alloc.allocate(1);
-				// _alloc.construct(&Node->value.first, key);
-				// _alloc.construct(&Node->value.second, 0);
-				// Node->left = NULL;
-				// Node->right = NULL;
-				// Node->root = NULL;
-				// Node->collor = 0; //while brown
-				// _size_struct++;
 				Node = (Node_or_leaf_map*)a.allocate(1);
-				Node->value(key, 0);
+				a.construct(Node, value);
 				Node->left = 0;
 				Node->right = 0;
 				Node->root = 0;
 				Node->collor = 0;
-				// iteratorNode(Node);
-				// ret.first = iteratorNode;
-				// ret.second = true;
 				_size_struct++;
-				return(*this);
+				return(Node->value.second);
 			}
 			else
 			{
@@ -253,29 +241,27 @@ class Map
 					else
 					{
 						if (_comp(tmp2->value.first, key) == 0)
-							return (tmp2);
+							return (tmp2->value.second);
 						tmp1 = tmp2->right;
 					}
 				}
 				Node_or_leaf_map* tmp3;
 				tmp3 = (Node_or_leaf_map*)a.allocate(1);
-				tmp3->value(key, 0);
+				a.construct(tmp3, value);
 				tmp3->root = tmp2;
 				tmp3->left = NULL;
 				tmp3->right = NULL;
 				tmp3->collor = 0; //while brown
-				// Node->left = tmp3;
 				if (_comp(tmp2->value.first, key) == 1)
 					tmp2->left = tmp3;
 				else
 					tmp2->right = tmp3;
-				// tmp2 = tmp3;
 				_size_struct++;
-				return (tmp3);
+				return (tmp3->value.second);
 			}
 		}
 
-		IteratorMap begin()
+		IteratorMap begin() //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -298,7 +284,7 @@ class Map
 			}
 		}
 
-		IteratorMap end()
+		IteratorMap end() //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -321,7 +307,7 @@ class Map
 			}
 		}
 
-		ReversIteratorMap rbegin()
+		ReversIteratorMap rbegin() //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -344,7 +330,7 @@ class Map
 			}
 		}
 
-		ReversIteratorMap rend()
+		ReversIteratorMap rend() //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -367,7 +353,7 @@ class Map
 			}
 		}
 
-		bool empty() const
+		bool empty() const //работает
 		{
 			if (_size_struct == 0)
 				return (true);
@@ -375,24 +361,24 @@ class Map
 				return (false);
 		}
 
-		size_t size() const
+		size_t size() const //работает
 		{
 			return (_size_struct);
 		}
 
-		size_t max_size() const
+		size_t max_size() const //работает
 		{
 			size_t max_size;
 			max_size = (pow(2, 64)) / ((sizeof(Key) - 1) + (sizeof(T) - 1) + (sizeof(Node_or_leaf_map)));
 			return (max_size);
 		}
 
-		void clear()
+		void clear() //не работает
 		{
 			erase(begin(), end());
 		}
 
-		Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value)
+		Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value) //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -484,7 +470,7 @@ class Map
 			return (iteratorNewNode);
 		}
 
-		void erase(IteratorMap pos)
+		void erase(IteratorMap pos) //работает
 		{
 			Node_allocator _alloc_node;
 			Node_or_leaf_map* tmp;
@@ -533,7 +519,9 @@ class Map
 			}
 			if (tmp->right != NULL && tmp->left != NULL) //есть два подлиста
 			{
-				Node_or_leaf_map* tmp2 = NULL; //(next)
+				IteratorMap itmp2(tmp, tmp, _comp);
+				itmp2++;
+				Node_or_leaf_map* tmp2 = itmp2.get_node();
 				pos2->value.first = tmp->value.first;
 				pos2->value.second = tmp->value.second;
 				if (tmp2->root->left == tmp2)
@@ -552,18 +540,19 @@ class Map
 			_size_struct--;
 		}
 
-		void erase( IteratorMap first, IteratorMap last )
+		void erase( IteratorMap first, IteratorMap last ) //не работает
 		{
 			while (first != last)
 			{
+				IteratorMap tmp(first);
+				++first;
 				erase(first);
-				first++;
 			}
 		}
 		
 		// void swap( map& other );
 		
-		size_t count( const Key& key ) const
+		size_t count( const Key& key ) const //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -589,7 +578,7 @@ class Map
 			return (0);
 		}
 		
-		IteratorMap find(const Key& key )
+		IteratorMap find(const Key& key ) //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -625,61 +614,75 @@ class Map
 
 		// }
 
-		Pair<IteratorMap, IteratorMap> equal_range(const Key& key)
+		Pair<IteratorMap, IteratorMap> equal_range(const Key& key) //доделать
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap iterator;
-			
+			Pair<IteratorMap, IteratorMap> combo;
+
 			tmp1 = Node;
 			if (tmp1 == NULL)
-				return (iterator());
+				return (combo);
 			else
 			{
 				while (tmp1 != NULL)
 				{
 					tmp2 = tmp1;
-					if (_comp(tmp2->obj, key) == 1)
+					if (_comp(tmp2->value.first, key) == 1)
 						tmp1 = tmp2->left;
 					else
 					{
-						if (_comp(tmp2->obj, key) == 0)
-							return (iterator(tmp2)); 
+						if (_comp(tmp2->value.first, key) == 0)
+						{
+							IteratorMap iterator1(tmp2, tmp2, _comp);
+							iterator1++;
+							combo.first = iterator1;
+							IteratorMap iterator2(tmp2, tmp2, _comp);
+							iterator2--;
+							combo.second = iterator2;
+							return (combo); 
+						}
 						tmp1 = tmp2->right;
 					}
 				}
 			}
-			return (iterator());
+			return (combo);
 		}
 
 		// std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
 
-		IteratorMap lower_bound( const Key& key )
+		IteratorMap lower_bound(const Key& key) //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap iterator;
+			
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
-				return (iterator());
+				return (NULL);
 			else
 			{
 				while (tmp1 != NULL)
 				{
 					tmp2 = tmp1;
-					if (_comp(tmp2->obj, key) == -1 || _comp(tmp2->obj, key) == 0)
-						tmp1 = tmp2->right;
+					if (_comp(tmp2->value.first, key) == 1)
+						tmp1 = tmp2->left;
 					else
-						break;
+					{
+						if (_comp(tmp2->value.first, key) == 0)
+							break;
+						if (_comp(tmp2->value.first, key) == -1)
+							break;
+					}
 				}
 			}
-			return (iterator(tmp2));
+			IteratorMap iterator(tmp2, tmp2, _comp);
+			return (iterator);
 		}
 
 		// const_iterator lower_bound( const Key& key ) const;
 
-		IteratorMap upper_bound( const Key& key )
+		IteratorMap upper_bound(const Key& key) //проверить
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
@@ -693,10 +696,15 @@ class Map
 				while (tmp1 != NULL)
 				{
 					tmp2 = tmp1;
-					if (_comp(tmp2->obj, key) == -1 || _comp(tmp2->obj, key) == 0)
-						tmp1 = tmp2->left;
+					if (_comp(tmp2->value.first, key) == -1)
+						tmp1 = tmp2->right;
 					else
-						break;
+					{
+						if (_comp(tmp2->value.first, key) == 0)
+							break;
+						if (_comp(tmp2->value.first, key) == 1)
+							break;
+					}
 				}
 			}
 			return (iterator(tmp2));
@@ -704,160 +712,160 @@ class Map
 
 		// const_iterator upper_bound( const Key& key ) const;
 
-		Compare key_comp() const
+		Compare key_comp() const //работает
 		{
 			return (_comp);
 		}
-		Compare value_comp() const
+		Compare value_comp() const //работает
 		{
 			return (_comp);
 		}
 
 		
-		friend bool operator==(const Map& lhs, const Map& rhs)
+		friend bool operator==(const Map& lhs, const Map& rhs) //переделать через инкремент
 		{
-			// (void)lhs;
-			// (void)rhs;
-			Node_or_leaf_map* lastElemlhs = NULL;
-			Node_or_leaf_map* lastElemrhs = NULL;
+			(void)lhs;
+			(void)rhs;
+			// Node_or_leaf_map* lastElemlhs = NULL;
+			// Node_or_leaf_map* lastElemrhs = NULL;
 			
-			if (lhs->_size_struct != rhs->_size_struct)
-				return (false);
-			while(lhs->Node != NULL || rhs->Node != NULL)
-			{
-				if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
-				{
-					if (lhs->Node->left != NULL && rhs->Node->left != NULL)
-					{
-						lastElemlhs = lhs->Node;
-						lhs->Node = lhs->Node->Left;
-						lastElemrhs = rhs->Node;
-						rhs->Node = rhs->Node->left;
-						continue;
-					}
-					else
-					{
-						lastElemlhs = NULL;
-						lastElemrhs = NULL;
-					}
-				}
-				if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
-				{
-					if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
-						return (false);
-					if (lhs->Node->right != NULL && rhs->Node->right != NULL)
-					{
-						lastElemlhs = lhs->Node;
-						lhs->Node = lhs->Node->right;
-						lastElemrhs = rhs->Node;
-						rhs->Node = rhs->Node->right;
-						continue;
-					}
-					else
-					{
-						lastElemlhs = NULL;
-						lastElemrhs = NULL;
-					}
-				}
-				if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
-				{
-					lastElemlhs = lhs->Node;
-					lhs->Node = lhs->Node.root;
-					lastElemrhs = rhs->Node;
-					rhs->Node = rhs->Node->right;
-				}
-			}
-			if (lhs->Node != NULL || rhs->Node != NULL)
-			{
-				return (false);
-			}
+			// if (lhs->_size_struct != rhs->_size_struct)
+			// 	return (false);
+			// while(lhs->Node != NULL || rhs->Node != NULL)
+			// {
+			// 	if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
+			// 	{
+			// 		if (lhs->Node->left != NULL && rhs->Node->left != NULL)
+			// 		{
+			// 			lastElemlhs = lhs->Node;
+			// 			lhs->Node = lhs->Node->Left;
+			// 			lastElemrhs = rhs->Node;
+			// 			rhs->Node = rhs->Node->left;
+			// 			continue;
+			// 		}
+			// 		else
+			// 		{
+			// 			lastElemlhs = NULL;
+			// 			lastElemrhs = NULL;
+			// 		}
+			// 	}
+			// 	if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
+			// 	{
+			// 		if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
+			// 			return (false);
+			// 		if (lhs->Node->right != NULL && rhs->Node->right != NULL)
+			// 		{
+			// 			lastElemlhs = lhs->Node;
+			// 			lhs->Node = lhs->Node->right;
+			// 			lastElemrhs = rhs->Node;
+			// 			rhs->Node = rhs->Node->right;
+			// 			continue;
+			// 		}
+			// 		else
+			// 		{
+			// 			lastElemlhs = NULL;
+			// 			lastElemrhs = NULL;
+			// 		}
+			// 	}
+			// 	if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
+			// 	{
+			// 		lastElemlhs = lhs->Node;
+			// 		lhs->Node = lhs->Node.root;
+			// 		lastElemrhs = rhs->Node;
+			// 		rhs->Node = rhs->Node->right;
+			// 	}
+			// }
+			// if (lhs->Node != NULL || rhs->Node != NULL)
+			// {
+			// 	return (false);
+			// }
+			// return (true);
+		}
+
+		
+		friend bool operator!=(const Map& lhs, const Map& rhs)  //переделать через инкремент
+		{
+			(void)lhs;
+			(void)rhs;
+			// Node_or_leaf_map* lastElemlhs = NULL;
+			// Node_or_leaf_map* lastElemrhs = NULL;
+			
+			// if (lhs->_size_struct != rhs->_size_struct)
+			// 	return (true);
+			// while(lhs->Node != NULL || rhs->Node != NULL)
+			// {
+			// 	if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
+			// 	{
+			// 		if (lhs->Node->left != NULL && rhs->Node->left != NULL)
+			// 		{
+			// 			lastElemlhs = lhs->Node;
+			// 			lhs->Node = lhs->Node->Left;
+			// 			lastElemrhs = rhs->Node;
+			// 			rhs->Node = rhs->Node->left;
+			// 			continue;
+			// 		}
+			// 		else
+			// 		{
+			// 			lastElemlhs = NULL;
+			// 			lastElemrhs = NULL;
+			// 		}
+			// 	}
+			// 	if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
+			// 	{
+			// 		if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
+			// 			return (true);
+			// 		if (lhs->Node->right != NULL && rhs->Node->right != NULL)
+			// 		{
+			// 			lastElemlhs = lhs->Node;
+			// 			lhs->Node = lhs->Node->right;
+			// 			lastElemrhs = rhs->Node;
+			// 			rhs->Node = rhs->Node->right;
+			// 			continue;
+			// 		}
+			// 		else
+			// 		{
+			// 			lastElemlhs = NULL;
+			// 			lastElemrhs = NULL;
+			// 		}
+			// 	}
+			// 	if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
+			// 	{
+			// 		lastElemlhs = lhs->Node;
+			// 		lhs->Node = lhs->Node.root;
+			// 		lastElemrhs = rhs->Node;
+			// 		rhs->Node = rhs->Node->right;
+			// 	}
+			// }
+			// if (lhs->Node != NULL || rhs->Node != NULL)
+			// {
+			// 	return (true);
+			// }
+			// return (false);
+		}
+
+		friend bool operator<(const Map& lhs, const Map& rhs)  //сделать через инкремент
+		{
+			(void)lhs;
+			(void)rhs;
 			return (true);
 		}
 
 		
-		friend bool operator!=(const Map& lhs, const Map& rhs)
-		{
-			// (void)lhs;
-			// (void)rhs;
-			Node_or_leaf_map* lastElemlhs = NULL;
-			Node_or_leaf_map* lastElemrhs = NULL;
-			
-			if (lhs->_size_struct != rhs->_size_struct)
-				return (true);
-			while(lhs->Node != NULL || rhs->Node != NULL)
-			{
-				if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
-				{
-					if (lhs->Node->left != NULL && rhs->Node->left != NULL)
-					{
-						lastElemlhs = lhs->Node;
-						lhs->Node = lhs->Node->Left;
-						lastElemrhs = rhs->Node;
-						rhs->Node = rhs->Node->left;
-						continue;
-					}
-					else
-					{
-						lastElemlhs = NULL;
-						lastElemrhs = NULL;
-					}
-				}
-				if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
-				{
-					if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
-						return (true);
-					if (lhs->Node->right != NULL && rhs->Node->right != NULL)
-					{
-						lastElemlhs = lhs->Node;
-						lhs->Node = lhs->Node->right;
-						lastElemrhs = rhs->Node;
-						rhs->Node = rhs->Node->right;
-						continue;
-					}
-					else
-					{
-						lastElemlhs = NULL;
-						lastElemrhs = NULL;
-					}
-				}
-				if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
-				{
-					lastElemlhs = lhs->Node;
-					lhs->Node = lhs->Node.root;
-					lastElemrhs = rhs->Node;
-					rhs->Node = rhs->Node->right;
-				}
-			}
-			if (lhs->Node != NULL || rhs->Node != NULL)
-			{
-				return (true);
-			}
-			return (false);
-		}
-
-		friend bool operator<(const Map& lhs, const Map& rhs)
+		friend bool operator<=(const Map& lhs, const Map& rhs) //сделать через инкремент
 		{
 			(void)lhs;
 			(void)rhs;
 			return (true);
 		}
 
-		
-		friend bool operator<=(const Map& lhs, const Map& rhs)
+		friend bool operator>(const Map& lhs, const Map& rhs) //сделать через инкремент
 		{
 			(void)lhs;
 			(void)rhs;
 			return (true);
 		}
 
-		friend bool operator>(const Map& lhs, const Map& rhs)
-		{
-			(void)lhs;
-			(void)rhs;
-			return (true);
-		}
-
-		friend bool operator>=(const Map& lhs, const Map& rhs)
+		friend bool operator>=(const Map& lhs, const Map& rhs) //сделать через инкремент
 		{
 			(void)lhs;
 			(void)rhs;

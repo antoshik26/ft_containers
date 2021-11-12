@@ -34,105 +34,95 @@ class IteratorMap
 			return (*this);
 		}
 
-		IteratorMap &operator++()
+		IteratorMap &operator++(int)
 		{
-			Node_or_leaf_map* previousNode = _node;
-
-			if (_node == _lastElem)
+			if (_node->right != NULL)
 			{
-				_node = _lastElem->right;
+				_node = searchMinNode(_node->right);
 				return (*this);
 			}
-			while (_node != _lastElem && _comp(previousNode->value->first, _node->value->first) == 1)
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;
+			while (tmp != NULL && _node == tmp->right)
 			{
-				if (_node->right && (_node->right == _lastElem || _comp(previousNode->content.first, _node->right->content.first)))
-				{
-					_node = _node->right;
-					Node_or_leaf_map* tmp = 0;
-					if (_node != _lastElem && (tmp = searchMinNode(_node)))
-						_node = tmp;
-				}
-				else
-				{
-					_node = _node->root;
-				}
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (*this);
+		}
+
+		IteratorMap &operator--(int)
+		{
+			if (_node->left != NULL)
+			{
+				_node = searchMaxNode(_node->left);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;			
+			while (tmp != NULL && _node == tmp->left)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (*this);
+		}
+
+		IteratorMap &operator++()
+		{
+			if (_node->right != NULL)
+			{
+				_node = searchMinNode(_node->right);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;
+			while (tmp != NULL && _node == tmp->right)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
 			}
 			return (*this);
 		}
 
 		IteratorMap &operator--()
 		{
-			Node_or_leaf_map* previousNode = _node;
-
-			if (_node == _lastElem)
+			if (_node->left != NULL)
 			{
-				_node = _lastElem->right;
+				_node = searchMaxNode(_node->left);
 				return (*this);
 			}
-			while (_node != _lastElem && _comp(previousNode->value->first, _node->value->first) == -1)
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;			
+			while (tmp != NULL && _node == tmp->left)
 			{
-				if (_node->left && (_node->left == _lastElem || _comp(previousNode->value.first, _node->left->value.first)))
-				{
-					_node == _node->left;
-					Node_or_leaf_map* tmp = 0;
-					if (_node != _lastElem && (tmp = searchMaxNode(_node)))
-						_node = tmp;
-				}
-				else
-				{
-					_node = _node->root;
-				}
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
 			}
 			return (*this);
 		}
 
-		IteratorMap &operator++(int)
-		{
-			IteratorMap res(*this);
-
-			if (_node == _lastElem)
-			{
-				_node = _lastElem->right;
-				return (res);
-			}
-			while (_node != _lastElem && _comp(res->first, _node->value->first))
-			{
-				if (_node->right && (_node->right == _lastElem || _comp(res->first, _node->right->value.first)))
-				{
-					_node = _node->right;
-					Node_or_leaf_map* tmp;
-					if (_node != _lastElem && (tmp == searchMaxNode(_node)))
-						_node = tmp;
-				}
-				else
-					_node = _node->right;
-			}
-			return (res);
-		}
-
-		IteratorMap &operator--(int)
-		{
-			IteratorMap res(*this);
-
-			if (_node == _lastElem)
-			{
-				_node = _lastElem->right;
-				return (res);
-			}
-			while (_node != _lastElem && _comp(res->first, _node->value->first))
-			{
-				if (_node->right && (_node->right == _lastElem || _comp(res->first, _node->right->value.first)))
-				{
-					_node = _node->right;
-					Node_or_leaf_map* tmp;
-					if (_node != _lastElem && (tmp == searchMinNode(_node)))
-						_node = tmp;
-				}
-				else
-					_node = _node->right;
-			}
-			return (res);
-		}
+	
 
 		Node_or_leaf_map* get_node()
 		{
@@ -161,16 +151,16 @@ class IteratorMap
 		private:
 			Node_or_leaf_map* searchMinNode(Node_or_leaf_map* node)
 			{
-				if (node && node != _lastElem && node->left && node->left != _lastElem)
-					return (searchMinNode(node->left));
-				return (node);
+				if (node->left == NULL)
+					return (node);
+				return searchMinNode(node->left); 
 			}
 
 			Node_or_leaf_map* searchMaxNode(Node_or_leaf_map* node)
 			{
-				if (node && node != _lastElem && node->right && node->right != _lastElem)
-					return (searchMaxNode(node->right));
-				return (node);	
+				if (node->right == NULL)
+					return (node);
+				return (searchMaxNode(node->right));
 			}
 };
 #endif
