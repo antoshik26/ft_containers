@@ -89,7 +89,7 @@ class Map
 		
 		~Map()
 		{
-			// clear(); //не работает clear();
+			clear();
 			// Node_or_leaf_map* tmp1;
 			// Node_or_leaf_map* tmp2;
 
@@ -375,7 +375,11 @@ class Map
 
 		void clear() //не работает
 		{
-			erase(begin(), end());
+			if (_size_struct != 0)
+				erase(begin(), end());
+			if (_size_struct == 1)
+				erase(begin());
+
 		}
 
 		Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value) //работает
@@ -476,7 +480,9 @@ class Map
 			Node_or_leaf_map* tmp;
 			Node_or_leaf_map* pos2 = pos.get_node();
 			tmp = pos.get_node()->root;
-			if (tmp->right == NULL && tmp->left == NULL) //нет подлистьев
+			if (tmp == NULL)
+				tmp = Node;
+			if (pos2->right == NULL && pos2->left == NULL) //нет подлистьев
 			{
 				if (tmp->left == pos2)
 				{
@@ -490,9 +496,9 @@ class Map
 					tmp->right = NULL;
 				}
 			}
-			if (tmp->right == NULL || tmp->left == NULL) //есть подлистья
+			else if (pos2->right == NULL || pos2->left == NULL) //есть подлистья
 			{
-				if (tmp->left == NULL)
+				if (pos2->left == NULL)
 				{
 					if (tmp->left == pos2)
 					{
@@ -517,13 +523,13 @@ class Map
 					pos2->left->root = tmp;
 				}
 			}
-			if (tmp->right != NULL && tmp->left != NULL) //есть два подлиста
+			else
 			{
-				IteratorMap itmp2(tmp, tmp, _comp);
+				IteratorMap itmp2(pos2, pos2, _comp);
 				itmp2++;
 				Node_or_leaf_map* tmp2 = itmp2.get_node();
-				pos2->value.first = tmp->value.first;
-				pos2->value.second = tmp->value.second;
+				pos2->value.first = tmp2->value.first;
+				pos2->value.second = tmp2->value.second;
 				if (tmp2->root->left == tmp2)
 				{
 					tmp2->root->left = tmp2->right;
@@ -539,15 +545,15 @@ class Map
 			}
 			_size_struct--;
 		}
-
+		
 		void erase( IteratorMap first, IteratorMap last ) //не работает
 		{
 			while (first != last)
 			{
-				IteratorMap tmp(first);
-				++first;
 				erase(first);
+				++first;
 			}
+			erase(first);
 		}
 		
 		// void swap( map& other );
@@ -670,27 +676,32 @@ class Map
 					else
 					{
 						if (_comp(tmp2->value.first, key) == 0)
-							break;
+						{
+							IteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
 						if (_comp(tmp2->value.first, key) == -1)
-							break;
+						{
+							IteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
 					}
 				}
 			}
-			IteratorMap iterator(tmp2, tmp2, _comp);
+			IteratorMap iterator = begin();
 			return (iterator);
 		}
 
 		// const_iterator lower_bound( const Key& key ) const;
 
-		IteratorMap upper_bound(const Key& key) //проверить
+		IteratorMap upper_bound(const Key& key) //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			IteratorMap iterator;
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
-				return (iterator());
+				return (NULL);
 			else
 			{
 				while (tmp1 != NULL)
@@ -701,13 +712,20 @@ class Map
 					else
 					{
 						if (_comp(tmp2->value.first, key) == 0)
-							break;
+						{
+							IteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
 						if (_comp(tmp2->value.first, key) == 1)
-							break;
+						{
+							IteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
 					}
 				}
 			}
-			return (iterator(tmp2));
+			IteratorMap iterator = end();
+			return (iterator);
 		}
 
 		// const_iterator upper_bound( const Key& key ) const;
@@ -722,10 +740,24 @@ class Map
 		}
 
 		
-		friend bool operator==(const Map& lhs, const Map& rhs) //переделать через инкремент
+		friend bool operator==( Map& lhs,  Map& rhs) //переделать через инкремент
 		{
-			(void)lhs;
-			(void)rhs;
+			// (void)lhs;
+			// (void)rhs;
+			IteratorMap lhsiter = lhs.begin();
+			IteratorMap rhsiter = rhs.begin();
+			size_t i = 0;
+
+			if (lhs._size_struct != rhs._size_struct)
+				return (false);
+			while (i < lhs._size_struct)
+			{
+				if ((lhsiter.get_node())->value.first != (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second != (rhsiter.get_node())->value.second)
+					return (false);
+				lhsiter++;
+				rhsiter++;
+			}
+			return (true);
 			// Node_or_leaf_map* lastElemlhs = NULL;
 			// Node_or_leaf_map* lastElemrhs = NULL;
 			
@@ -785,8 +817,22 @@ class Map
 		
 		friend bool operator!=(const Map& lhs, const Map& rhs)  //переделать через инкремент
 		{
-			(void)lhs;
-			(void)rhs;
+			// (void)lhs;
+			// (void)rhs;
+			IteratorMap lhsiter = lhs.begin();
+			IteratorMap rhsiter = rhs.begin();
+			size_t i = 0;
+
+			if (lhs._size_struct == rhs._size_struct)
+				return (false);
+			while (i < lhs._size_struct)
+			{
+				if ((lhsiter.get_node())->value.first == (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second == (rhsiter.get_node())->value.second)
+					return (false);
+				lhsiter++;
+				rhsiter++;
+			}
+			return (true);
 			// Node_or_leaf_map* lastElemlhs = NULL;
 			// Node_or_leaf_map* lastElemrhs = NULL;
 			
@@ -845,8 +891,19 @@ class Map
 
 		friend bool operator<(const Map& lhs, const Map& rhs)  //сделать через инкремент
 		{
-			(void)lhs;
-			(void)rhs;
+			// (void)lhs;
+			// (void)rhs;
+			IteratorMap lhsiter = lhs.begin();
+			IteratorMap rhsiter = rhs.begin();
+			size_t i = 0;
+
+			if (lhs._size_struct > rhs._size_struct)
+				return (false);
+			while(i < lhs._size_struct)
+			{
+
+				i++;
+			}
 			return (true);
 		}
 

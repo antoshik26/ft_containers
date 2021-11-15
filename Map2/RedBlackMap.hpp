@@ -4,6 +4,11 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include "../Map/Less.hpp"
+#include "../Map/Pair.hpp"
+#include "../Map/IteratorMap.hpp"
+#include "../Map/ReversIteratorMap.hpp"
+#include "../Map/Map.hpp"
 
 template<
     class Key,

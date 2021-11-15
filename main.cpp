@@ -4,6 +4,7 @@
 #include "./Map/IteratorMap.hpp"
 #include "./Map/Less.hpp"
 #include "./Map/Pair.hpp"
+#include "./Map2/RedBlackMap.hpp"
 #include <map>
 
 // int main()
@@ -115,7 +116,7 @@ int main()
 		{
 			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
 		}
-		d3 = a.find(5);
+		d3 = a.find(4);
 		std::cout << (*d3).first << " " << (*d3).second << std::endl;
 		a.erase(d3);
 		d1 = a.begin();
@@ -145,11 +146,21 @@ int main()
 		std::cout << "first = " <<  (*d3).first << " second = "  << (*d3).second << std::endl;
 		d3 = combo.second;
 		std::cout << "first = " <<  (*d3).first << " second = "  << (*d3).second << std::endl;
-		d3 = a.lower_bound(2);
+		d3 = a.lower_bound(5);
+		std::cout << "first = " <<  (*d3).first << " second = "  << (*d3).second << std::endl;
+		d3 = a.upper_bound(5);
 		std::cout << "first = " <<  (*d3).first << " second = "  << (*d3).second << std::endl;
 		std::cout << "Value from key 7 = " << a.at(7) <<std::endl; 
 		std::cout << "Size_map = " << a.size() << std::endl;
 		std::cout << "Count elem in key 3 = " << a.count(3) << std::endl;
+		if (a == a2)
+			std::cout << "Map a равна Map a2" << std::endl;
+		else
+			std::cout << "Map a не равна Map a2" << std::endl;
+		d1 = a.begin();
+		d2 = a.end();
+		a.erase(d1, d2);
+		// a.clear();
 	}
 	catch(std::exception& e)
 	{
