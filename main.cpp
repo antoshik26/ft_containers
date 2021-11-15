@@ -125,13 +125,14 @@ int main()
 		{
 			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
 		}
+		std::cout << std::endl;
 		a2 = a;
-		// d1 = a2.begin();
-		// d2 = a2.end();
-		// for (int i = 0; d1 != d2; i++, d1++)
-		// {
-		// 	std::cout << (*d1).first << " "  << (*d1).second << std::endl;
-		// }
+		d1 = a2.begin();
+		d2 = a2.end();
+		for (size_t i = 0; i != a2.size(); i++, d1++)
+		{
+			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
+		}
 		d1 = a.begin();
 		d2 = a.end();
 		std::cout << std::endl;
@@ -157,10 +158,18 @@ int main()
 			std::cout << "Map a равна Map a2" << std::endl;
 		else
 			std::cout << "Map a не равна Map a2" << std::endl;
+		if (a != a2)
+			std::cout << "Map a не равна Map a2" << std::endl;
+		else
+			std::cout << "Map a равна Map a2" << std::endl;
+		if (a > a2)
+			std::cout << "Map a больше Map a2" << std::endl;
+		else
+			std::cout << "Map a меньше Map a2" << std::endl;
 		d1 = a.begin();
 		d2 = a.end();
 		a.erase(d1, d2);
-		// a.clear();
+		// a2.clear();
 	}
 	catch(std::exception& e)
 	{

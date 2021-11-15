@@ -87,6 +87,24 @@ class Map
 			Node = NULL;
 		}
 		
+		Map(Map& other )
+		{
+			_alloc = other._alloc;
+			_comp = other._comp;
+			// _size_struct = other._size_struct;
+			// _size_alloc = other._size_alloc;
+			_alloc_node = other._alloc_node;
+
+			IteratorMap begin = other.begin();
+			IteratorMap end = other.end();
+			while (begin != end)
+			{
+				insert(*begin);
+				begin++;
+			}
+			insert(*begin);
+		}
+		
 		~Map()
 		{
 			clear();
@@ -121,54 +139,70 @@ class Map
 			// _alloc.deallocate((Node_or_leaf_map*)Node, _size_struct); 
 		}
 		
-		Map& operator=(const Map& other) //не работает
+		Map& operator=(Map& other) //работает
 		{
-			Node_allocator alloc_node;
-			Node_or_leaf_map* Copy_Node; 
 			_alloc = other._alloc;
 			_comp = other._comp;
-			_size_struct = other._size_struct;
-			_size_alloc = other._size_alloc;
+			// _size_struct = other._size_struct;
+			// _size_alloc = other._size_alloc;
+			_alloc_node = other._alloc_node;
 
-			Node_or_leaf_map* lastNode = NULL;
-			Node_or_leaf_map* Node = other.Node;
-			while (Node != NULL)
+			IteratorMap begin = other.begin();
+			IteratorMap end = other.end();
+			while (begin != end)
 			{
-				if (lastNode == Node->root)
-				{
-					if (Node->left != NULL)
-					{
-						lastNode = Node;
-						Node = Node->left;
-						continue;
-					}
-					else
-						lastNode = NULL;
-				}
-				if (lastNode == Node->left)
-				{
-					// std::cout << Node->value.first << " " << Node->value.second << std::endl;
-					Copy_Node = alloc_node.allocate(1);
-					alloc_node.construct(Copy_Node, Node->value);
-					Copy_Node->right = NULL;
-					Copy_Node->left = NULL;
-					Copy_Node->root = NULL; //изменить на предыдущий добавляемый элемент
-					Copy_Node->collor = other.Node->collor;
-					if (Node->right != NULL)
-					{
-						lastNode = Node;
-						Node = Node->right;
-						continue;
-					}
-					else
-						lastNode = NULL;
-				}
-				if (lastNode == Node->right)
-				{
-					lastNode = Node;
-					Node = Node->root;
-				}
+				insert(*begin);
+				begin++;
 			}
+			insert(*begin);
+			// Node_allocator alloc_node;
+			// Node_or_leaf_map* Copy_Node; 
+			// _alloc = other._alloc;
+			// _comp = other._comp;
+			// _size_struct = other._size_struct;
+			// _size_alloc = other._size_alloc;
+
+			// Node_or_leaf_map* lastNode = NULL;
+			// Node_or_leaf_map* Node = other.Node;
+			// while (Node != NULL)
+			// {
+			// 	if (lastNode == Node->root)
+			// 	{
+			// 		if (Node->left != NULL)
+			// 		{
+			// 			lastNode = Node;
+			// 			Node = Node->left;
+			// 			continue;
+			// 		}
+			// 		else
+			// 			lastNode = NULL;
+			// 	}
+			// 	if (lastNode == Node->left)
+			// 	{
+			// 		// Node_or_leaf_map* root = Node;
+			// 		// std::cout << Node->value.first << " " << Node->value.second << std::endl;
+			// 		Copy_Node = alloc_node.allocate(1);
+			// 		alloc_node.construct(Copy_Node, Node->value);
+			// 		Copy_Node->right = NULL;
+			// 		Copy_Node->left = NULL;
+			// 		Copy_Node->root = NULL;
+			// 		 //изменить на предыдущий добавляемый элемент
+			// 		Copy_Node->collor = other.Node->collor;
+			// 		if (Node->right != NULL)
+			// 		{
+			// 			lastNode = Node;
+			// 			Node = Node->right;
+			// 			continue;
+			// 		}
+			// 		else
+			// 			lastNode = NULL;
+			// 	}
+			// 	if (lastNode == Node->right)
+			// 	{
+			// 		lastNode = Node;
+			// 		Node = Node->root;
+			// 	}
+			// }
 			return (*this);
 		}
 		
@@ -373,7 +407,7 @@ class Map
 			return (max_size);
 		}
 
-		void clear() //не работает
+		void clear() //работает
 		{
 			if (_size_struct != 0)
 				erase(begin(), end());
@@ -545,8 +579,8 @@ class Map
 			}
 			_size_struct--;
 		}
-		
-		void erase( IteratorMap first, IteratorMap last ) //не работает
+
+		void erase( IteratorMap first, IteratorMap last ) //работает
 		{
 			while (first != last)
 			{
@@ -556,7 +590,15 @@ class Map
 			erase(first);
 		}
 		
-		// void swap( map& other );
+		void swap(Map& other) //работает
+		{
+			swap(Node, other.Node);
+			swap(_size_struct, other._size_struct);
+			swap(_size_alloc, other._size_alloc);
+			swap(_comp, other._comp);
+			swap(_alloc_node, other._alloc_node);
+			swap(_alloc, other._alloc);
+        }
 		
 		size_t count( const Key& key ) const //работает
 		{
@@ -740,7 +782,7 @@ class Map
 		}
 
 		
-		friend bool operator==( Map& lhs,  Map& rhs) //переделать через инкремент
+		friend bool operator==(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
 		{
 			// (void)lhs;
 			// (void)rhs;
@@ -815,7 +857,7 @@ class Map
 		}
 
 		
-		friend bool operator!=(const Map& lhs, const Map& rhs)  //переделать через инкремент
+		friend bool operator!=(/*const*/ Map& lhs,/*const*/ Map& rhs)  //работает
 		{
 			// (void)lhs;
 			// (void)rhs;
@@ -823,16 +865,16 @@ class Map
 			IteratorMap rhsiter = rhs.begin();
 			size_t i = 0;
 
-			if (lhs._size_struct == rhs._size_struct)
-				return (false);
+			if (lhs._size_struct != rhs._size_struct)
+				return (true);
 			while (i < lhs._size_struct)
 			{
-				if ((lhsiter.get_node())->value.first == (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second == (rhsiter.get_node())->value.second)
-					return (false);
+				if ((lhsiter.get_node())->value.first != (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second != (rhsiter.get_node())->value.second)
+					return (true);
 				lhsiter++;
 				rhsiter++;
 			}
-			return (true);
+			return (false);
 			// Node_or_leaf_map* lastElemlhs = NULL;
 			// Node_or_leaf_map* lastElemrhs = NULL;
 			
@@ -889,7 +931,7 @@ class Map
 			// return (false);
 		}
 
-		friend bool operator<(const Map& lhs, const Map& rhs)  //сделать через инкремент
+		friend bool operator<(/*const*/ Map& lhs, /*const*/ Map& rhs)  //работает
 		{
 			// (void)lhs;
 			// (void)rhs;
@@ -899,33 +941,78 @@ class Map
 
 			if (lhs._size_struct > rhs._size_struct)
 				return (false);
-			while(i < lhs._size_struct)
+			while (i < lhs._size_struct)
 			{
-
+				if ((lhsiter.get_node())->value.first >= (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second >= (rhsiter.get_node())->value.second)
+					return (false);
+				lhsiter++;
+				rhsiter++;
 				i++;
 			}
 			return (true);
 		}
 
 		
-		friend bool operator<=(const Map& lhs, const Map& rhs) //сделать через инкремент
+		friend bool operator<=(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
 		{
 			(void)lhs;
 			(void)rhs;
+			IteratorMap lhsiter = lhs.begin();
+			IteratorMap rhsiter = rhs.begin();
+			size_t i = 0;
+
+			if (lhs._size_struct > rhs._size_struct)
+				return (false);
+				while (i < lhs._size_struct)
+			{
+				if ((lhsiter.get_node())->value.first > (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second > (rhsiter.get_node())->value.second)
+					return (false);
+				lhsiter++;
+				rhsiter++;
+				i++;
+			}
 			return (true);
 		}
 
-		friend bool operator>(const Map& lhs, const Map& rhs) //сделать через инкремент
+		friend bool operator>(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
 		{
-			(void)lhs;
-			(void)rhs;
+			// (void)lhs;
+			// (void)rhs;
+			IteratorMap lhsiter = lhs.begin();
+			IteratorMap rhsiter = rhs.begin();
+			size_t i = 0;
+
+			if (lhs._size_struct < rhs._size_struct)
+				return (false);
+			while(i < lhs._size_struct)
+			{
+				if ((lhsiter.get_node())->value.first <= (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second <= (rhsiter.get_node())->value.second)
+					return (false);
+				lhsiter++;
+				rhsiter++;
+				i++;
+			}
 			return (true);
 		}
 
-		friend bool operator>=(const Map& lhs, const Map& rhs) //сделать через инкремент
+		friend bool operator>=(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
 		{
-			(void)lhs;
-			(void)rhs;
+			// (void)lhs;
+			// (void)rhs;
+			IteratorMap lhsiter = lhs.begin();
+			IteratorMap rhsiter = rhs.begin();
+			size_t i = 0;
+
+			if (lhs._size_struct < rhs._size_struct)
+				return (false);
+			while(i < lhs._size_struct)
+			{
+				if ((lhsiter.get_node())->value.first < (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second < (rhsiter.get_node())->value.second)
+					return (false);
+				lhsiter++;
+				rhsiter++;
+				i++;
+			}
 			return (true);
 		}
 
