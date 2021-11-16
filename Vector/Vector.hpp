@@ -6,10 +6,29 @@
 #include <cmath>
 #include "IteratorVector.hpp"
 #include "ReversIteratorVector.hpp"
+#include "../include/Enable_if.hpp"
+#include "../include/Is_integral.hpp"
 
 template<typename T, class Allocator = std::allocator<T> >
-class Vector //	: public IteratorVector, public ReversIteratorVector
+class Vector
 {
+	public:
+		typedef T                                           value_type;
+		typedef Allocator                                   allocator_type;
+		typedef long int                                    difference_type;
+		typedef size_t                                      size_type;
+
+		typedef T&                                          reference;
+		typedef const T&                                    const_reference;
+		typedef T*                                          pointer;
+		typedef const T*                                    const_pointer;
+		
+		typedef IteratorVector<T>							iterator;
+		typedef ConstIteratorVector<T>						const_iterator;
+
+		typedef ReversIteratorVector<T>						reverse_iterator;
+		typedef ConstReversIteratorVector<T>   				const_reverse_iterator;
+	
 	private:
 		T* array;
 		Allocator _alloc;
@@ -217,9 +236,19 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			return (IteratorVector<T>(array));
 		}
 
+		const_iterator begin() const
+		{
+			return (ConstIteratorVector<T>(array));
+		}
+
 		IteratorVector<T> end()
 		{
 			return (IteratorVector<T>(array + _n));
+		}
+		
+		const_iterator end() const
+		{
+			return (ConstIteratorVector<T>(array + _n));
 		}
 
 		ReversIteratorVector<T> rbegin()
@@ -227,7 +256,17 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			return (ReversIteratorVector<T>(array + _n));
 		}
 
+		const_reverse_iterator rbegin() const
+		{
+			return (ConstReversIteratorVector<T>(array + _n));
+		}
+
 		ReversIteratorVector<T> rend()
+		{
+			return (ReversIteratorVector<T>(array));
+		}
+
+		const_reverse_iterator rend() const
 		{
 			return (ReversIteratorVector<T>(array));
 		}
@@ -246,7 +285,38 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 				throw;
 			}
 		}
+
+		const_reference at( size_type pos ) const
+		{
+			try
+			{
+				if (pos > _n || pos < 0)
+					throw Vector::ExceptionAt();
+				else
+					return (&array[pos]);
+			}
+			catch (std::exception& e)
+			{
+				throw;
+			}
+		}
+
 		T& operator[](size_t pos)
+		{
+			try
+			{
+					if (pos > _n || pos < 0)
+							throw Vector::ExceptionAt();
+					else
+						return (array[pos]);
+			}
+			catch (std::exception& e)
+			{
+				throw;
+			}
+		}
+
+		const_reference operator[]( size_type pos ) const
 		{
 			try
 			{
@@ -266,7 +336,17 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			return (&array[0]);
 		}
 
+		const_reference front() const
+		{
+			return (&array[0]);
+		}
+
 		T& back()
+		{
+			return (&array[_n]);
+		}
+
+		const_reference back() const
 		{
 			return (&array[_n]);
 		}
@@ -276,6 +356,10 @@ class Vector //	: public IteratorVector, public ReversIteratorVector
 			return (array);
 		}
 
+		const T* data() const
+		{
+			return (array);
+		}
 		
 		size_t size() const
 		{

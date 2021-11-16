@@ -42,6 +42,10 @@ class Pair
 			}
 			return (*this);
 		}
-		// make_pair
+		Pair make_pair(const A1 &v1, const A2 &v2)
+		{
+			
+			return (*this);
+		}
 };
 #endif

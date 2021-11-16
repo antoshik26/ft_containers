@@ -8,6 +8,8 @@
 #include "ReversIteratorMap.hpp"
 #include "Less.hpp"
 #include "Pair.hpp"
+#include "../include/Enable_if.hpp"
+#include "../include/Is_integral.hpp"
 
 template<
     class Key,
@@ -43,9 +45,21 @@ class Map
 			}
 		};		
 	public:
-		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     IteratorMap;
-		typedef ReversIteratorMap<Key, T, Compare, Node_or_leaf_map> ReversIteratorMap;
-		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other  Node_allocator;
+		typedef Key																key_type;
+		typedef T																mapped_type;
+		typedef Pair</*const*/ Key, T>											value_type;
+		typedef size_t															size_type;
+		typedef Compare															key_compare;
+		typedef Allocator														allocator_type;
+		typedef value_type&														reference;
+		typedef const value_type&												const_reference;
+		typedef value_type*														pointer;
+		typedef const value_type*												const_pointer;
+		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     				IteratorMap;
+		typedef ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>				ConstIteratorMap;
+		typedef ReversIteratorMap<Key, T, Compare, Node_or_leaf_map> 			ReversIteratorMap;
+		// typedef ConstReversIteratorMap<Key, T, Compare, Node_or_leaf_map>		ConstReversIteratorMap;
+		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other	Node_allocator;
 
 		Allocator _alloc;
 	 	Compare _comp;
@@ -1038,7 +1052,7 @@ class Map
 					searchMinNode(node->left);
 				return (node);
             }
-
+			// lexicographical_compare //будет в операторах сравнения
 			// void Walk(Node_or_leaf_map node)
 			// {
 			// 	Node_or_leaf_map lastNode = NULL;

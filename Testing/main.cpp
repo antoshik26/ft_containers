@@ -100,6 +100,9 @@ int main()
 	// std::map<int, double>::iterator it2
 	// std::map<int, double>::iterator it3;
 	std::pair<std::map<int, double>::iterator, std::map<int, double>::iterator> count;
+	std::map<int, double>::const_iterator ls;
+	ls = a.begin();
+	ls++;
 	count = a.equal_range(2);
 	int j = 0;
 	if (count.first == count.second)

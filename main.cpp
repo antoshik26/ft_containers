@@ -5,6 +5,7 @@
 #include "./Map/Less.hpp"
 #include "./Map/Pair.hpp"
 #include "./Map2/RedBlackMap.hpp"
+
 #include <map>
 
 // int main()
@@ -64,10 +65,10 @@
 
 // 		// a.reserve(a.max_size() + 1);
 // 	}
-	// catch(std::exception& e)
-	// {
-	// 	std::cout << e.what() << std::endl;
-	// }
+// 	catch(std::exception& e)
+// 	{
+// 		std::cout << e.what() << std::endl;
+// 	}
 // 	return(0);
 // }
 
@@ -169,7 +170,7 @@ int main()
 		d1 = a.begin();
 		d2 = a.end();
 		a.erase(d1, d2);
-		// a2.clear();
+		a2.clear();
 	}
 	catch(std::exception& e)
 	{

@@ -8,13 +8,16 @@
 template<class T, class Container = Vector<T> >
 class Stack
 {
+	public:
+		typedef Container									container_type;
+		typedef T                                           value_type;
+		typedef size_t                                      size_type;
+		typedef T&                                          reference;
+		typedef const T&                                    const_reference;
+	
 	private:
 		Container obj;
 	public:
-		// Stack() : Stack(Container()) 
-		// {
-		// }
-
 		explicit Stack( const Container& cont = Container() )
 		{
 			obj = cont;
