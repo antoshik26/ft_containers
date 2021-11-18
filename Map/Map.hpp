@@ -58,7 +58,7 @@ class Map
 		typedef IteratorMap<Key, T, Compare, Node_or_leaf_map>     				IteratorMap;
 		typedef ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>				ConstIteratorMap;
 		typedef ReversIteratorMap<Key, T, Compare, Node_or_leaf_map> 			ReversIteratorMap;
-		// typedef ConstReversIteratorMap<Key, T, Compare, Node_or_leaf_map>		ConstReversIteratorMap;
+		typedef ConstReversIteratorMap<Key, T, Compare, Node_or_leaf_map>		ConstReversIteratorMap;
 		typedef typename  Allocator::template rebind<Node_or_leaf_map>::other	Node_allocator;
 
 		Allocator _alloc;
@@ -119,6 +119,21 @@ class Map
 			insert(*begin);
 		}
 		
+		template< class InputIt >
+		Map( InputIt first, InputIt last,const Compare& comp = Compare(), const Allocator& alloc = Allocator(), typename enable_if<!is_integral<InputIt>::value >::type* = 0) //провепить
+		{
+			_alloc = alloc;;
+			_comp = comp;
+			_size_struct = 0;;
+			_size_alloc = 0;;
+			Node = NULL;
+			while(first != last)
+			{
+				insert(*first);
+				first++;
+			}
+		}
+
 		~Map()
 		{
 			clear();
@@ -483,6 +498,16 @@ class Map
 			return (ret);
 		}
 
+		template<class InputIt>
+		void insert(InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //проверить
+		{
+			while (first != last)
+			{
+				insert(*first);
+				first++;
+			}
+		}
+
 		IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value) //не работает и не заработает
 		{
 			if (hint->node->value->first > value->first)
@@ -796,7 +821,7 @@ class Map
 		}
 
 		
-		friend bool operator==(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
+		friend bool operator==(/*const*/ Map& lhs, /*const*/ Map& rhs) //segmentation fault // работает 
 		{
 			// (void)lhs;
 			// (void)rhs;
@@ -1088,6 +1113,11 @@ class Map
 			// 			node = node.root;
 			// 		}
 			// 	}
+			// }
+			// template<class InputIt1, class InputIt2>
+			// bool lexicographical_compare ((InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2))
+			// {
+
 			// }
 };
 #endif

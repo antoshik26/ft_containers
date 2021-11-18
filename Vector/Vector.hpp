@@ -79,7 +79,7 @@ class Vector
 		}
 
 		template< class InputIt >
-		Vector( InputIt first, InputIt last, const Allocator& alloc = Allocator())
+		Vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename enable_if<!is_integral<InputIt>::value >::type* = 0)
 		{
 			alloc = Allocator();
 			_n = first - last;
@@ -93,12 +93,18 @@ class Vector
 			}
 		}
 
-		Vector( const Vector& other )
+		Vector(const Vector& other)
 		{
 			_alloc = other._alloc;
 			_size_alloc = other._size_alloc;
 			_n = other._n;
-			//дописать
+			array = _alloc.allocate(_size_alloc);
+			for (size_t i = 0; i < _n; i++)
+			{
+    			_alloc.construct(&array[i]);
+				array[i] = other.get_data(i);
+			}
+			return (*this);
 		}
 
 		~Vector()
@@ -218,7 +224,7 @@ class Vector
 		}
 
 		template< class InputIt >
-		void assign( InputIt first, InputIt last )
+		void assign( InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0 )
 		{
 			clear();
 			size_t count = first - last;
@@ -436,7 +442,7 @@ class Vector
 			_n = 0;
 		}
 
-		IteratorVector<T>  insert(IteratorVector<T> pos, const T& value) //проверить
+		IteratorVector<T>  insert(IteratorVector<T> pos, const T& value) //проверить //- 
 		{
 			size_t i = pos - begin();
 			if ((_n + 1) > _size_alloc)
@@ -446,7 +452,9 @@ class Vector
 				_alloc.construct(&array[j + 1], array[j]);
 				_alloc.destroy(&array[j]);
 			}
-			_alloc.construct(array[i] + 1, value);
+			_alloc.construct(&array[i], value);
+			IteratorVector<T> a(&array[i]);
+			return (a);
 		}
 
 		void insert(IteratorVector<T> pos, size_t count, const T& value )
@@ -488,7 +496,7 @@ class Vector
 		}
 
 		template< class InputIt >
-		void insert( InputIt pos, InputIt first, InputIt last ) //проверить
+		void insert(InputIt pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //проверить //-
 		{
 			size_t i = pos - begin();
 			size_t count = last - first;
@@ -501,36 +509,40 @@ class Vector
 			}
 			for (size_t j = 0; j < count; j++)
 			{
-				_alloc.construct(array[j + i], &(*first));
+				_alloc.construct(&array[j + i], *first);
 				first++;
 			}
 			_n = _n + count;
 		}
 
-		IteratorVector<T> erase(IteratorVector<T> pos) //проверить
+		IteratorVector<T> erase(IteratorVector<T> pos) //проверить //-
 		{
 			size_t k = pos - begin();
 			_n--;
-			_alloc.destroy(array[k]);
+			_alloc.destroy(&array[k]);
 			for (size_t i = k; i < k + (end() - k) - 1; i++)
 			{
-				_alloc.construct(array[i], array[i + 1]);
+				_alloc.construct(&array[i], array[i + 1]);
 				_alloc.destroy(&array[i + 1]);
 			}
+			IteratorVector<T> a;
+			return (a);
 		}
 
-		IteratorVector<T> erase(IteratorVector<T> first, IteratorVector<T> last) //проверить
+		IteratorVector<T> erase(IteratorVector<T> first, IteratorVector<T> last) //проверить //-
 		{
 			size_t k = first - begin();
 			size_t count = first - last;
 			_n = _n - count;
 			for (size_t i = 0; i < count; i++)
-				_alloc.destroy(array[i]);
+				_alloc.destroy(&array[i]);
 			for (size_t i = k; i < k + (end() - k - count); i++)
 			{
-				_alloc.construct(array[i], array[i + count]);
-				_alloc.destroy(array[i + count]);
+				_alloc.construct(&array[i], array[i + count]);
+				_alloc.destroy(&array[i + count]);
 			}
+			IteratorVector<T> a;
+			return (a);
 		}
 
 		void push_back( const T& value )
@@ -591,7 +603,17 @@ class Vector
 			_size_alloc = new_size;
 			array = new_vec;
 		}
-		
+
+		template<class InputIt1, class InputIt2>
+		bool lexicographical_compare (InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
+		{
+			for (; (first1 != last1) && (first2 != last2); ++first1, ++last1)
+			{
+				if (*first1 < *first2) return true;
+       			if (*first2 < *first1) return false;
+    		}
+    		return (first1 == last1) && (first2 != last2);	
+		}
 };
 
 #endif
