@@ -68,6 +68,7 @@ class IteratorMap
 
 		IteratorMap &operator--(int)
 		{
+			
 			if (_node->left != NULL)
 			{
 				_node = searchMaxNode(_node->left);
@@ -88,8 +89,9 @@ class IteratorMap
 			return (*this);
 		}
 
-		IteratorMap &operator++()
+		IteratorMap operator++()
 		{
+			IteratorMap res(*this);
 			if (_node->right != NULL)
 			{
 				_node = searchMinNode(_node->right);
@@ -107,11 +109,12 @@ class IteratorMap
 				_node = tmp;
 				tmp = tmp->root;
 			}
-			return (*this);
+			return (res);
 		}
 
-		IteratorMap &operator--()
+		IteratorMap operator--()
 		{
+			IteratorMap res(*this);
 			if (_node->left != NULL)
 			{
 				_node = searchMaxNode(_node->left);
@@ -129,10 +132,8 @@ class IteratorMap
 				_node = tmp;
 				tmp = tmp->root;
 			}
-			return (*this);
+			return (res);
 		}
-
-	
 
 		Node_or_leaf_map* get_node()
 		{
@@ -255,8 +256,9 @@ class ConstIteratorMap
 			return (*this);
 		}
 
-		ConstIteratorMap &operator++()
+		ConstIteratorMap operator++()
 		{
+			ConstIteratorMap res(*this);
 			if (_node->right != NULL)
 			{
 				_node = searchMinNode(_node->right);
@@ -274,11 +276,12 @@ class ConstIteratorMap
 				_node = tmp;
 				tmp = tmp->root;
 			}
-			return (*this);
+			return (res);
 		}
 
-		ConstIteratorMap &operator--()
+		ConstIteratorMap operator--()
 		{
+			ConstIteratorMap res(*this);
 			if (_node->left != NULL)
 			{
 				_node = searchMaxNode(_node->left);

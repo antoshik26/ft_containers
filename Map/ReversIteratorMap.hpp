@@ -41,25 +41,96 @@ class ReversIteratorMap
 			return (*this);
 		}
 
-		// T &operator++(int)
-		// {
-		// 	return (*obj++);
-		// }
+		ReversIteratorMap &operator--(int)
+		{
+			if (_node->right != NULL)
+			{
+				_node = searchMinNode(_node->right);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;
+			while (tmp != NULL && _node == tmp->right)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (*this);
+		}
 
-		// T &operator--(int)
-		// {
-		// 	return(*obj--);
-		// }
+		ReversIteratorMap &operator++(int)
+		{
+			
+			if (_node->left != NULL)
+			{
+				_node = searchMaxNode(_node->left);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;			
+			while (tmp != NULL && _node == tmp->left)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (*this);
+		}
 
-		// T &operator++()
-		// {
-		// 	return (++*obj);
-		// }
+		ReversIteratorMap operator--()
+		{
+			ReversIteratorMap res(*this);
+			if (_node->right != NULL)
+			{
+				_node = searchMinNode(_node->right);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;
+			while (tmp != NULL && _node == tmp->right)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (res);
+		}
 
-		// T &operator--()
-		// {
-		// 	return (--*obj);
-		// }
+		ReversIteratorMap operator++()
+		{
+			ReversIteratorMap res(*this);
+			if (_node->left != NULL)
+			{
+				_node = searchMaxNode(_node->left);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;			
+			while (tmp != NULL && _node == tmp->left)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (res);
+		}
 
 		bool operator!=(const ReversIteratorMap &it)
 		{
@@ -135,25 +206,96 @@ class ConstReversIteratorMap
 			return (*this);
 		}
 
-		// T &operator++(int)
-		// {
-		// 	return (*obj++);
-		// }
+		ConstReversIteratorMap &operator--(int)
+		{
+			if (_node->right != NULL)
+			{
+				_node = searchMinNode(_node->right);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;
+			while (tmp != NULL && _node == tmp->right)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (*this);
+		}
 
-		// T &operator--(int)
-		// {
-		// 	return(*obj--);
-		// }
+		ConstReversIteratorMap &operator++(int)
+		{
+			
+			if (_node->left != NULL)
+			{
+				_node = searchMaxNode(_node->left);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;			
+			while (tmp != NULL && _node == tmp->left)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (*this);
+		}
 
-		// T &operator++()
-		// {
-		// 	return (++*obj);
-		// }
+		ConstReversIteratorMap operator--()
+		{
+			ConstReversIteratorMap res(*this);
+			if (_node->right != NULL)
+			{
+				_node = searchMinNode(_node->right);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;
+			while (tmp != NULL && _node == tmp->right)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (res);
+		}
 
-		// T &operator--()
-		// {
-		// 	return (--*obj);
-		// }
+		ConstReversIteratorMap operator++()
+		{
+			ConstReversIteratorMap res(*this);
+			if (_node->left != NULL)
+			{
+				_node = searchMaxNode(_node->left);
+				return (*this);
+			}
+			Node_or_leaf_map* tmp;
+			tmp = _node->root;			
+			while (tmp != NULL && _node == tmp->left)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			if (tmp != NULL)
+			{
+				_node = tmp;
+				tmp = tmp->root;
+			}
+			return (res);
+		}
 
 		bool operator!=(const ConstReversIteratorMap &it)
 		{
