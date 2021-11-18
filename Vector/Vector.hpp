@@ -39,7 +39,7 @@ class Vector
 			public:
 				virtual const char* what() const throw()
 				{
-					return ("1");
+					return ("You can't reserve more memory");
 				}
 		};
 		class ExceptionAt : public std::exception
@@ -47,7 +47,7 @@ class Vector
 			public:
 				virtual const char* what() const throw()
 				{
-					return ("2");
+					return ("Element not found");
 				}
 		};
 		class ExceptionPushBack :public std::exception
@@ -55,7 +55,7 @@ class Vector
 			public:
 				virtual const char* what() const throw()
 				{
-					return ("3");
+					return ("You can't reserve more memory");
 				}
 		};
 	public:
@@ -75,7 +75,10 @@ class Vector
 			_alloc = alloc;
 			array = _alloc.allocate(_size_alloc);
 			for (size_t i = 0; i < count; ++i)
+			{
     			_alloc.construct(&array[i], value);
+				_n++;
+			}
 		}
 
 		template< class InputIt >
@@ -442,67 +445,87 @@ class Vector
 			_n = 0;
 		}
 
-		IteratorVector<T>  insert(IteratorVector<T> pos, const T& value) //проверить //- 
+		IteratorVector<T>  insert(IteratorVector<T> pos, const T& value) //+
 		{
-			size_t i = pos - begin();
-			if ((_n + 1) > _size_alloc)
-				realocateVec(_n + 1);
-			for (size_t j = (_n - 1); j > i - 1; j--)
+			try
 			{
-				_alloc.construct(&array[j + 1], array[j]);
-				_alloc.destroy(&array[j]);
+				size_t i = pos - begin();
+				if (_n + 1 > max_size())
+					throw Vector::ExceptionReserve();
+				if ((_n + 1) > _size_alloc)
+					realocateVec(_n + 1);
+				for (size_t j = (_n - 1); j != i - 1 ; j--)
+				{
+					_alloc.construct(&array[j + 1], array[j]);
+					_alloc.destroy(&array[j]);
+				}
+				_alloc.construct(&array[i], value);
+				_n++;
+				IteratorVector<T> a(&array[i]);
+				return (a);
 			}
-			_alloc.construct(&array[i], value);
-			IteratorVector<T> a(&array[i]);
-			return (a);
+			catch (std::exception &e)
+			{
+				throw;
+			}
 		}
 
 		void insert(IteratorVector<T> pos, size_t count, const T& value )
 		{
-			size_t i = pos - begin();
-			// size_t k = end() - pos;
-			if (static_cast<size_t>(_n + count) > _size_alloc)
-				realocateVec(_n + count);
-			// IteratorVector<T> new_pos(&array[i]);
-			// std::cout << i << std::endl;
-			for (size_t j = (_n - 1); j > i - 1 ; j--)
+			try
 			{
+				size_t i = pos - begin();
+				// size_t k = end() - pos;
+				if (_n + 1 > max_size())
+					throw Vector::ExceptionReserve();
+				if (static_cast<size_t>(_n + count) > _size_alloc)
+					realocateVec(_n + count);
+				// IteratorVector<T> new_pos(&array[i]);
+				// std::cout << i << std::endl;
+				
+				for (size_t j = (_n - 1); j != i - 1 ; j--)
+				{
 
-				_alloc.construct(&array[j + count], array[j]);
-				// std::cout << array[j + count] << std::endl;
-				// std::cout << j + count << std::endl;
-				_alloc.destroy(&array[j]);
+					_alloc.construct(&array[j + count], array[j]);
+					// std::cout << array[j + count] << std::endl;
+					// std::cout << j + count << std::endl;
+					_alloc.destroy(&array[j]);
+				}
+				// size_t z = 0;
+				// while (z < _n + 5)
+				// {
+				// 	std::cout << array[z] << " ";
+				// 	z++;
+				// }
+				// std::cout << std::endl;
+				// (void)value;
+				for (size_t j = 0; j < count; j++)
+				{
+					_alloc.construct(&array[i + j], value);
+					_n++;
+				}
+				// z = 0;
+				// while (z < _n + 5)
+				// {
+				// 	std::cout << array[z] << " ";
+				// 	z++;
+				// }
+				// std::cout << std::endl;
 			}
-			// size_t z = 0;
-			// while (z < _n + 5)
-			// {
-			// 	std::cout << array[z] << " ";
-			// 	z++;
-			// }
-			// std::cout << std::endl;
-			// (void)value;
-			for (size_t j = 0; j < count; j++)
+			catch (std::exception &e)
 			{
-				_alloc.construct(&array[i + j], value);
-				_n++;
+				throw;
 			}
-			// z = 0;
-			// while (z < _n + 5)
-			// {
-			// 	std::cout << array[z] << " ";
-			// 	z++;
-			// }
-			// std::cout << std::endl;
 		}
 
 		template< class InputIt >
-		void insert(InputIt pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //проверить //-
+		void insert(InputIt pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //+
 		{
 			size_t i = pos - begin();
 			size_t count = last - first;
-			if ((_n + count) < _size_alloc)
+			if ((_n + count) > _size_alloc)
 				realocateVec(_n + count);
-			for (size_t j = (_n - 1); j > i - 1; j--)
+			for (size_t j = (_n - 1); j != i - 1 ; j--)
 			{
 				_alloc.construct(&array[j + count], array[j]);
 				_alloc.destroy(&array[j]);
@@ -515,52 +538,53 @@ class Vector
 			_n = _n + count;
 		}
 
-		IteratorVector<T> erase(IteratorVector<T> pos) //проверить //-
+		IteratorVector<T> erase(IteratorVector<T> pos) //+
 		{
 			size_t k = pos - begin();
 			_n--;
 			_alloc.destroy(&array[k]);
-			for (size_t i = k; i < k + (end() - k) - 1; i++)
+			for (size_t i = k; i < _n; i++)
 			{
 				_alloc.construct(&array[i], array[i + 1]);
 				_alloc.destroy(&array[i + 1]);
 			}
-			IteratorVector<T> a;
+			IteratorVector<T> a(&array[k]);
 			return (a);
 		}
 
-		IteratorVector<T> erase(IteratorVector<T> first, IteratorVector<T> last) //проверить //-
+		IteratorVector<T> erase(IteratorVector<T> first, IteratorVector<T> last) //+
 		{
 			size_t k = first - begin();
-			size_t count = first - last;
+			size_t count = last - first;
 			_n = _n - count;
 			for (size_t i = 0; i < count; i++)
 				_alloc.destroy(&array[i]);
-			for (size_t i = k; i < k + (end() - k - count); i++)
+			for (size_t i = k; i < _n; i++)
 			{
 				_alloc.construct(&array[i], array[i + count]);
 				_alloc.destroy(&array[i + count]);
 			}
-			IteratorVector<T> a;
+			IteratorVector<T> a(&array[k]);
 			return (a);
 		}
 
 		void push_back( const T& value )
 		{
-			try
-			{
-				if (_n == _size_alloc)
-					throw Vector::ExceptionPushBack();
-				else
-				{
-					array[_n] = value;
-					_n++;
-				}
-			}
-			catch(std::exception& e)
-			{
-				throw;
-			}
+			// try
+			// {
+			// 	if (_n == _size_alloc)
+			// 		throw Vector::ExceptionPushBack();
+			// 	else
+			// 	{
+			// 		array[_n] = value;
+			// 		_n++;
+			// 	}
+			// }
+			// catch(std::exception& e)
+			// {
+			// 	throw;
+			// }
+			insert(end(), value);
 		}
 
 		void pop_back()
@@ -597,22 +621,11 @@ class Vector
 		void realocateVec(size_t new_size)
 		{
 			T* new_vec = _alloc.allocate(new_size);
-			for (size_t i = 0; i < new_size; i++)
+			for (size_t i = 0; i < _n; i++)
 				_alloc.construct(&new_vec[i], array[i]);
 			this->~Vector();
 			_size_alloc = new_size;
 			array = new_vec;
-		}
-
-		template<class InputIt1, class InputIt2>
-		bool lexicographical_compare (InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
-		{
-			for (; (first1 != last1) && (first2 != last2); ++first1, ++last1)
-			{
-				if (*first1 < *first2) return true;
-       			if (*first2 < *first1) return false;
-    		}
-    		return (first1 == last1) && (first2 != last2);	
 		}
 };
 

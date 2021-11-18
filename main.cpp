@@ -13,7 +13,7 @@
 // 	try
 // 	{
 // 		size_t i = 0;
-// 		Vector<int> a(10);
+// 		Vector<int> a(0);
 // 		Vector<int> a2(15, 5);
 // 		std::cout << "Vector empty " << a.empty() << std::endl;
 // 		std::cout << "Vector max_size " << a.max_size() << std::endl;
@@ -44,20 +44,31 @@
 // 		const int d[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 // 		c = a.begin();
 // 		c++;
-// 		a.insert(c, 2, d[0]);
-// 		// c = a.begin();
-// 		// a.insert(c, 26);
-// 		// c = a2.begin();
-// 		// b = a2.end();
-// 		// IteratorVector<int> c2;
-// 		// c2 = a.begin();
-// 		// a.insert(c2, c, b);
-// 		// c++;
-// 		// a.erase(c);
-// 		// c = a.begin();
-// 		// b = a.end();
-// 		// a.erase(c, b);
+// 		a.insert(c, 15, d[0]);
+// 		c = a.end();
+// 		a.insert(c, 26);
+// 		c = a2.begin();
+// 		b = a2.end();
+// 		IteratorVector<int> c2;
+// 		c2 = a.begin();
+// 		a.insert(c2, c, b);
 // 		std::cout << "Avter insert ";
+// 		i = 0;
+// 		std::cout <<  a.size() <<std::endl;
+// 		while(i < a.size())
+// 		{
+// 			std::cout << a[i] << " ";
+// 			i++;
+// 		}
+// 		std::cout << std::endl;
+// 		c = a.begin();
+// 		a.erase(c);
+// 		c = a.begin();
+// 		b = a.end();
+// 		c++;
+// 		b--;
+// 		a.erase(c, b);
+// 		std::cout << "Avter erase ";
 // 		i = 0;
 // 		std::cout <<  a.size() <<std::endl;
 // 		while(i < a.size())
