@@ -43,6 +43,11 @@ class Map
 				(void)other;
 				std::cout << "3" << std::endl;
 			}
+
+			~Node_or_leaf_map()
+			{
+				
+			}
 		};		
 	public:
 		typedef Key																key_type;
@@ -120,7 +125,7 @@ class Map
 		}
 		
 		template< class InputIt >
-		Map( InputIt first, InputIt last,const Compare& comp = Compare(), const Allocator& alloc = Allocator(), typename enable_if<!is_integral<InputIt>::value >::type* = 0) //провепить
+		Map( InputIt first, InputIt last,const Compare& comp = Compare(), const Allocator& alloc = Allocator(), typename enable_if<!is_integral<InputIt>::value >::type* = 0) //работает
 		{
 			_alloc = alloc;;
 			_comp = comp;
@@ -132,6 +137,7 @@ class Map
 				insert(*first);
 				first++;
 			}
+			insert(*first);
 		}
 
 		~Map()
@@ -393,6 +399,29 @@ class Map
 			}
 		}
 
+		ConstIteratorMap end() const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			IteratorMap it = NULL;
+
+			tmp1 = Node;
+			if (Node == NULL)
+			{
+				return (it);
+			}
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					tmp1 = tmp2->right;
+				}
+				IteratorMap it2(tmp2, tmp2->root, _comp);
+				return (it2);
+			}
+		}
+
 		ReversIteratorMap rbegin() //работает
 		{
 			Node_or_leaf_map* tmp1;
@@ -416,6 +445,29 @@ class Map
 			}
 		}
 
+		ConstReversIteratorMap rbegin() const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			ConstReversIteratorMap it;
+
+			tmp1 = Node;
+			if (Node == NULL)
+			{
+				return (it);
+			}
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					tmp1 = tmp2->right;
+				}
+				ConstReversIteratorMap it2(tmp2, tmp2->root, _comp);
+				return (it2);
+			}
+		}
+
 		ReversIteratorMap rend() //работает
 		{
 			Node_or_leaf_map* tmp1;
@@ -435,6 +487,29 @@ class Map
 					tmp1 = tmp2->left;
 				}
 				IteratorMap it2(tmp2, tmp2->root, _comp);
+				return (it2);
+			}
+		}
+
+		ConstReversIteratorMap rend() const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			ConstReversIteratorMap it = NULL;
+
+			tmp1 = Node;
+			if (Node == NULL)
+			{
+				return (it);
+			}
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					tmp1 = tmp2->left;
+				}
+				ConstReversIteratorMap it2(tmp2, tmp2->root, _comp);
 				return (it2);
 			}
 		}
@@ -473,7 +548,6 @@ class Map
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
 			Pair<IteratorMap, bool> ret;
-			IteratorMap iteratorNode;
 			Node_allocator a;
 			
 			tmp1 = Node;
@@ -485,7 +559,7 @@ class Map
 				Node->right = 0;
 				Node->root = 0;
 				Node->collor = 0;
-				// iteratorNode(Node);
+				IteratorMap iteratorNode(Node, Node, _comp);
 				ret.first = iteratorNode;
 				ret.second = true;
 				_size_struct++;
@@ -501,7 +575,12 @@ class Map
 					else
 					{
 						if (_comp(tmp2->value.first, value.first) == 0)
-							return (ret); 
+						{
+							IteratorMap iteratorNode(tmp2, tmp2, _comp);
+							ret.first = iteratorNode;
+							ret.second = true;
+							return (ret);
+						}
 						tmp1 = tmp2->right;
 					}
 				}
@@ -517,21 +596,25 @@ class Map
 				else
 					tmp2->right = tmp3;
 				_size_struct++;
+				IteratorMap iteratorNode(tmp3, tmp3, _comp);
+				ret.first = iteratorNode;
+				ret.second = true;
 			}
 			return (ret);
 		}
 
 		template<class InputIt>
-		void insert(InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //проверить
+		void insert(InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //работает
 		{
 			while (first != last)
 			{
 				insert(*first);
 				first++;
 			}
+			insert(*first);
 		}
 
-		IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value) //не работает и не заработает
+		IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value) //работает
 		{
 			if (hint->node->value->first > value->first)
 			{
@@ -719,10 +802,36 @@ class Map
 			return (NULL);
 		}
 		
-		// const_iterator find( const Key& key ) const
-		// {
-
-		// }
+		ConstIteratorMap find( const Key& key ) const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			
+			tmp1 = Node;
+			if (tmp1 == NULL)
+			{
+				return (NULL);
+			}
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					if (_comp(tmp2->value.first, key) == 1)
+						tmp1 = tmp2->left;
+					else
+					{
+						if (_comp(tmp2->value.first, key) == 0)
+						{
+							ConstIteratorMap iteratorNode(tmp2, tmp1, _comp);
+							return (iteratorNode);
+						}
+						tmp1 = tmp2->right;
+					}
+				}
+			}
+			return (NULL);
+		}
 
 		Pair<IteratorMap, IteratorMap> equal_range(const Key& key) //доделать
 		{
@@ -759,13 +868,45 @@ class Map
 			return (combo);
 		}
 
-		// std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
+		Pair<ConstIteratorMap, ConstIteratorMap> equal_range( const Key& key ) const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			Pair<ConstIteratorMap, ConstIteratorMap> combo;
+
+			tmp1 = Node;
+			if (tmp1 == NULL)
+				return (combo);
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					if (_comp(tmp2->value.first, key) == 1)
+						tmp1 = tmp2->left;
+					else
+					{
+						if (_comp(tmp2->value.first, key) == 0)
+						{
+							ConstIteratorMap iterator1(tmp2, tmp2, _comp);
+							iterator1++;
+							combo.first = iterator1;
+							ConstIteratorMap iterator2(tmp2, tmp2, _comp);
+							iterator2--;
+							combo.second = iterator2;
+							return (combo); 
+						}
+						tmp1 = tmp2->right;
+					}
+				}
+			}
+			return (combo);
+		}
 
 		IteratorMap lower_bound(const Key& key) //работает
 		{
 			Node_or_leaf_map* tmp1;
 			Node_or_leaf_map* tmp2;
-			
 			
 			tmp1 = Node;
 			if (tmp1 == NULL)
@@ -796,7 +937,39 @@ class Map
 			return (iterator);
 		}
 
-		// const_iterator lower_bound( const Key& key ) const;
+		ConstIteratorMap lower_bound( const Key& key ) const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			
+			tmp1 = Node;
+			if (tmp1 == NULL)
+				return (NULL);
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					if (_comp(tmp2->value.first, key) == 1)
+						tmp1 = tmp2->left;
+					else
+					{
+						if (_comp(tmp2->value.first, key) == 0)
+						{
+							ConstIteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
+						if (_comp(tmp2->value.first, key) == -1)
+						{
+							ConstIteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
+					}
+				}
+			}
+			ConstIteratorMap iterator = begin();
+			return (iterator);
+		}
 
 		IteratorMap upper_bound(const Key& key) //работает
 		{
@@ -832,12 +1005,45 @@ class Map
 			return (iterator);
 		}
 
-		// const_iterator upper_bound( const Key& key ) const;
+		ConstIteratorMap upper_bound( const Key& key ) const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			
+			tmp1 = Node;
+			if (tmp1 == NULL)
+				return (NULL);
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					if (_comp(tmp2->value.first, key) == -1)
+						tmp1 = tmp2->right;
+					else
+					{
+						if (_comp(tmp2->value.first, key) == 0)
+						{
+							ConstIteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
+						if (_comp(tmp2->value.first, key) == 1)
+						{
+							ConstIteratorMap iterator(tmp2, tmp2, _comp);
+							return (iterator);
+						}
+					}
+				}
+			}
+			ConstIteratorMap iterator = end();
+			return (iterator);
+		}
 
 		Compare key_comp() const //работает
 		{
 			return (_comp);
 		}
+		
 		Compare value_comp() const //работает
 		{
 			return (_comp);

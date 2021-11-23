@@ -112,6 +112,13 @@ int main()
 		const Pair</*const*/ int, int> c5(1, 5);
 		const Pair</*const*/ int, int> c6(6, 6);
 		const Pair</*const*/ int, int> c7(7, 7);
+		const Pair</*const*/ int, int> c8(8, 7);
+		const Pair</*const*/ int, int> c9(9, 7);
+		const Pair</*const*/ int, int> c10(10, 7);
+		const Pair</*const*/ int, int> c11(11, 7);
+		const Pair</*const*/ int, int> c12(12, 7);
+		const Pair</*const*/ int, int> c13(13, 7);
+		const Pair</*const*/ int, int> c14(14, 7);
 		// a.insert(c2);
 		// for (int i = 0; i < 50; i++)
 		// {
@@ -145,23 +152,40 @@ int main()
 		a.erase(d3);
 		d1 = a.begin();
 		d2 = a.end();
+		std::cout << "erase key 4" << std::endl;
 		for (size_t i = 0; i < a.size(); i++, d1++)
 		{
 			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
 		}
 		std::cout << std::endl;
 		a2 = a;
+		a2.insert(c8);
+		a2.insert(c9);
+		a2.insert(c10);
+		a2.insert(c11);
+		a2.insert(c12);
+		a2.insert(c13);
+		a2.insert(c14);
 		d1 = a2.begin();
 		d2 = a2.end();
+		a.insert(d1, d2);
+		std::cout << "a2" << std::endl;
 		for (size_t i = 0; i != a2.size(); i++, d1++)
 		{
 			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
 		}
+		std::cout << std::endl;
 		d1 = a.begin();
 		d2 = a.end();
+		std::cout << "a1" << std::endl;
+		for (size_t i = 0; i != a.size(); i++, d1++)
+		{
+			std::cout << "int i = " <<  i << " first = " <<  (*d1).first << " second = "  << (*d1).second << std::endl;
+		}
 		std::cout << std::endl;
 		a[5] = 3563;
 		a[2] = 5678;
+		d2 = a.end();
 		for (size_t i = 0; i < a.size(); i++, d2--)
 		{
 			std::cout << "int i = " <<  i << " first = " <<  (*d2).first << " second = "  << (*d2).second << std::endl;

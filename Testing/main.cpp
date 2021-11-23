@@ -554,6 +554,8 @@ int main() {
   bst.insert(60);
   bst.insert(75);
   bst.insert(57);
+  bst.insert(56);
+  bst.insert(58);
 
   bst.printTree();
   cout << endl
