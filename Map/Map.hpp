@@ -347,6 +347,29 @@ class Map
 			}
 		}
 
+		ConstIteratorMap begin() const
+		{
+			Node_or_leaf_map* tmp1;
+			Node_or_leaf_map* tmp2;
+			ConstIteratorMap it = NULL;
+
+			tmp1 = Node;
+			if (Node == NULL)
+			{
+				return (it);
+			}
+			else
+			{
+				while (tmp1 != NULL)
+				{
+					tmp2 = tmp1;
+					tmp1 = tmp2->left;
+				}
+				ConstIteratorMap it2(tmp2, tmp2->root, _comp);
+				return (it2);
+			}
+		}
+
 		IteratorMap end() //работает
 		{
 			Node_or_leaf_map* tmp1;
@@ -821,12 +844,12 @@ class Map
 		}
 
 		
-		friend bool operator==(/*const*/ Map& lhs, /*const*/ Map& rhs) //segmentation fault // работает 
+		friend bool operator==(const Map& lhs, const Map& rhs) //segmentation fault // работает 
 		{
 			// (void)lhs;
 			// (void)rhs;
-			IteratorMap lhsiter = lhs.begin();
-			IteratorMap rhsiter = rhs.begin();
+			ConstIteratorMap lhsiter = lhs.begin();
+			ConstIteratorMap rhsiter = rhs.begin();
 			size_t i = 0;
 
 			if (lhs._size_struct != rhs._size_struct)
@@ -896,12 +919,12 @@ class Map
 		}
 
 		
-		friend bool operator!=(/*const*/ Map& lhs,/*const*/ Map& rhs)  //работает
+		friend bool operator!=(const Map& lhs, const Map& rhs)  //работает
 		{
 			// (void)lhs;
 			// (void)rhs;
-			IteratorMap lhsiter = lhs.begin();
-			IteratorMap rhsiter = rhs.begin();
+			ConstIteratorMap lhsiter = lhs.begin();
+			ConstIteratorMap rhsiter = rhs.begin();
 			size_t i = 0;
 
 			if (lhs._size_struct != rhs._size_struct)
@@ -970,12 +993,12 @@ class Map
 			// return (false);
 		}
 
-		friend bool operator<(/*const*/ Map& lhs, /*const*/ Map& rhs)  //работает
+		friend bool operator<(const Map& lhs, const Map& rhs)  //работает
 		{
 			// (void)lhs;
 			// (void)rhs;
-			IteratorMap lhsiter = lhs.begin();
-			IteratorMap rhsiter = rhs.begin();
+			ConstIteratorMap lhsiter = lhs.begin();
+			ConstIteratorMap rhsiter = rhs.begin();
 			size_t i = 0;
 
 			if (lhs._size_struct > rhs._size_struct)
@@ -992,12 +1015,12 @@ class Map
 		}
 
 		
-		friend bool operator<=(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
+		friend bool operator<=(const Map& lhs, const Map& rhs) //работает
 		{
 			(void)lhs;
 			(void)rhs;
-			IteratorMap lhsiter = lhs.begin();
-			IteratorMap rhsiter = rhs.begin();
+			ConstIteratorMap lhsiter = lhs.begin();
+			ConstIteratorMap rhsiter = rhs.begin();
 			size_t i = 0;
 
 			if (lhs._size_struct > rhs._size_struct)
@@ -1013,12 +1036,12 @@ class Map
 			return (true);
 		}
 
-		friend bool operator>(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
+		friend bool operator>(const Map& lhs, const Map& rhs) //работает
 		{
 			// (void)lhs;
 			// (void)rhs;
-			IteratorMap lhsiter = lhs.begin();
-			IteratorMap rhsiter = rhs.begin();
+			ConstIteratorMap lhsiter = lhs.begin();
+			ConstIteratorMap rhsiter = rhs.begin();
 			size_t i = 0;
 
 			if (lhs._size_struct < rhs._size_struct)
@@ -1034,12 +1057,12 @@ class Map
 			return (true);
 		}
 
-		friend bool operator>=(/*const*/ Map& lhs, /*const*/ Map& rhs) //работает
+		friend bool operator>=(const Map& lhs, const Map& rhs) //работает
 		{
 			// (void)lhs;
 			// (void)rhs;
-			IteratorMap lhsiter = lhs.begin();
-			IteratorMap rhsiter = rhs.begin();
+			ConstIteratorMap lhsiter = lhs.begin();
+			ConstIteratorMap rhsiter = rhs.begin();
 			size_t i = 0;
 
 			if (lhs._size_struct < rhs._size_struct)
