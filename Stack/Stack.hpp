@@ -3,9 +3,9 @@
 #include <memory>
 #include <iostream>
 #include <string>
-#include "../Vector/Vector.hpp"
+#include "../Vector/vector.hpp"
 
-template<class T, class Container = Vector<T> >
+template<class T, class Container = ft::vector<T> >
 class Stack
 {
 	public:
@@ -39,7 +39,7 @@ class Stack
 
 		T top()
 		{
-			return (obj.array[obj._n]);
+			return (obj.array[obj._n]); //front
 		}
 
 		T top() const
@@ -64,7 +64,7 @@ class Stack
 
 		void pop()
 		{
-			obj.pop();
+			obj.pop(); //pop_back
 		}
 
 		void swap(Stack& other )
