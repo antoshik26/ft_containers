@@ -87,6 +87,8 @@ namespace ft
 			template< class InputIt >
 			vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename enable_if<!is_integral<InputIt>::value >::type* = 0)
 			{
+				_n = 0;
+				InputIt first2 = first;
 				_alloc = alloc;
 				for (; first != last; ++first)
 					++_n;
@@ -94,11 +96,11 @@ namespace ft
 				_size_alloc = _n;
 				_alloc = alloc;
 				size_t i = 0;
-				while (first != last)
+				while (first2 != last)
 				{
-					array[i] = *first;
+					array[i] = *first2;
 					i++;
-					first++;
+					first2++;
 				}
 			}
 
@@ -110,8 +112,7 @@ namespace ft
 				array = _alloc.allocate(_size_alloc);
 				for (size_t i = 0; i < _n; i++)
 				{
-					_alloc.construct(&array[i]);
-					array[i] = other.get_data(i);
+					_alloc.construct(&array[i], other.array[i]);
 				}
 				// return (*this);
 			}
@@ -120,7 +121,7 @@ namespace ft
 			{
 				for (size_t i = 0; i < _size_alloc; i++)
 					_alloc.destroy(&array[i]);
-				_alloc.deallocate(array, _size_alloc); 
+				// _alloc.deallocate(array, _size_alloc); 
 			}
 
 			vector &operator=(const vector obj)
@@ -131,8 +132,7 @@ namespace ft
 				array = _alloc.allocate(_size_alloc);
 				for (size_t i = 0; i < _n; i++)
 				{
-					_alloc.construct(&array[i]);
-					array[i] = obj.get_data(i);
+					_alloc.construct(&array[i], obj.array[i]);
 				}
 				return (*this);
 			}
@@ -533,7 +533,7 @@ namespace ft
 				}
 			}
 
-			template< class InputIt >
+			template< class InputIt>
 			void insert(InputIt pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //+
 			{
 				size_t i = pos - begin();

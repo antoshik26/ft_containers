@@ -4,8 +4,12 @@
 #include <iostream>
 #include <string>
 
+
 namespace ft
 {
+	template<typename T>
+	class ConstIteratorVector;
+
 	template<typename T>
 	class IteratorVector
 	{
@@ -41,17 +45,18 @@ namespace ft
                 return (*this);
             }
 			
-			// T* operator=(T obj)
-			// {
-			// 	this->obj = obj;
-			// 	return (this->obj);
-			// }
-
 			IteratorVector& operator+=(int nb)
             {
                 movePtr(this->obj, nb, 1);
                 return (*this);
             }
+
+			IteratorVector& operator-=(int nb)
+            {
+                movePtr(this->obj, nb, 0);
+                return (*this);
+            }
+
 
 			IteratorVector operator+(int nb) const
             {
@@ -60,12 +65,11 @@ namespace ft
                 movePtr(it.obj, nb, 1);
                 return (it);
             }
-            
-
-			IteratorVector& operator-=(int nb)
+			
+			friend IteratorVector operator+(int nb, const IteratorVector& obj)
             {
-                movePtr(this->obj, nb, 0);
-                return (*this);
+            	IteratorVector newIt(obj);
+            	return (newIt += nb);
             }
 
 			IteratorVector operator-(int nb) const
@@ -75,6 +79,12 @@ namespace ft
                 movePtr(it.obj, nb, 0);
                 return (it);
             }
+
+            friend IteratorVector operator-(int nb, const IteratorVector& obj)
+            {
+                IteratorVector newIt(obj);
+                return (newIt -= nb);
+            }            
 
 			reference operator[](int nb) const
             {
@@ -89,38 +99,6 @@ namespace ft
                 return (this->obj - it.obj);
             }
 
-
-			// IteratorVector& operator+(int n)
-			// {
-			// 	return *(obj + n);
-			// }
-
-			// IteratorVector& operator+(size_t n)
-			// {
-			// 	return *(obj + n);
-			// }
-
-			// IteratorVector& operator-(int n)
-			// {
-			// 	return *(obj - n);
-			// }
-
-			// size_t operator-(IteratorVector i)
-			// {
-			// 	return (obj - i.obj);
-			// }
-			
-			// size_t operator+(IteratorVector i)
-			// {
-			// 	return (obj + i.obj);
-			// }
-
-			// size_t operator+(IteratorVector i, size_t k)
-			// {
-				
-			// 	return (obj + i.obj);
-			// }
-
 			IteratorVector operator++(int)
 			{
 				IteratorVector res(*this);
@@ -131,7 +109,7 @@ namespace ft
 			IteratorVector operator--(int)
 			{
 				IteratorVector res(*this);
-				++(*this);
+				--(*this);
 				return (res);
 			}
 
@@ -166,14 +144,43 @@ namespace ft
             bool operator<=(const IteratorVector& it) const    { return (it.obj >= this->obj); }
             bool operator>=(const IteratorVector& it) const    { return (it.obj <= this->obj); }
 
-			T operator*()
+			T& operator*()
 			{
 				return(*obj);
 			}
 
-			T operator&()
+			T* operator&()
 			{
-				return(&obj);
+				return(obj);
+			}
+
+			operator ConstIteratorVector<T>()
+			{
+				return (ConstIteratorVector<T>(obj));
+			}
+			
+			bool operator!=(const ConstIteratorVector<T>& it) const
+			{
+				if (obj != it.get_data())
+					return(true);
+				return(false);
+			}
+
+			bool operator==(const ConstIteratorVector<T>& it) const
+			{
+				if (obj == it.get_data())
+					return(true);
+				return(false);
+			}
+
+			bool operator<(const ConstIteratorVector<T>& it) const     { return (it.get_data() > this->obj); }
+            bool operator>(const ConstIteratorVector<T>& it) const     { return (it.get_data() < this->obj); }
+            bool operator<=(const ConstIteratorVector<T>& it) const    { return (it.get_data() >= this->obj); }
+            bool operator>=(const ConstIteratorVector<T>& it) const    { return (it.get_data() <= this->obj); }
+
+			T* get_data() const
+			{
+				return (obj);
 			}
 			
 			private:
@@ -181,7 +188,6 @@ namespace ft
 				{
 					int mov;
 
-					// If addtion, mov will be positive. If substraction, negative.
 					if (sign == 1)
 						mov = nb > 0 ? mov = 1: mov = -1;
 					else
@@ -204,6 +210,7 @@ namespace ft
 			typedef size_t                                          size_type;		
 			typedef T*                                              pointer;
 			typedef T&												reference;
+			// typedef typename IteratorVector<T>						IteratorVector;
 		private:
 			T* obj;
 		public:
@@ -227,35 +234,71 @@ namespace ft
                     obj = it.obj;
                 return (*this);
             }
+			
 
-			// ConstIteratorVector& operator=(const IteratorVector& it)
-            // {
-            //     if (this != &it)
-            //         obj = it.obj;
-            //     return (*this);
-            // }
+			
+			ConstIteratorVector& operator+=(int nb)
+            {
+                movePtr(this->obj, nb, 1);
+                return (*this);
+            }
 
-			// T& operator+(int n)
-			// {
-			// 	return *(obj + n);
-			// }
+			ConstIteratorVector& operator-=(int nb)
+            {
+                movePtr(this->obj, nb, 0);
+                return (*this);
+            }
 
-			// T& operator+(size_t n)
-			// {
-			// 	return *(obj + n);
-			// }
 
-			// T& operator-(int n)
-			// {
-			// 	return *(obj - n);
-			// }
+			ConstIteratorVector operator+(int nb) const
+            {
+                ConstIteratorVector it(*this);
+                
+                movePtr(it.obj, nb, 1);
+                return (it);
+            }
+			
+			friend ConstIteratorVector operator+(int nb, const ConstIteratorVector& obj)
+            {
+            	ConstIteratorVector newIt(obj);
+            	return (newIt += nb);
+            }
 
-			size_t operator-(ConstIteratorVector i)
+			ConstIteratorVector operator-(int nb) const
+            {
+                ConstIteratorVector it(*this);
+                
+                movePtr(it.obj, nb, 0);
+                return (it);
+            }
+
+            friend ConstIteratorVector operator-(int nb, const ConstIteratorVector& obj)
+            {
+                ConstIteratorVector newIt(obj);
+                return (newIt -= nb);
+            }            
+
+			reference operator[](int nb) const
+            {
+                value_type* tmp(this->obj);
+
+                movePtr(tmp, nb, 1);
+                return (*tmp);
+            }
+
+			difference_type operator-(ConstIteratorVector it) const
+            {
+                return (this->obj - it.obj);
+            }
+
+			difference_type operator-(ConstIteratorVector i)
 			{
+				size_t a;
+				a = obj - i.obj;
 				return (obj - i.obj);
 			}
 			
-			size_t operator+(ConstIteratorVector i)
+			difference_type operator+(ConstIteratorVector i)
 			{
 				return (obj + i.obj);
 			}
@@ -306,9 +349,60 @@ namespace ft
 				return(false);
 			}
 
-			T operator*()
+			bool operator<(const ConstIteratorVector<T>& it) const     { return (it.obj > this->obj); }
+            bool operator>(const ConstIteratorVector<T>& it) const     { return (it.obj < this->obj); }
+            bool operator<=(const ConstIteratorVector<T>& it) const    { return (it.obj >= this->obj); }
+            bool operator>=(const ConstIteratorVector<T>& it) const    { return (it.obj <= this->obj); }
+
+			bool operator!=(const IteratorVector<T> &it)
+			{
+				return (obj != it.get_data());
+					// return(true);
+				// return(false);
+			}
+
+			bool operator==(const IteratorVector<T> &it)
+			{
+				if (obj == it.get_data())
+					return(true);
+				return(false);
+			}
+
+			bool operator<(const IteratorVector<T>& it) const     { return (it.get_data() > this->obj); }
+            bool operator>(const IteratorVector<T>& it) const     { return (it.get_data() < this->obj); }
+            bool operator<=(const IteratorVector<T>& it) const    { return (it.get_data() >= this->obj); }
+            bool operator>=(const IteratorVector<T>& it) const    { return (it.get_data() <= this->obj); }
+
+			T& operator*()
 			{
 				return(*obj);
+			}
+
+			T* operator&() 
+			{
+				return(obj);
+			}
+
+			T* get_data() const
+			{
+				return (obj);
+			}
+
+		private:
+			void movePtr(T*& val, long nb, bool sign) const
+			{
+				int mov;
+
+				// If addtion, mov will be positive. If substraction, negative.
+				if (sign == 1)
+					mov = nb > 0 ? mov = 1: mov = -1;
+				else
+					mov = nb > 0 ? mov = -1: mov = 1;
+
+				if (nb < 0)
+					nb *= -1;
+				for (; nb > 0; --nb)
+					val += mov;
 			}
 	};
 }

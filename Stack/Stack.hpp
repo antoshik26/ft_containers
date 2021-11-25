@@ -5,102 +5,105 @@
 #include <string>
 #include "../Vector/vector.hpp"
 
-template<class T, class Container = ft::vector<T> >
-class Stack
+namespace ft
 {
-	public:
-		typedef Container									container_type;
-		typedef T                                           value_type;
-		typedef size_t                                      size_type;
-		typedef T&                                          reference;
-		typedef const T&                                    const_reference;
-	
-	private:
-		Container obj;
-	public:
-		explicit Stack( const Container& cont = Container() )
-		{
-			obj = cont;
-		}
-
-		Stack( const Stack& other )
-		{
-			obj = other;
-		}
-
-		~Stack()
-		{	
-		}
-
-		Stack& operator=( const Stack& other )
-		{
-			obj = other;
-		}
-
-		T top()
-		{
-			return (obj.array[obj._n]); //front
-		}
-
-		T top() const
-		{
-			return (obj.array[obj._n]);
-		}
+	template<class T, class Container = ft::vector<T> >
+	class stack
+	{
+		public:
+			typedef Container									container_type;
+			typedef T                                           value_type;
+			typedef size_t                                      size_type;
+			typedef T&                                          reference;
+			typedef const T&                                    const_reference;
 		
-		bool empty() const
-		{
-			return (obj.empty());
-		}
+		private:
+			Container obj;
+		public:
+			explicit stack( const Container& cont = Container() )
+			{
+				obj = cont;
+			}
 
-		size_t size() const
-		{
-			return (obj.size());
-		}
+			stack( const stack& other )
+			{
+				obj = other;
+			}
 
-		void push( const T& value )
-		{
-			obj.push(value);	
-		}
+			~stack()
+			{	
+			}
 
-		void pop()
-		{
-			obj.pop(); //pop_back
-		}
+			stack& operator=( const stack& other )
+			{
+				obj = other;
+			}
 
-		void swap(Stack& other )
-		{
-			obj.swap(other);
-		}
-		
-		friend bool operator==( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
-		{
-			return (lhs.obj == rhs.obj);
-		}
+			T top()
+			{
+				return (obj.front());
+			}
 
-		friend bool operator!=( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
-		{
-			return (lhs.obj != rhs.obj);
-		}
+			T top() const
+			{
+				return (obj.front());
+			}
+			
+			bool empty() const
+			{
+				return (obj.empty());
+			}
 
-		friend bool operator<( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
-		{
-			return (lhs.obj < rhs.obj);
-		}
+			size_t size() const
+			{
+				return (obj.size());
+			}
 
-		friend bool operator<=( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
-		{
-			return (lhs.obj <= rhs.obj);
-		}
+			void push( const T& value )
+			{
+				obj.push_back(value);	
+			}
 
-		friend bool operator>( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
-		{
-			return (lhs.obj > rhs.obj);
-		}
+			void pop()
+			{
+				obj.pop_back();
+			}
 
-		friend bool operator>=( const Stack<T,Container>& lhs, const Stack<T,Container>& rhs )
-		{
-			return (lhs.obj >= rhs.obj);
-		}
-};
+			void swap(stack& other )
+			{
+				obj.swap(other);
+			}
+			
+			friend bool operator==( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+			{
+				return (lhs.obj == rhs.obj);
+			}
+
+			friend bool operator!=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+			{
+				return (lhs.obj != rhs.obj);
+			}
+
+			friend bool operator<( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+			{
+				return (lhs.obj < rhs.obj);
+			}
+
+			friend bool operator<=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+			{
+				return (lhs.obj <= rhs.obj);
+			}
+
+			friend bool operator>( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+			{
+				return (lhs.obj > rhs.obj);
+			}
+
+			friend bool operator>=( const stack<T,Container>& lhs, const stack<T,Container>& rhs )
+			{
+				return (lhs.obj >= rhs.obj);
+			}
+	};
+}
 
 #endif
