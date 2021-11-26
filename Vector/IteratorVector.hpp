@@ -154,6 +154,11 @@ namespace ft
 				return(obj);
 			}
 
+			T* operator->() const
+			{ 
+				return (obj); 
+			}
+
 			operator ConstIteratorVector<T>()
 			{
 				return (ConstIteratorVector<T>(obj));
@@ -311,16 +316,16 @@ namespace ft
 
 			ConstIteratorVector &operator++(int)
 			{
-				ConstIteratorVector res(*this);
+				ConstIteratorVector* res = new ConstIteratorVector(*this);
 				++(*this);
-				return (res);
+				return (*res);
 			}
 
 			ConstIteratorVector &operator--(int)
 			{
-				ConstIteratorVector res(*this);
+				ConstIteratorVector* res = new ConstIteratorVector(*this);
 				--(*this);
-				return (res);
+				return (*res);
 			}
 
 			ConstIteratorVector &operator++()
@@ -381,6 +386,11 @@ namespace ft
 			T* operator&() 
 			{
 				return(obj);
+			}
+
+			T* operator->() const
+			{ 
+				return (obj); 
 			}
 
 			T* get_data() const

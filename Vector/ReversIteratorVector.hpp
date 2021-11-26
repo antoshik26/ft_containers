@@ -55,20 +55,20 @@ namespace ft
 				return (*this);
 			}
 				
-			ReversIteratorVector& base()
+			IteratorVector<T> base()
 			{
-				return (*this);
+				return (IteratorVector<T>(obj));
 			}
 
 			ReversIteratorVector& operator+=(int nb)
 			{
-				movePtr(this->obj, nb, 1);
+				movePtr(this->obj, nb, 0);
 				return (*this);
 			}
 
 			ReversIteratorVector& operator-=(int nb)
 			{
-				movePtr(this->obj, nb, 0);
+				movePtr(this->obj, nb, 1);
 				return (*this);
 			}
 
@@ -77,7 +77,7 @@ namespace ft
 			{
 				ReversIteratorVector it(*this);
 				
-				movePtr(it.obj, nb, 1);
+				movePtr(it.obj, nb, 0);
 				return (it);
 			}
 
@@ -91,7 +91,7 @@ namespace ft
 			{
 				ReversIteratorVector it(*this);
 				
-				movePtr(it.obj, nb, 0);
+				movePtr(it.obj, nb, 1);
 				return (it);
 			}
 
@@ -118,26 +118,26 @@ namespace ft
 			ReversIteratorVector operator++(int)
 			{
 				ReversIteratorVector res(*this);
-				++(*this);
+				--(*this);
 				return (res);
 			}
 
 			ReversIteratorVector operator--(int)
 			{
 				ReversIteratorVector res(*this);
-				--(*this);
+				++(*this);
 				return (res);
 			}
 
 			ReversIteratorVector &operator++()
 			{
-				++obj;
+				--obj;
 				return(*this);
 			}
 
 			ReversIteratorVector &operator--()
 			{
-				--obj;
+				++obj;
 				return(*this);
 			}
 
@@ -223,6 +223,11 @@ namespace ft
 				return (obj);
 			}
 
+			T* operator->() const
+			{ 
+				return (obj); 
+			}
+
 		private:
 			void movePtr(T*& val, long nb, bool sign) const
 			{
@@ -290,9 +295,9 @@ namespace ft
 				return (*this);
 			}
 				
-			ConstReversIteratorVector& base()
+			ConstIteratorVector<T> base() const
 			{
-				return (*this);
+				return (ConstIteratorVector<T>(obj));
 			}
 
 			ConstReversIteratorVector& operator+=(int nb)
@@ -456,6 +461,11 @@ namespace ft
 			T* get_data() const
 			{
 				return (obj);
+			}
+
+			T* operator->() const
+			{ 
+				return (obj); 
 			}
 		
 		private:
