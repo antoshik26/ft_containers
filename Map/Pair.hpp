@@ -49,5 +49,15 @@ class Pair
 			second = v2;
 			return (*this);
 		}
+
+		Pair operator->()
+		{
+			return (*this);
+		}
+
+		Pair operator*()
+		{
+			return (*this);
+		}
 };
 #endif

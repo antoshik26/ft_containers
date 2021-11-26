@@ -72,16 +72,16 @@
 // 	return (0);
 // }
 
-// #include <iostream>
-// #include <vector>
-// #include <algorithm>
-// #include <string>
-// #include <map>
-// #include <utility>
-// #include <string>
-// #include <complex>
-// #include <tuple>
-// #include <iostream>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <map>
+#include <utility>
+#include <string>
+#include <complex>
+#include <tuple>
+#include <iostream>
 
 // int main()
 // {
@@ -546,20 +546,28 @@ class RedBlackTree {
   }
 };
 
-int main() {
-  RedBlackTree bst;
-  bst.insert(55);
-  bst.insert(40);
-  bst.insert(65);
-  bst.insert(60);
-  bst.insert(75);
-  bst.insert(57);
-  bst.insert(56);
-  bst.insert(58);
+int main() 
+{
+	std::map<int, int> a;
+	std::pair<int,int> b(4, 5);
 
-  bst.printTree();
-  cout << endl
-     << "After deleting" << endl;
-  bst.deleteNode(40);
-  bst.printTree();
+	a.insert(b);
+	std::map<int,int>::iterator it = a.begin();
+	bool b = a.value_comp(*it, *it);
+	std::cout << *it << std::endl;
+	RedBlackTree bst;
+	bst.insert(55);
+	bst.insert(40);
+	bst.insert(65);
+	bst.insert(60);
+	bst.insert(75);
+	bst.insert(57);
+	bst.insert(56);
+	bst.insert(58);
+
+	bst.printTree();
+	cout << endl
+		<< "After deleting" << endl;
+	bst.deleteNode(40);
+ 	 bst.printTree();
 }

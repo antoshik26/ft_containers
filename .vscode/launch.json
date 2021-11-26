@@ -8,7 +8,7 @@
 			"type": "lldb",
 			"request": "launch",
 			"name": "Debug",
-			"program": "${workspaceFolder}/Vector/containers_test/a.out",
+			"program": "${workspaceFolder}/Stack/containers_test/a.out",
 			"args": [],
 			"cwd": "${workspaceFolder}"
 		}

@@ -41,12 +41,12 @@ namespace ft
 
 			T top()
 			{
-				return (obj.front());
+				return (obj.back());
 			}
 
 			T top() const
 			{
-				return (obj.front());
+				return (obj.back());
 			}
 			
 			bool empty() const

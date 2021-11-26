@@ -168,6 +168,10 @@ namespace ft
 
 			friend bool operator<(const vector obj1, const vector obj2)
 			{
+				if (obj1._n > obj2._n)
+					return (false);
+				if (obj1._n < obj2._n)
+					return (true);
 				int key = 0;
 				for (size_t i = 0; i < obj1._n; i++)
 				{
@@ -197,6 +201,10 @@ namespace ft
 
 			friend bool operator>(const vector obj1, const vector obj2)
 			{
+				if (obj1._n < obj2._n)
+					return (false);
+				if (obj1._n > obj2._n)
+					return (true);
 				int key = 0;
 				for (size_t i = 0; i < obj1._n; i++)
 				{
@@ -226,6 +234,10 @@ namespace ft
 
 			friend bool operator<=(const vector obj1, const vector obj2)
 			{
+				if (obj1._n > obj2._n)
+					return (false);
+				if (obj1._n < obj2._n)
+					return (true);
 				int key = 0;
 				for (size_t i = 0; i < obj1._n; i++)
 				{
@@ -256,6 +268,10 @@ namespace ft
 
 			friend bool operator>=(const vector obj1, const vector obj2)
 			{
+				if (obj1._n < obj2._n)
+					return (false);
+				if (obj1._n > obj2._n)
+					return (true);
 				int key = 0;
 				for (size_t i = 0; i < obj1._n; i++)
 				{

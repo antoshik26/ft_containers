@@ -2,6 +2,9 @@
 #define REVERSITERATORMAP_HPP
 #include <iostream>
 #include <memory>
+#include "map.hpp"
+#include "Pair.hpp"
+#include "Less.hpp"
 
 template<class Key, class T, class Compare, typename Node_or_leaf_map>
 class ReversIteratorMap
