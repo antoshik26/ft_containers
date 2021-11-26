@@ -168,13 +168,28 @@ namespace ft
 
 			friend bool operator<(const vector obj1, const vector obj2)
 			{
-				if (obj1._n < obj2._n || obj1._size_alloc < obj2._size_alloc)
-					return (true);
-				if (obj1._n > obj2._n || obj1._size_alloc > obj2._size_alloc)
-					return (false);
+				int key = 0;
 				for (size_t i = 0; i < obj1._n; i++)
 				{
-					if (obj1.array[i] >= obj2.array[i])
+					if (obj1.array[i] == obj2.array[i])
+					{
+						key = 1;
+					}
+					else
+					{
+						key = 0;
+						break;
+					}
+				}
+				if (key == 1)
+				{	
+					if (obj1._size_alloc < obj2._size_alloc)
+						return (true);
+					return (false);
+				}
+				for (size_t i = 0; i < obj1._n; i++)
+				{
+					if (obj1.array[i] > obj2.array[i])
 						return (false);
 				}
 				return (true);
@@ -182,13 +197,28 @@ namespace ft
 
 			friend bool operator>(const vector obj1, const vector obj2)
 			{
-				if (obj1._n > obj2._n || obj1._size_alloc > obj2._size_alloc)
-					return (true);
-				if (obj1._n < obj2._n || obj1._size_alloc < obj2._size_alloc)
-					return (false);
+				int key = 0;
 				for (size_t i = 0; i < obj1._n; i++)
 				{
-					if (obj1.array[i] <= obj2.array[i])
+					if (obj1.array[i] == obj2.array[i])
+					{
+						key = 1;
+					}
+					else
+					{
+						key = 0;
+						break;
+					}
+				}
+				if (key == 1)
+				{	
+					if (obj1._size_alloc > obj2._size_alloc)
+						return (true);
+					return (false);
+				}
+				for (size_t i = 0; i < obj1._n; i++)
+				{
+					if (obj1.array[i] < obj2.array[i])
 						return (false);
 				}
 				return (true);
@@ -226,16 +256,31 @@ namespace ft
 
 			friend bool operator>=(const vector obj1, const vector obj2)
 			{
-				if (obj1._n > obj2._n || obj1._size_alloc > obj2._size_alloc)
+				int key = 0;
+				for (size_t i = 0; i < obj1._n; i++)
 				{
-					for (size_t i = 0; i < obj2._n; i++)
+					if (obj1.array[i] < obj2.array[i])
 					{
-						if (obj1.array[i] < obj2.array[i])
-							return (false);
+						return (false);
 					}
 				}
-				if (obj1._n < obj2._n || obj1._size_alloc < obj2._size_alloc)
-					return (false);
+				for (size_t i = 0; i < obj1._n; i++)
+				{
+					if (obj1.array[i] == obj2.array[i])
+					{
+						key = 1;
+					}
+					else
+					{
+						key = 0;
+						break;
+					}
+				}
+				if (key == 1)
+				{
+					if (obj1._size_alloc < obj2._size_alloc)
+						return (false);
+				}
 				return (true);
 			}
 
