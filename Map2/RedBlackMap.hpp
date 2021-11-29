@@ -9,6 +9,10 @@
 #include "IteratorRedBlackMap.hpp"
 #include "ReversIteratorRedBlackMap.hpp"
 
+// namespace ft
+// {
+
+// }
 template<
     class Key,
     class T,
@@ -113,39 +117,194 @@ class RedBlackmap
 		//     root = TNULL;
 		//   }
 		
-		// RedBlackmap(Map& other )
+			// RedBlackmap(RedBlackmap& other )
+			// {
+			// 	_alloc = other._alloc;
+			// 	_comp = other._comp;
+			// 	// _size_struct = other._size_struct;
+			// 	// _size_alloc = other._size_alloc;
+			// 	_alloc_node = other._alloc_node;
+
+			// 	iterator begin = other.begin();
+			// 	iterator end = other.end();
+			// 	while (begin != end)
+			// 	{
+			// 		insert(*begin);
+			// 		begin++;
+			// 	}
+			// 	insert(*begin);
+			// }
 
 		// template< class InputIt >
-		// Map( InputIt first, InputIt last,const Compare& comp = Compare(), const Allocator& alloc = Allocator(), typename enable_if<!is_integral<InputIt>::value >::type* = 0) //провепить
+		// RedBlackmap( InputIt first, InputIt last,const Compare& comp = Compare(), const Allocator& alloc = Allocator(), typename enable_if<!is_integral<InputIt>::value >::type* = 0) //провепить
+		// {
+		// 	_alloc = alloc;;
+		// 	_comp = comp;
+		// 	_size_struct = 0;;
+		// 	_size_alloc = 0;;
+		// 	Node = NULL;
+		// 	while(first != last)
+		// 	{
+		// 		insert(*first);
+		// 		first++;
+		// 	}
+		// 	insert(*first);
+		// }
+
+		
 
 		// Map& operator=(Map& other) //работает
+		// RedBlackmap& operator=(RedBlackmap& other) //работает
+		// {
+		// 	_alloc = other._alloc;
+		// 	_comp = other._comp;
+		// 	// _size_struct = other._size_struct;
+		// 	// _size_alloc = other._size_alloc;
+		// 	_alloc_node = other._alloc_node;
+
+		// 	iterator begin = other.begin();
+		// 	iterator end = other.end();
+		// 	while (begin != end)
+		// 	{
+		// 		insert(*begin);
+		// 		begin++;
+		// 	}
+		// 	insert(*begin);
+		// }
 
 		~RedBlackmap()
 		{
-
+			// clear();
 		}
 
 		// Allocator get_allocator() const //работает
+		// {
+		// 	return (_alloc);
+		// }
 
-		// T& at(const Key& key) //работает
+			// T& at(const Key& key) //работает
+			// {
+			// 	try
+			// 	{
+			// 		Node_or_leaf_map* tmp1;
+			// 		Node_or_leaf_map* tmp2;
 
-		// T& operator[](Key key) //работает
+			// 		tmp1 = Node;
+			// 		if (Node == NULL)
+			// 		{
+			// 			throw map::ExceptionAt();
+			// 		}
+			// 		else
+			// 		{
+			// 			while (tmp1 != NULL)
+			// 			{
+			// 				tmp2 = tmp1;
+			// 				if (_comp(tmp2->value.first, key) == 1)
+			// 					tmp1 = tmp2->left;
+			// 				else
+			// 				{
+			// 					if (_comp(tmp2->value.first, key) == 0)
+			// 						return (tmp2->value.second);
+			// 					tmp1 = tmp2->right;
+			// 				}
+			// 			}
+			// 			throw map::ExceptionAt();
+			// 		}
+			// 	}
+			// 	catch(std::exception &e)
+			// 	{
+			// 		throw;
+			// 	}
+			// }
+
+			// T& operator[](Key key) //работает
+			// {
+			// 	Node_or_leaf_map* tmp1;
+			// 	Node_or_leaf_map* tmp2;
+			// 	Node_allocator a;
+			// 	Pair<Key, T> value(key, static_cast<T>(0));
+				
+			// 	tmp1 = Node;
+			// 	if (Node == NULL)
+			// 	{
+			// 		Node = (Node_or_leaf_map*)a.allocate(1);
+			// 		a.construct(Node, value);
+			// 		Node->left = 0;
+			// 		Node->right = 0;
+			// 		Node->root = 0;
+			// 		Node->collor = 0;
+			// 		_size_struct++;
+			// 		return(Node->value.second);
+			// 	}
+			// 	else
+			// 	{
+			// 		while (tmp1 != NULL)
+			// 		{
+			// 			tmp2 = tmp1;
+			// 			if (_comp(tmp2->value.first, key) == 1)
+			// 				tmp1 = tmp2->left;
+			// 			else
+			// 			{
+			// 				if (_comp(tmp2->value.first, key) == 0)
+			// 					return (tmp2->value.second);
+			// 				tmp1 = tmp2->right;
+			// 			}
+			// 		}
+			// 		Node_or_leaf_map* tmp3;
+			// 		tmp3 = (Node_or_leaf_map*)a.allocate(1);
+			// 		a.construct(tmp3, value);
+			// 		tmp3->root = tmp2;
+			// 		tmp3->left = NULL;
+			// 		tmp3->right = NULL;
+			// 		tmp3->collor = 0; //while brown
+			// 		if (_comp(tmp2->value.first, key) == 1)
+			// 			tmp2->left = tmp3;
+			// 		else
+			// 			tmp2->right = tmp3;
+			// 		_size_struct++;
+			// 		return (tmp3->value.second);
+			// 	}
+			// }
 
 		// IteratorMap begin() //работает
+		// {
+		// 	return (IteratorRedBlackMap(searchMinNode(Node), Node, _comp));	
+		// }
 
 		// ConstIteratorMap begin() const
+		// {
+		// 	return (ConstIteratorRedBlackMap(searchMinNode(Node), Node, _comp));
+		// }
 
 		// IteratorMap end() //работает
+		// {
+		// 	return (IteratorRedBlackMap(searchMaxNode(Node), Node, _comp));
+		// }
 
 		// ConstIteratorMap end() const
+		// {
+		// 	return (ConstIteratorRedBlackMap(searchMaxNode(Node), Node, _comp));	
+		// }
 
 		// ReversIteratorMap rbegin() //работает
+		// {
+		// 	return (ReversIteratorRedBlackMap(searchMaxNode(Node), Node, _comp));
+		// }
 		
 		// ConstReversIteratorMap rbegin() const
+		// {
+		// 	return (ConstReversIteratorRedBlackMap(searchMaxNode(Node), Node, _comp));
+		// }
 
 		// ReversIteratorMap rend() //работает
+		// {
+		// 	return (ReversIteratorRedBlackMap(searchMinNode(Node), Node, _comp));
+		// }
 
 		// ConstReversIteratorMap rend() const
+		// {
+		// 	return (ConstReversIteratorRedBlackMap(searchMinNode(Node, Node, _comp)));
+		// }
 
 		bool empty() const //работает
 		{
@@ -168,9 +327,22 @@ class RedBlackmap
 		}
 
 		// void clear() //работает
+		// {
+		// 	IteratorMap it1 = begin();
+		// 	IteratorMap it2 = end();
+
+		// 	while (it1 != it2)
+		// 	{
+		// 		erase(it1);	
+		// 		it1++;
+		// 	}
+		// }
 
 		// Pair<IteratorMap, bool> insert(const Pair</*const*/ Key, T>& value) //работает
-		//   void insert(int key) {
+		// {
+
+		// }
+		//   void insert(int key) { //переписать создание нода
 		//     NodePtr node = new Node;
 		//     node->parent = nullptr;
 		//     node->data = key;
@@ -213,18 +385,40 @@ class RedBlackmap
 
 
 		// template<class InputIt>
-		// void insert(InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0) //проверить
+		// void insert(InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value >::type* = 0)
+		// {
+		// 	while (first != last)
+		// 	{
+		// 		insert(first.get_node()->value);
+		// 		first++;
+		// 	}
+		// 	insert(first.get_node()->value);
+		// }
 
-		// IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value) //не работает и не заработает
+		// IteratorMap insert(IteratorMap hint, const Pair</*const*/ Key, T>& value)
+		// {
+		// 	insert(value);
+		// }
 
 		// void erase(IteratorMap pos) //работает
-		//	void deleteNode(int data)
-		//	{
-		//		deleteNodeHelper(this->root, data);
-		//	}
+		// {
+		// 	deleteNodeHelper(Node, pos.get_node()->value.first);
+		// }
+		// void deleteNode(int data)
+		// {
+		// 	deleteNodeHelper(this->root, data);
+		// }
 
 
 		// void erase( IteratorMap first, IteratorMap last ) //работает
+		// {
+		// 	while (first != last)
+		// 	{
+		// 		erase(first);
+		// 		first++;
+		// 	}
+		// 	erase(first);
+		// }
 		
 		void swap(RedBlackmap& other) //работает
 		{
@@ -237,52 +431,447 @@ class RedBlackmap
         }
 
 		// size_t count( const Key& key ) const //работает
+		// {
+		// 	Node_or_leaf_map* search_node = (searchTreeHelper Node, key);
+		// 	if (search_node == NULL)
+		// 		return (0);
+		// 	return (1);
+		// }
 
-		// IteratorMap find(const Key& key ) //работает
-			// NodePtr searchTree(int k)
-			// {
-		 	// return searchTreeHelper(this->root, k);
-			// }
+		// IteratorMap find(const Key& key) //работает
+		// {
+		// 	Node_or_leaf_map* search_node = (searchTreeHelper Node, key);
+		// 	IteratorMap it2(search_node, search_node, _comp);
+		// 	return (it2);
+		// }	
+		// NodePtr searchTree(int k)
+		// {
+		// return searchTreeHelper(this->root, k);
+		// }
 
 		// ConstIteratorMap find( const Key& key ) const
-			// NodePtr searchTree(int k)
+		// {
+		// 	Node_or_leaf_map* search_node = (searchTreeHelper Node, key);
+		// 	ConstIteratorMap it2(search_node, search_node, _comp);
+		// 	return (it2);
+		// }
+		// NodePtr searchTree(int k)
+		// {
+		// return searchTreeHelper(this->root, k);
+		// }
+
+			// Pair<const_iterator, const_iterator> equal_range( const Key& key ) const
 			// {
-		 	// return searchTreeHelper(this->root, k);
+			// 	Node_or_leaf_map* tmp1;
+			// 	Node_or_leaf_map* tmp2;
+			// 	Pair<const_iterator, const_iterator> combo;
+
+			// 	tmp1 = Node;
+			// 	if (tmp1 == NULL)
+			// 		return (combo);
+			// 	else
+			// 	{
+			// 		while (tmp1 != NULL)
+			// 		{
+			// 			tmp2 = tmp1;
+			// 			if (_comp(tmp2->value.first, key) == 1)
+			// 				tmp1 = tmp2->left;
+			// 			else
+			// 			{
+			// 				if (_comp(tmp2->value.first, key) == 0)
+			// 				{
+			// 					const_iterator iterator1(tmp2, tmp2, _comp);
+			// 					iterator1++;
+			// 					combo.first = iterator1;
+			// 					const_iterator iterator2(tmp2, tmp2, _comp);
+			// 					iterator2--;
+			// 					combo.second = iterator2;
+			// 					return (combo); 
+			// 				}
+			// 				tmp1 = tmp2->right;
+			// 			}
+			// 		}
+			// 	}
+			// 	return (combo);
 			// }
 
-		// Pair<IteratorMap, IteratorMap> equal_range(const Key& key) //доделать
+			// iterator lower_bound(const Key& key) //работает
+			// {
+			// 	Node_or_leaf_map* tmp1;
+			// 	Node_or_leaf_map* tmp2;
+				
+			// 	tmp1 = Node;
+			// 	if (tmp1 == NULL)
+			// 		return (NULL);
+			// 	else
+			// 	{
+			// 		while (tmp1 != NULL)
+			// 		{
+			// 			tmp2 = tmp1;
+			// 			if (_comp(tmp2->value.first, key) == 1)
+			// 				tmp1 = tmp2->left;
+			// 			else
+			// 			{
+			// 				if (_comp(tmp2->value.first, key) == 0)
+			// 				{
+			// 					iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 				if (_comp(tmp2->value.first, key) == -1)
+			// 				{
+			// 					iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// 	iterator iterator = begin();
+			// 	return (iterator);
+			// }
 
-		// Pair<ConstIteratorMap, ConstIteratorMap> equal_range( const Key& key ) const
+			// const_iterator lower_bound( const Key& key ) const
+			// {
+			// 	Node_or_leaf_map* tmp1;
+			// 	Node_or_leaf_map* tmp2;
+				
+			// 	tmp1 = Node;
+			// 	if (tmp1 == NULL)
+			// 		return (NULL);
+			// 	else
+			// 	{
+			// 		while (tmp1 != NULL)
+			// 		{
+			// 			tmp2 = tmp1;
+			// 			if (_comp(tmp2->value.first, key) == 1)
+			// 				tmp1 = tmp2->left;
+			// 			else
+			// 			{
+			// 				if (_comp(tmp2->value.first, key) == 0)
+			// 				{
+			// 					const_iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 				if (_comp(tmp2->value.first, key) == -1)
+			// 				{
+			// 					const_iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// 	const_iterator iterator = begin();
+			// 	return (iterator);
+			// }
 
-		// IteratorMap lower_bound(const Key& key) //работает
+			// iterator upper_bound(const Key& key) //работает
+			// {
+			// 	Node_or_leaf_map* tmp1;
+			// 	Node_or_leaf_map* tmp2;
+				
+			// 	tmp1 = Node;
+			// 	if (tmp1 == NULL)
+			// 		return (NULL);
+			// 	else
+			// 	{
+			// 		while (tmp1 != NULL)
+			// 		{
+			// 			tmp2 = tmp1;
+			// 			if (_comp(tmp2->value.first, key) == -1)
+			// 				tmp1 = tmp2->right;
+			// 			else
+			// 			{
+			// 				if (_comp(tmp2->value.first, key) == 0)
+			// 				{
+			// 					iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 				if (_comp(tmp2->value.first, key) == 1)
+			// 				{
+			// 					iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// 	iterator iterator = end();
+			// 	return (iterator);
+			// }
 
-		// ConstIteratorMap lower_bound( const Key& key ) const
+			// const_iterator upper_bound( const Key& key ) const
+			// {
+			// 	Node_or_leaf_map* tmp1;
+			// 	Node_or_leaf_map* tmp2;
+				
+			// 	tmp1 = Node;
+			// 	if (tmp1 == NULL)
+			// 		return (NULL);
+			// 	else
+			// 	{
+			// 		while (tmp1 != NULL)
+			// 		{
+			// 			tmp2 = tmp1;
+			// 			if (_comp(tmp2->value.first, key) == -1)
+			// 				tmp1 = tmp2->right;
+			// 			else
+			// 			{
+			// 				if (_comp(tmp2->value.first, key) == 0)
+			// 				{
+			// 					const_iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 				if (_comp(tmp2->value.first, key) == 1)
+			// 				{
+			// 					const_iterator iterator(tmp2, tmp2, _comp);
+			// 					return (iterator);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// 	const_iterator iterator = end();
+			// 	return (iterator);
+			// }
 
-		// IteratorMap upper_bound(const Key& key) //работает
+			// Compare key_comp() const //работает
+			// {
+			// 	return (_comp);
+			// }
+			
+			// value_compare value_comp() const //работает
+			// {
+			// 	return (value_compare(_comp));
+			// }
+			// friend bool operator==(const map& lhs, const map& rhs) //segmentation fault // работает 
+			// {
+			// 	// (void)lhs;
+			// 	// (void)rhs;
+			// 	const_iterator lhsiter = lhs.begin();
+			// 	const_iterator rhsiter = rhs.begin();
+			// 	size_t i = 0;
 
-		// ConstIteratorMap upper_bound( const Key& key ) const
+			// 	if (lhs._size_struct != rhs._size_struct)
+			// 		return (false);
+			// 	while (i < lhs._size_struct)
+			// 	{
+			// 		if ((lhsiter.get_node())->value.first != (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second != (rhsiter.get_node())->value.second)
+			// 			return (false);
+			// 		lhsiter++;
+			// 		rhsiter++;
+			// 	}
+			// 	return (true);
+			// 	// Node_or_leaf_map* lastElemlhs = NULL;
+			// 	// Node_or_leaf_map* lastElemrhs = NULL;
+				
+			// 	// if (lhs->_size_struct != rhs->_size_struct)
+			// 	// 	return (false);
+			// 	// while(lhs->Node != NULL || rhs->Node != NULL)
+			// 	// {
+			// 	// 	if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
+			// 	// 	{
+			// 	// 		if (lhs->Node->left != NULL && rhs->Node->left != NULL)
+			// 	// 		{
+			// 	// 			lastElemlhs = lhs->Node;
+			// 	// 			lhs->Node = lhs->Node->Left;
+			// 	// 			lastElemrhs = rhs->Node;
+			// 	// 			rhs->Node = rhs->Node->left;
+			// 	// 			continue;
+			// 	// 		}
+			// 	// 		else
+			// 	// 		{
+			// 	// 			lastElemlhs = NULL;
+			// 	// 			lastElemrhs = NULL;
+			// 	// 		}
+			// 	// 	}
+			// 	// 	if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
+			// 	// 	{
+			// 	// 		if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
+			// 	// 			return (false);
+			// 	// 		if (lhs->Node->right != NULL && rhs->Node->right != NULL)
+			// 	// 		{
+			// 	// 			lastElemlhs = lhs->Node;
+			// 	// 			lhs->Node = lhs->Node->right;
+			// 	// 			lastElemrhs = rhs->Node;
+			// 	// 			rhs->Node = rhs->Node->right;
+			// 	// 			continue;
+			// 	// 		}
+			// 	// 		else
+			// 	// 		{
+			// 	// 			lastElemlhs = NULL;
+			// 	// 			lastElemrhs = NULL;
+			// 	// 		}
+			// 	// 	}
+			// 	// 	if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
+			// 	// 	{
+			// 	// 		lastElemlhs = lhs->Node;
+			// 	// 		lhs->Node = lhs->Node.root;
+			// 	// 		lastElemrhs = rhs->Node;
+			// 	// 		rhs->Node = rhs->Node->right;
+			// 	// 	}
+			// 	// }
+			// 	// if (lhs->Node != NULL || rhs->Node != NULL)
+			// 	// {
+			// 	// 	return (false);
+			// 	// }
+			// 	// return (true);
+			// }
+			
+			// friend bool operator!=(const map& lhs, const map& rhs)  //работает
+			// {
+			// 	// (void)lhs;
+			// 	// (void)rhs;
+			// 	const_iterator lhsiter = lhs.begin();
+			// 	const_iterator rhsiter = rhs.begin();
+			// 	size_t i = 0;
 
-		Compare key_comp() const //работает
-		{
-			return (_comp);
-		}
-		
-		Compare value_comp() const //работает
-		{
-			return (_comp);
-		}
+			// 	if (lhs._size_struct != rhs._size_struct)
+			// 		return (true);
+			// 	while (i < lhs._size_struct)
+			// 	{
+			// 		if ((lhsiter.get_node())->value.first != (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second != (rhsiter.get_node())->value.second)
+			// 			return (true);
+			// 		lhsiter++;
+			// 		rhsiter++;
+			// 	}
+			// 	return (false);
+			// 	// Node_or_leaf_map* lastElemlhs = NULL;
+			// 	// Node_or_leaf_map* lastElemrhs = NULL;
+				
+			// 	// if (lhs->_size_struct != rhs->_size_struct)
+			// 	// 	return (true);
+			// 	// while(lhs->Node != NULL || rhs->Node != NULL)
+			// 	// {
+			// 	// 	if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
+			// 	// 	{
+			// 	// 		if (lhs->Node->left != NULL && rhs->Node->left != NULL)
+			// 	// 		{
+			// 	// 			lastElemlhs = lhs->Node;
+			// 	// 			lhs->Node = lhs->Node->Left;
+			// 	// 			lastElemrhs = rhs->Node;
+			// 	// 			rhs->Node = rhs->Node->left;
+			// 	// 			continue;
+			// 	// 		}
+			// 	// 		else
+			// 	// 		{
+			// 	// 			lastElemlhs = NULL;
+			// 	// 			lastElemrhs = NULL;
+			// 	// 		}
+			// 	// 	}
+			// 	// 	if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
+			// 	// 	{
+			// 	// 		if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
+			// 	// 			return (true);
+			// 	// 		if (lhs->Node->right != NULL && rhs->Node->right != NULL)
+			// 	// 		{
+			// 	// 			lastElemlhs = lhs->Node;
+			// 	// 			lhs->Node = lhs->Node->right;
+			// 	// 			lastElemrhs = rhs->Node;
+			// 	// 			rhs->Node = rhs->Node->right;
+			// 	// 			continue;
+			// 	// 		}
+			// 	// 		else
+			// 	// 		{
+			// 	// 			lastElemlhs = NULL;
+			// 	// 			lastElemrhs = NULL;
+			// 	// 		}
+			// 	// 	}
+			// 	// 	if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
+			// 	// 	{
+			// 	// 		lastElemlhs = lhs->Node;
+			// 	// 		lhs->Node = lhs->Node.root;
+			// 	// 		lastElemrhs = rhs->Node;
+			// 	// 		rhs->Node = rhs->Node->right;
+			// 	// 	}
+			// 	// }
+			// 	// if (lhs->Node != NULL || rhs->Node != NULL)
+			// 	// {
+			// 	// 	return (true);
+			// 	// }
+			// 	// return (false);
+			// }
 
-		// friend bool operator==(const Map& lhs, const Map& rhs) //segmentation fault // работает 
+			// friend bool operator<(const map& lhs, const map& rhs)  //работает
+			// {
+			// 	// (void)lhs;
+			// 	// (void)rhs;
+			// 	const_iterator lhsiter = lhs.begin();
+			// 	const_iterator rhsiter = rhs.begin();
+			// 	size_t i = 0;
 
-		// friend bool operator!=(const Map& lhs, const Map& rhs)  //работает
+			// 	if (lhs._size_struct > rhs._size_struct)
+			// 		return (false);
+			// 	while (i < lhs._size_struct)
+			// 	{
+			// 		if ((lhsiter.get_node())->value.first >= (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second >= (rhsiter.get_node())->value.second)
+			// 			return (false);
+			// 		lhsiter++;
+			// 		rhsiter++;
+			// 		i++;
+			// 	}
+			// 	return (true);
+			// }
 
-		// friend bool operator<(const Map& lhs, const Map& rhs)  //работает
+			
+			// friend bool operator<=(const map& lhs, const map& rhs) //работает
+			// {
+			// 	(void)lhs;
+			// 	(void)rhs;
+			// 	const_iterator lhsiter = lhs.begin();
+			// 	const_iterator rhsiter = rhs.begin();
+			// 	size_t i = 0;
 
-		// friend bool operator<=(const Map& lhs, const Map& rhs) //работает
+			// 	if (lhs._size_struct > rhs._size_struct)
+			// 		return (false);
+			// 		while (i < lhs._size_struct)
+			// 	{
+			// 		if ((lhsiter.get_node())->value.first > (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second > (rhsiter.get_node())->value.second)
+			// 			return (false);
+			// 		lhsiter++;
+			// 		rhsiter++;
+			// 		i++;
+			// 	}
+			// 	return (true);
+			// }
 
-		// friend bool operator>(const Map& lhs, const Map& rhs) //работает
+			// friend bool operator>(const map& lhs, const map& rhs) //работает
+			// {
+			// 	// (void)lhs;
+			// 	// (void)rhs;
+			// 	const_iterator lhsiter = lhs.begin();
+			// 	const_iterator rhsiter = rhs.begin();
+			// 	size_t i = 0;
 
-		// friend bool operator>=(const Map& lhs, const Map& rhs) //работает
+			// 	if (lhs._size_struct < rhs._size_struct)
+			// 		return (false);
+			// 	while(i < lhs._size_struct)
+			// 	{
+			// 		if ((lhsiter.get_node())->value.first <= (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second <= (rhsiter.get_node())->value.second)
+			// 			return (false);
+			// 		lhsiter++;
+			// 		rhsiter++;
+			// 		i++;
+			// 	}
+			// 	return (true);
+			// }
+
+			// friend bool operator>=(const map& lhs, const map& rhs) //работает
+			// {
+			// 	// (void)lhs;
+			// 	// (void)rhs;
+			// 	const_iterator lhsiter = lhs.begin();
+			// 	const_iterator rhsiter = rhs.begin();
+			// 	size_t i = 0;
+
+			// 	if (lhs._size_struct < rhs._size_struct)
+			// 		return (false);
+			// 	while(i < lhs._size_struct)
+			// 	{
+			// 		if ((lhsiter.get_node())->value.first < (rhsiter.get_node())->value.first || (lhsiter.get_node())->value.second < (rhsiter.get_node())->value.second)
+			// 			return (false);
+			// 		lhsiter++;
+			// 		rhsiter++;
+			// 		i++;
+			// 	}
+			// 	return (true);
+			// }
 
 	private:
 		template <typename U>
@@ -340,7 +929,7 @@ class RedBlackmap
 			}
 		}
 
-			// Post order
+		// Post order
 		void postOrderHelper(Node_or_leaf_map* node)
 		{
 			if (node != TNULL)
@@ -562,7 +1151,6 @@ class RedBlackmap
 			{
 				return node;
 			}
-
 			if (key < node->data)
 			{
 				return searchTreeHelper(node->left, key);

@@ -73,7 +73,6 @@ namespace ft
 
 			IteratorMap &operator--(int)
 			{
-				
 				if (_node->left != NULL)
 				{
 					_node = searchMaxNode(_node->left);
@@ -145,35 +144,60 @@ namespace ft
 				return (_node);
 			}
 
-			operator ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>()
-			{
-				return (ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>(_node, _lastElem, _comp));
-			}
-
 			bool operator!=(const IteratorMap &it)
 			{
-					if (_node != it._node)
+					if (_node->value.first != it->first && _node->value.second != it->second)
 						return(true);
 					return(false);
 			}
 
 			bool operator==(const IteratorMap &it)
 			{
+				if (_node->value.first == it->first && _node->value.second == it->second)
+					return(true);
+				return(false);
+			}
+
+			// bool operator<(const IteratorMap& it) const     { return (it.get_data() > this->obj); }
+            // bool operator>(const IteratorMap& it) const     { return (it.get_data() < this->obj); }
+            // bool operator<=(const IteratorMap& it) const    { return (it.get_data() >= this->obj); }
+            // bool operator>=(const IteratorMap& it) const    { return (it.get_data() <= this->obj); }
+
+			operator ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>()
+			{
+				return (ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>(_node, _lastElem, _comp));
+			}
+
+			bool operator!=(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const
+			{
+				if (_node != it._node)
+					return(true);
+				return(false);
+			}
+
+			bool operator==(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const
+			{
 				if (_node == it._node)
 					return(true);
 				return(false);
 			}
 
-			Pair</*const*/ Key, T> operator*()
+			// bool operator<(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const     { return (it.get_data() > this->obj); }
+            // bool operator>(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const     { return (it.get_data() < this->obj); }
+            // bool operator<=(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const    { return (it.get_data() >= this->obj); }
+            // bool operator>=(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const    { return (it.get_data() <= this->obj); }
+
+
+			Pair<Key, T>& operator*() const
 			{
 				return(_node->value);
 			}
 
-			Pair<Key, T> operator->()
+			Pair<Key, T>* operator->() const
 			{
-				return(_node->value);
+				return(&(_node->value));
 			}
-
+			
 			private:
 				Node_or_leaf_map* searchMinNode(Node_or_leaf_map* node)
 				{
@@ -317,8 +341,6 @@ namespace ft
 				return (*this);
 			}
 
-		
-
 			Node_or_leaf_map* get_node()
 			{
 				return (_node);
@@ -337,6 +359,31 @@ namespace ft
 					return(true);
 				return(false);
 			}
+			
+
+			operator IteratorMap<Key, T, Compare, Node_or_leaf_map>()
+			{
+				return (IteratorMap<Key, T, Compare, Node_or_leaf_map>(_node, _lastElem, _comp));
+			}
+
+			bool operator!=(const IteratorMap<Key, T, Compare, Node_or_leaf_map> &it)
+			{
+					if (_node->value.first != it->first && _node->value.second != it->second)
+						return(true);
+					return(false);
+			}
+
+			bool operator==(const IteratorMap<Key, T, Compare, Node_or_leaf_map> &it)
+			{
+				if (_node->value.first == it->first && _node->value.second == it->second)
+					return(true);
+				return(false);
+			}
+
+			// bool operator<(const IteratorMap& it) const     { return (it.get_data() > this->obj); }
+            // bool operator>(const IteratorMap& it) const     { return (it.get_data() < this->obj); }
+            // bool operator<=(const IteratorMap& it) const    { return (it.get_data() >= this->obj); }
+            // bool operator>=(const IteratorMap& it
 
 			Pair<Key, T>& operator*() const
 			{

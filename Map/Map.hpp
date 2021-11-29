@@ -50,7 +50,43 @@ namespace ft
 				{
 					
 				}
-			};		
+				
+			 	// bool operator==(const Node_or_leaf_map& obj)
+				// {
+				// 	return (true);
+				// }
+
+				// bool operator!=(const Node_or_leaf_map& obj)
+				// {
+				// 	return (true);
+				// }
+
+				// bool operator>(const Node_or_leaf_map& obj)
+				// {
+				// 	return (true);
+				// }
+
+				// bool operator<(const Node_or_leaf_map& obj)
+				// {
+				// 	return (true);
+				// }  
+			};
+			class value_compare
+			{
+				friend class map;
+
+				protected:
+					Compare _comp;
+					value_compare(Compare comp)
+					{
+						_comp = comp;
+					}
+				public:
+					bool operator()(const Pair</*const*/ Key, T>& x, const Pair</*const*/ Key, T>& y) const
+                    {
+                        return _comp(x.first, y.first);
+                    }
+			};	
 		public:
 			typedef Key																key_type;
 			typedef T																mapped_type;
@@ -288,7 +324,7 @@ namespace ft
 				Node_or_leaf_map* tmp1;
 				Node_or_leaf_map* tmp2;
 				Node_allocator a;
-				Pair<Key, T> value(key, 0);
+				Pair<Key, T> value(key, static_cast<T>(0));
 				
 				tmp1 = Node;
 				if (Node == NULL)
@@ -618,27 +654,27 @@ namespace ft
 
 			iterator insert(iterator hint, const Pair</*const*/ Key, T>& value) //работает
 			{
-				if (hint->node->value->first > value->first)
+				if (hint.get_node()->value.first > value.first)
 				{
 					iterator prev(hint);
 					--prev;
-					while (prev != end() && prev->node->value->first >= value->first)
+					while (prev != end() && prev.get_node()->value.first >= value.first)
 					{
 						hint--;
 						prev--;
 					}
 				}
-				if (hint->node->value->first < value->first)
+				if (hint.get_node()->value.first < value.first)
 				{
 					iterator next(hint);
 					++next;
-					while (next != begin() && next->node->first <= value->first)
+					while (next != begin() && next.get_node()->value.first <= value.first)
 					{
 						++hint;
 						++next;
 					}
 				}
-				if (hint != end() && value->first == hint->_node->value->first)
+				if (hint != end() && value.first == hint.get_node()->value.first)
 					return (hint);
 				_size_struct = _size_struct + 1;
 				//создание нода 
@@ -647,7 +683,7 @@ namespace ft
 
 				newNode = a.allocate(1);
 				a.construct(newNode, value);
-				newNode->root = hint->_node;
+				newNode->root = hint.get_node();
 				newNode->left = NULL;
 				newNode->right = NULL;
 				newNode->collor = 0;
@@ -772,6 +808,8 @@ namespace ft
 				}
 				return (0);
 			}
+
+			// size_type erase(const Key& key)
 			
 			iterator find(const Key& key ) //работает
 			{
@@ -1046,9 +1084,9 @@ namespace ft
 				return (_comp);
 			}
 			
-			Compare value_comp() const //работает
+			value_compare value_comp() const //работает
 			{
-				return (_comp);
+				return (value_compare(_comp));
 			}
 
 			
