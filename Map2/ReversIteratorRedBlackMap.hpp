@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 
-template<class Key, class T, class Compare, typename Node_or_leaf_map>
+template<class Key, class T, class Compare, typename Node>
 class ReversIteratorRedBlackMap
 {
 	private:
@@ -93,7 +93,7 @@ class ReversIteratorRedBlackMap
 		// }
 };
 
-template<class Key, class T, class Compare, typename Node_or_leaf_map>
+template<class Key, class T, class Compare, typename Node>
 class ConstReversIteratorRedBlackMap
 {
 	private:
