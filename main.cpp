@@ -10,12 +10,12 @@
 
 // int main()
 // {
-	// try
-	// {
-		// size_t i = 0;
-		// ft::vector<int> a(0);
-		// ft::vector<int> a2(15, 5);
-		// ft::vector<int> a3();
+// 	try
+// 	{
+// 		size_t i = 0;
+// 		ft::vector<int> a(0);
+// 		ft::vector<int> a2(15, 5);
+// 		ft::vector<int> a3(0);
 // 		std::cout << "Vector empty " << a.empty() << std::endl;
 // 		std::cout << "Vector max_size " << a.max_size() << std::endl;
 // 		a.push_back(15);
@@ -31,8 +31,8 @@
 // 		}
 // 		std::cout << std::endl;
 // 		std::cout << "Vector data through iterator ";
-// 		IteratorVector<int> c;
-// 		IteratorVector<int> b;
+// 		ft::IteratorVector<int> c;
+// 		ft::IteratorVector<int> b;
 // 		c = a.begin();
 // 		b = a.end();
 // 		while(c != b)
@@ -50,7 +50,7 @@
 // 		a.insert(c, 26);
 // 		c = a2.begin();
 // 		b = a2.end();
-// 		IteratorVector<int> c2;
+// 		ft::IteratorVector<int> c2;
 // 		c2 = a.begin();
 // 		a.insert(c2, c, b);
 // 		std::cout << "Avter insert ";
@@ -254,28 +254,31 @@
 // 	}
 // 	return (0);
 // }
-int main() 
-{
-	ft::RedBlackmap<int, int> bst;
-	ft::Pair<int, int> c1;
-	// bst.insert(55);
-	// bst.insert(40);
-	// bst.insert(65);
-	// bst.insert(60);
-	// bst.insert(75);
-	// bst.insert(57);
-	// bst.insert(56);
-	// bst.insert(58);
-	for (int i = 0; i < 50; i++)
-	{
-		c1.first = rand();
-		c1.second = rand();
-		bst.insert(c1);
-	}
+// int main() 
+// {
+// 	ft::RedBlackmap<int, int> bst;
+// 	ft::Pair<int, int> c1;
+// 	ft::IteratorRedBlackMap<int, int, ft::less<int>, ft::RedBlackmap<int, int, ft::less<int>, std::__1::allocator<std::__1::pair<int, int> > >::Node> it;
+	
+// 	// bst.insert(55);
+// 	// bst.insert(40);
+// 	// bst.insert(65);
+// 	// bst.insert(60);
+// 	// bst.insert(75);
+// 	// bst.insert(57);
+// 	// bst.insert(56);
+// 	// bst.insert(58);
+// 	for (int i = 0; i < 50; i++)
+// 	{
+// 		c1.first = rand();
+// 		c1.second = rand();
+// 		bst.insert(c1);
+// 	}
 
-	bst.printTree();
-	// std::cout << std::endl
-	// 	<< "After deleting" << std::endl;
-	// bst.deleteNode(ft::Pair<int, int>(40,0));
- 	// bst.printTree();
-}
+// 	it = bst.begin();
+// 	bst.printTree();
+// 	std::cout << std::endl
+// 		<< "After deleting" << std::endl;
+// 	bst.erase(it);
+//  	bst.printTree();
+// }

@@ -123,7 +123,7 @@ namespace ft
 				public:
 					virtual const char* what() const throw()
 					{
-						return ("2");
+						return ("Element not found");
 					}
 			};
 			class ExceptionPushBack :public std::exception
@@ -181,35 +181,7 @@ namespace ft
 			~map()
 			{
 				clear();
-				// Node_or_leaf_map* tmp1;
-				// Node_or_leaf_map* tmp2;
-
-				// tmp1 = Node;
-				// if (tmp1 != NULL)
-				// {
-					// while (tmp1)
-					// {
-					// 	while (tmp1) 
-					// 	{
-					// 		tmp2 = tmp1->left;
-					// 		if (tmp2 == NULL)
-					// 			tmp2 = tmp1->right;
-					// 		if (tmp2 == NULL)
-					// 		{
-					// 			_alloc.destroy(&tmp2->value);
-					// 			tmp1 = NULL;
-					// 		}					
-					// 		else
-					// 		{
-					// 			_alloc.destroy(&tmp2->value);
-					// 			tmp2 = NULL;
-					// 		}
-					// 		tmp1 = tmp2;
-					// 	}
-					// 	tmp1 = Node;
-					// } вечный цикл
-				// }	
-				// _alloc.deallocate((Node_or_leaf_map*)Node, _size_struct); 
+				_alloc_node.deallocate(Node, 1);		
 			}
 			
 			map& operator=(map& other) //работает
@@ -228,54 +200,6 @@ namespace ft
 					begin++;
 				}
 				insert(*begin);
-				// Node_allocator alloc_node;
-				// Node_or_leaf_map* Copy_Node; 
-				// _alloc = other._alloc;
-				// _comp = other._comp;
-				// _size_struct = other._size_struct;
-				// _size_alloc = other._size_alloc;
-
-				// Node_or_leaf_map* lastNode = NULL;
-				// Node_or_leaf_map* Node = other.Node;
-				// while (Node != NULL)
-				// {
-				// 	if (lastNode == Node->root)
-				// 	{
-				// 		if (Node->left != NULL)
-				// 		{
-				// 			lastNode = Node;
-				// 			Node = Node->left;
-				// 			continue;
-				// 		}
-				// 		else
-				// 			lastNode = NULL;
-				// 	}
-				// 	if (lastNode == Node->left)
-				// 	{
-				// 		// Node_or_leaf_map* root = Node;
-				// 		// std::cout << Node->value.first << " " << Node->value.second << std::endl;
-				// 		Copy_Node = alloc_node.allocate(1);
-				// 		alloc_node.construct(Copy_Node, Node->value);
-				// 		Copy_Node->right = NULL;
-				// 		Copy_Node->left = NULL;
-				// 		Copy_Node->root = NULL;
-				// 		 //изменить на предыдущий добавляемый элемент
-				// 		Copy_Node->collor = other.Node->collor;
-				// 		if (Node->right != NULL)
-				// 		{
-				// 			lastNode = Node;
-				// 			Node = Node->right;
-				// 			continue;
-				// 		}
-				// 		else
-				// 			lastNode = NULL;
-				// 	}
-				// 	if (lastNode == Node->right)
-				// 	{
-				// 		lastNode = Node;
-				// 		Node = Node->root;
-				// 	}
-				// }
 				return (*this);
 			}
 			
@@ -323,14 +247,13 @@ namespace ft
 			{
 				Node_or_leaf_map* tmp1;
 				Node_or_leaf_map* tmp2;
-				Node_allocator a;
 				Pair<Key, T> value(key, static_cast<T>(0));
 				
 				tmp1 = Node;
 				if (Node == NULL)
 				{
-					Node = (Node_or_leaf_map*)a.allocate(1);
-					a.construct(Node, value);
+					Node = (Node_or_leaf_map*)_alloc_node.allocate(1);
+					_alloc_node.construct(Node, value);
 					Node->left = 0;
 					Node->right = 0;
 					Node->root = 0;
@@ -353,8 +276,8 @@ namespace ft
 						}
 					}
 					Node_or_leaf_map* tmp3;
-					tmp3 = (Node_or_leaf_map*)a.allocate(1);
-					a.construct(tmp3, value);
+					tmp3 = (Node_or_leaf_map*)_alloc_node.allocate(1);
+					_alloc_node.construct(tmp3, value);
 					tmp3->root = tmp2;
 					tmp3->left = NULL;
 					tmp3->right = NULL;
@@ -586,13 +509,12 @@ namespace ft
 				Node_or_leaf_map* tmp1;
 				Node_or_leaf_map* tmp2;
 				Pair<iterator, bool> ret;
-				Node_allocator a;
 				
 				tmp1 = Node;
 				if (Node == NULL)
 				{	
-					Node = (Node_or_leaf_map*)a.allocate(1);
-					a.construct(Node, value);
+					Node = (Node_or_leaf_map*)_alloc_node.allocate(1);
+					_alloc_node.construct(Node, value);
 					Node->left = 0;
 					Node->right = 0;
 					Node->root = 0;
@@ -601,6 +523,7 @@ namespace ft
 					ret.first = iteratorNode;
 					ret.second = true;
 					_size_struct++;
+					_size_alloc++;
 					return (ret);
 				}
 				else
@@ -616,15 +539,15 @@ namespace ft
 							{
 								iterator iteratorNode(tmp2, tmp2, _comp);
 								ret.first = iteratorNode;
-								ret.second = true;
+								ret.second = false;
 								return (ret);
 							}
 							tmp1 = tmp2->right;
 						}
 					}
 					Node_or_leaf_map* tmp3;
-					tmp3 = (Node_or_leaf_map*)a.allocate(1);
-					a.construct(tmp3, value);
+					tmp3 = (Node_or_leaf_map*)_alloc_node.allocate(1);
+					_alloc_node.construct(tmp3, value);
 					tmp3->root = tmp2;
 					tmp3->left = NULL;
 					tmp3->right = NULL;
@@ -634,6 +557,7 @@ namespace ft
 					else
 						tmp2->right = tmp3;
 					_size_struct++;
+					_size_alloc++;
 					iterator iteratorNode(tmp3, tmp3, _comp);
 					ret.first = iteratorNode;
 					ret.second = true;
@@ -678,11 +602,10 @@ namespace ft
 					return (hint);
 				_size_struct = _size_struct + 1;
 				//создание нода 
-				Node_allocator a;
 				Node_or_leaf_map* newNode;
 
-				newNode = a.allocate(1);
-				a.construct(newNode, value);
+				newNode = _alloc_node.allocate(1);
+				_alloc_node.construct(newNode, value);
 				newNode->root = hint.get_node();
 				newNode->left = NULL;
 				newNode->right = NULL;
@@ -693,7 +616,6 @@ namespace ft
 
 			void erase(iterator pos) //работает
 			{
-				Node_allocator _alloc_node;
 				Node_or_leaf_map* tmp;
 				Node_or_leaf_map* pos2 = pos.get_node();
 				tmp = pos.get_node()->root;
@@ -703,15 +625,16 @@ namespace ft
 				{
 					if (tmp->left == pos2)
 					{
-						// _alloc.destroy(pos2);
+						_alloc_node.destroy(pos2);
 						tmp->left = NULL;
 					}
-
 					if (tmp->right == pos2)
 					{
-						// _alloc_node.destroy(pos2);
+						_alloc_node.destroy(pos2);
 						tmp->right = NULL;
 					}
+					tmp = NULL;
+					// _alloc_node.deallocate(pos2, 1);
 				}
 				else if (pos2->right == NULL || pos2->left == NULL) //есть подлистья
 				{
@@ -720,24 +643,35 @@ namespace ft
 						if (tmp->left == pos2)
 						{
 							tmp->left = pos2->right;
+							_alloc.destroy(&(pos2->value));
+							_alloc_node.destroy(pos2);
+
 						}
 						else
 						{
 							tmp->right = pos2->right;
+							_alloc.destroy(&pos2->value);
+							_alloc_node.destroy(pos2);
 						}
 						pos2->right->root = tmp;
+						// _alloc_node.deallocate(pos2, 1);
 					}
 					else
 					{
 						if (tmp->left == pos2)
 						{
 							tmp->left = pos2->left;
+							_alloc.destroy(&(pos2->value));
+							_alloc_node.destroy(pos2);
 						}
 						else
 						{
 							tmp->right = pos2->left;
+							_alloc.destroy(&(pos2->value));
+							_alloc_node.destroy(pos2);
 						}
 						pos2->left->root = tmp;
+						// _alloc_node.deallocate(pos2, 1);
 					}
 				}
 				else
@@ -752,13 +686,18 @@ namespace ft
 						tmp2->root->left = tmp2->right;
 						if (tmp2->right != NULL)
 							tmp2->right->root = tmp2->root;
+						_alloc.destroy(&(pos2->value));
+						_alloc_node.destroy(tmp2);
 					}
 					else
 					{
 						tmp2->root->right = tmp2->right;
 						if (tmp->right != NULL)
 							tmp2->right->root = tmp2->root;
+						_alloc.destroy(&(pos2->value));
+						_alloc_node.destroy(tmp2);
 					}
+					// _alloc_node.deallocate(tmp2, 1);
 				}
 				_size_struct--;
 			}
@@ -770,7 +709,9 @@ namespace ft
 					erase(first);
 					++first;
 				}
+				// iterator it(Node, Node, _comp);
 				erase(first);
+				// erase(it);
 			}
 			
 			void swap(map& other) //работает
@@ -1090,10 +1031,8 @@ namespace ft
 			}
 
 			
-			friend bool operator==(const map& lhs, const map& rhs) //segmentation fault // работает 
+			friend bool operator==(const map& lhs, const map& rhs)// работает 
 			{
-				// (void)lhs;
-				// (void)rhs;
 				const_iterator lhsiter = lhs.begin();
 				const_iterator rhsiter = rhs.begin();
 				size_t i = 0;
@@ -1108,67 +1047,11 @@ namespace ft
 					rhsiter++;
 				}
 				return (true);
-				// Node_or_leaf_map* lastElemlhs = NULL;
-				// Node_or_leaf_map* lastElemrhs = NULL;
-				
-				// if (lhs->_size_struct != rhs->_size_struct)
-				// 	return (false);
-				// while(lhs->Node != NULL || rhs->Node != NULL)
-				// {
-				// 	if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
-				// 	{
-				// 		if (lhs->Node->left != NULL && rhs->Node->left != NULL)
-				// 		{
-				// 			lastElemlhs = lhs->Node;
-				// 			lhs->Node = lhs->Node->Left;
-				// 			lastElemrhs = rhs->Node;
-				// 			rhs->Node = rhs->Node->left;
-				// 			continue;
-				// 		}
-				// 		else
-				// 		{
-				// 			lastElemlhs = NULL;
-				// 			lastElemrhs = NULL;
-				// 		}
-				// 	}
-				// 	if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
-				// 	{
-				// 		if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
-				// 			return (false);
-				// 		if (lhs->Node->right != NULL && rhs->Node->right != NULL)
-				// 		{
-				// 			lastElemlhs = lhs->Node;
-				// 			lhs->Node = lhs->Node->right;
-				// 			lastElemrhs = rhs->Node;
-				// 			rhs->Node = rhs->Node->right;
-				// 			continue;
-				// 		}
-				// 		else
-				// 		{
-				// 			lastElemlhs = NULL;
-				// 			lastElemrhs = NULL;
-				// 		}
-				// 	}
-				// 	if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
-				// 	{
-				// 		lastElemlhs = lhs->Node;
-				// 		lhs->Node = lhs->Node.root;
-				// 		lastElemrhs = rhs->Node;
-				// 		rhs->Node = rhs->Node->right;
-				// 	}
-				// }
-				// if (lhs->Node != NULL || rhs->Node != NULL)
-				// {
-				// 	return (false);
-				// }
-				// return (true);
 			}
 
 			
 			friend bool operator!=(const map& lhs, const map& rhs)  //работает
 			{
-				// (void)lhs;
-				// (void)rhs;
 				const_iterator lhsiter = lhs.begin();
 				const_iterator rhsiter = rhs.begin();
 				size_t i = 0;
@@ -1183,66 +1066,10 @@ namespace ft
 					rhsiter++;
 				}
 				return (false);
-				// Node_or_leaf_map* lastElemlhs = NULL;
-				// Node_or_leaf_map* lastElemrhs = NULL;
-				
-				// if (lhs->_size_struct != rhs->_size_struct)
-				// 	return (true);
-				// while(lhs->Node != NULL || rhs->Node != NULL)
-				// {
-				// 	if (lastElemlhs == lhs->Node->root && lastElemrhs == rhs->Node->root)
-				// 	{
-				// 		if (lhs->Node->left != NULL && rhs->Node->left != NULL)
-				// 		{
-				// 			lastElemlhs = lhs->Node;
-				// 			lhs->Node = lhs->Node->Left;
-				// 			lastElemrhs = rhs->Node;
-				// 			rhs->Node = rhs->Node->left;
-				// 			continue;
-				// 		}
-				// 		else
-				// 		{
-				// 			lastElemlhs = NULL;
-				// 			lastElemrhs = NULL;
-				// 		}
-				// 	}
-				// 	if (lastElemlhs == lhs->Node->left && lastElemrhs == rhs->Node->left)
-				// 	{
-				// 		if (lhs->Node->value->first != rhs->Node->value->first || lhs->Node->value->second != rhs->Node->value->second)
-				// 			return (true);
-				// 		if (lhs->Node->right != NULL && rhs->Node->right != NULL)
-				// 		{
-				// 			lastElemlhs = lhs->Node;
-				// 			lhs->Node = lhs->Node->right;
-				// 			lastElemrhs = rhs->Node;
-				// 			rhs->Node = rhs->Node->right;
-				// 			continue;
-				// 		}
-				// 		else
-				// 		{
-				// 			lastElemlhs = NULL;
-				// 			lastElemrhs = NULL;
-				// 		}
-				// 	}
-				// 	if (lastElemlhs == lhs->Node->Right && lastElemrhs == rhs->Node->Right)
-				// 	{
-				// 		lastElemlhs = lhs->Node;
-				// 		lhs->Node = lhs->Node.root;
-				// 		lastElemrhs = rhs->Node;
-				// 		rhs->Node = rhs->Node->right;
-				// 	}
-				// }
-				// if (lhs->Node != NULL || rhs->Node != NULL)
-				// {
-				// 	return (true);
-				// }
-				// return (false);
 			}
 
 			friend bool operator<(const map& lhs, const map& rhs)  //работает
 			{
-				// (void)lhs;
-				// (void)rhs;
 				const_iterator lhsiter = lhs.begin();
 				const_iterator rhsiter = rhs.begin();
 				size_t i = 0;
@@ -1263,8 +1090,6 @@ namespace ft
 			
 			friend bool operator<=(const map& lhs, const map& rhs) //работает
 			{
-				(void)lhs;
-				(void)rhs;
 				const_iterator lhsiter = lhs.begin();
 				const_iterator rhsiter = rhs.begin();
 				size_t i = 0;
@@ -1284,8 +1109,6 @@ namespace ft
 
 			friend bool operator>(const map& lhs, const map& rhs) //работает
 			{
-				// (void)lhs;
-				// (void)rhs;
 				const_iterator lhsiter = lhs.begin();
 				const_iterator rhsiter = rhs.begin();
 				size_t i = 0;
@@ -1305,8 +1128,6 @@ namespace ft
 
 			friend bool operator>=(const map& lhs, const map& rhs) //работает
 			{
-				// (void)lhs;
-				// (void)rhs;
 				const_iterator lhsiter = lhs.begin();
 				const_iterator rhsiter = rhs.begin();
 				size_t i = 0;
@@ -1346,43 +1167,6 @@ namespace ft
 						searchMinNode(node->left);
 					return (node);
 				}
-				
-				// void Walk(Node_or_leaf_map node)
-				// {
-				// 	Node_or_leaf_map lastNode = NULL;
-				// 	while (node != NULL)
-				// 	{
-				// 		if (lastNode == node.root)
-				// 		{
-				// 			if (node.left != NULL)
-				// 			{
-				// 				lastNode = node;
-				// 				node = node.left;
-				// 				continue;
-				// 			}
-				// 			else
-				// 				lastNode = NULL;
-				// 		}
-				// 		if (lastNode == node.left)
-				// 		{
-				// 			Output(node);
-
-				// 			if (node.right != NULL)
-				// 			{
-				// 				lastNode = node;
-				// 				node = node.right;
-				// 				continue;
-				// 			}
-				// 			else
-				// 				lastNode = NULL;
-				// 		}
-				// 		if (lastNode == node.right)
-				// 		{
-				// 			lastNode = node;
-				// 			node = node.root;
-				// 		}
-				// 	}
-				// }
 				template<class InputIt1, class InputIt2>
 				bool lexicographical_compare (InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
 				{
@@ -1393,7 +1177,6 @@ namespace ft
 					}
 					return (first1 == last1) && (first2 != last2);	
 				}
-			// protected:
 	};
 }
 #endif

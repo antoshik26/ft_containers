@@ -121,7 +121,7 @@ namespace ft
 			{
 				for (size_t i = 0; i < _size_alloc; i++)
 					_alloc.destroy(&array[i]);
-				// _alloc.deallocate(array, _size_alloc); 
+				_alloc.deallocate(array, _size_alloc); 
 			}
 
 			vector &operator=(const vector obj)
