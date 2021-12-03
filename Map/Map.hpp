@@ -17,28 +17,22 @@ namespace ft
 		class Key,
 		class T,
 		class Compare = less<Key>, 
-		class Allocator = std::allocator<Pair</*const*/ Key, T> >
+		class Allocator = std::allocator<Pair<Key, T> >
 	>
 	class map
 	{
 		public:
 			struct Node_or_leaf_map
 			{
-				Pair</*const*/ Key, T> value;
+				Pair<Key, T> value;
 				Node_or_leaf_map *right;
 				Node_or_leaf_map *left;
 				Node_or_leaf_map *root;
 				int collor;
 				
-				Node_or_leaf_map(const Pair</*const*/ Key, T>& value/*, Node_or_leaf_map* right, Node_or_leaf_map* left, Node_or_leaf_map* root, int collor*/)
+				Node_or_leaf_map(const Pair<Key, T>& value)
 				{
-					// std::cout << "1" << std::endl;
 					this->value = value;
-					// this->right = right;
-					// this->left = left;
-					// this->root = root;
-					// this->collor = collor;
-					// std::cout << "2" << std::endl;
 				}
 				Node_or_leaf_map& operator=(const Node_or_leaf_map& other)
 				{
@@ -50,26 +44,6 @@ namespace ft
 				{
 					
 				}
-				
-			 	// bool operator==(const Node_or_leaf_map& obj)
-				// {
-				// 	return (true);
-				// }
-
-				// bool operator!=(const Node_or_leaf_map& obj)
-				// {
-				// 	return (true);
-				// }
-
-				// bool operator>(const Node_or_leaf_map& obj)
-				// {
-				// 	return (true);
-				// }
-
-				// bool operator<(const Node_or_leaf_map& obj)
-				// {
-				// 	return (true);
-				// }  
 			};
 			class value_compare
 			{
@@ -82,7 +56,7 @@ namespace ft
 						_comp = comp;
 					}
 				public:
-					bool operator()(const Pair</*const*/ Key, T>& x, const Pair</*const*/ Key, T>& y) const
+					bool operator()(const Pair<Key, T>& x, const Pair<Key, T>& y) const
                     {
                         return _comp(x.first, y.first);
                     }
@@ -90,7 +64,7 @@ namespace ft
 		public:
 			typedef Key																key_type;
 			typedef T																mapped_type;
-			typedef Pair</*const*/ Key, T>											value_type;
+			typedef Pair< Key, T>											value_type;
 			typedef size_t															size_type;
 			typedef Compare															key_compare;
 			typedef Allocator														allocator_type;
@@ -148,8 +122,6 @@ namespace ft
 			{
 				_alloc = other._alloc;
 				_comp = other._comp;
-				// _size_struct = other._size_struct;
-				// _size_alloc = other._size_alloc;
 				_alloc_node = other._alloc_node;
 
 				iterator begin = other.begin();
@@ -188,8 +160,6 @@ namespace ft
 			{
 				_alloc = other._alloc;
 				_comp = other._comp;
-				// _size_struct = other._size_struct;
-				// _size_alloc = other._size_alloc;
 				_alloc_node = other._alloc_node;
 
 				iterator begin = other.begin();
@@ -709,9 +679,7 @@ namespace ft
 					erase(first);
 					++first;
 				}
-				// iterator it(Node, Node, _comp);
 				erase(first);
-				// erase(it);
 			}
 			
 			void swap(map& other) //работает

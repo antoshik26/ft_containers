@@ -106,20 +106,20 @@
 
 // 		// Pair</*const*/ int, int> c1;
 // 		// Pair</*const*/ int, int> c2(50000000, 1);
-// 		const ft::Pair</*const*/ int, int> c1(4, 1);
-// 		const ft::Pair</*const*/ int, int> c2(3, 2);
-// 		const ft::Pair</*const*/ int, int> c3(5, 3);
-// 		const ft::Pair</*const*/ int, int> c4(2, 4);
-// 		const ft::Pair</*const*/ int, int> c5(1, 5);
-// 		const ft::Pair</*const*/ int, int> c6(6, 6);
-// 		const ft::Pair</*const*/ int, int> c7(7, 7);
-// 		const ft::Pair</*const*/ int, int> c8(8, 7);
-// 		const ft::Pair</*const*/ int, int> c9(9, 7);
-// 		const ft::Pair</*const*/ int, int> c10(10, 7);
-// 		const ft::Pair</*const*/ int, int> c11(11, 7);
-// 		const ft::Pair</*const*/ int, int> c12(12, 7);
-// 		const ft::Pair</*const*/ int, int> c13(13, 7);
-// 		const ft::Pair</*const*/ int, int> c14(14, 7);
+// 		const ft::Pair< int, int> c1(4, 1);
+// 		const ft::Pair<int, int> c2(3, 2);
+// 		const ft::Pair<int, int> c3(5, 3);
+// 		const ft::Pair<int, int> c4(2, 4);
+// 		const ft::Pair<int, int> c5(1, 5);
+// 		const ft::Pair< int, int> c6(6, 6);
+// 		const ft::Pair< int, int> c7(7, 7);
+// 		const ft::Pair< int, int> c8(8, 7);
+// 		const ft::Pair< int, int> c9(9, 7);
+// 		const ft::Pair< int, int> c10(10, 7);
+// 		const ft::Pair< int, int> c11(11, 7);
+// 		const ft::Pair< int, int> c12(12, 7);
+// 		const ft::Pair<int, int> c13(13, 7);
+// 		const ft::Pair<int, int> c14(14, 7);
 // 		// a.insert(c2);
 // 		// for (int i = 0; i < 50; i++)
 // 		// {
@@ -133,7 +133,6 @@
 // 		ft::IteratorMap<int, int, ft::less<int>, ft::map<int, int, ft::less<int>, std::allocator<ft::Pair<int, int> > >::Node_or_leaf_map> d2;
 // 		ft::IteratorMap<int, int, ft::less<int>, ft::map<int, int, ft::less<int>, std::allocator<ft::Pair<int, int> > >::Node_or_leaf_map> d3;
 // 		ft::Pair<ft::IteratorMap<int, int, ft::less<int>, ft::map<int, int, ft::less<int>, std::allocator<ft::Pair<int, int> > >::Node_or_leaf_map>, ft::IteratorMap<int, int, ft::less<int>, ft::map<int, int, ft::less<int>, std::allocator<ft::Pair<int, int> > >::Node_or_leaf_map> > combo;
-// 		// ft::Pair< , >
 // 		std::cout << a.max_size() << std::endl;
 // 		std::cout << b.max_size() << std::endl;
 // 		a.insert(c1);
@@ -228,46 +227,36 @@
 // 	return (0);
 // }
 
-// int main()
-// {
-// 	try
-// 	{
-// 		ft::RedBlackmap<int, int> a;
-// 		// ft::RedBlackmap<int, int> a2;
-// 		ft::Pair</*const*/ int, int> c1(4, 1);
-
-
-// 		for (int i = 0; i < 50; i++)
-// 		{
-// 			c1.first = rand();
-// 			c1.second = rand();
-		
-// 			a.insert(c1);
-// 			// std::cout << "a" << std::endl;
-// 		}
-
-// 		a.printTree();
-// 	}
-// 	catch(std::exception& e)
-// 	{
-// 		std::cout << e.what() << std::endl;
-// 	}
-// 	return (0);
-// }
 // int main() 
 // {
 // 	ft::RedBlackmap<int, int> bst;
 // 	ft::Pair<int, int> c1;
 // 	ft::IteratorRedBlackMap<int, int, ft::less<int>, ft::RedBlackmap<int, int, ft::less<int>, std::__1::allocator<std::__1::pair<int, int> > >::Node> it;
 	
-// 	// bst.insert(55);
-// 	// bst.insert(40);
-// 	// bst.insert(65);
-// 	// bst.insert(60);
-// 	// bst.insert(75);
-// 	// bst.insert(57);
-// 	// bst.insert(56);
-// 	// bst.insert(58);
+	// c1.first = 55;
+	// c1.second = 1234;
+	// bst.insert(c1);
+	// c1.first = 40;
+	// c1.second = 1234;
+	// bst.insert(c1);
+	// c1.first = 65;
+	// c1.second = 1234;
+	// bst.insert(c1);
+	// c1.first = 60;
+	// c1.second = 1234;
+	// bst.insert(c1);
+	// c1.first = 75;
+	// c1.second = 1234;
+	// bst.insert(c1);
+	// c1.first = 57;
+	// c1.second = 1234;
+	// bst.insert(c1);
+	// c1.first = 56;
+	// c1.second = 1234;
+	// bst.insert(c1);
+	// c1.first = 58;
+	// c1.second = 1234;
+// 	// bst.insert(c1);
 // 	for (int i = 0; i < 50; i++)
 // 	{
 // 		c1.first = rand();

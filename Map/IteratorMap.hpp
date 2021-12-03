@@ -158,10 +158,10 @@ namespace ft
 				return(false);
 			}
 
-			// bool operator<(const IteratorMap& it) const     { return (it.get_data() > this->obj); }
-            // bool operator>(const IteratorMap& it) const     { return (it.get_data() < this->obj); }
-            // bool operator<=(const IteratorMap& it) const    { return (it.get_data() >= this->obj); }
-            // bool operator>=(const IteratorMap& it) const    { return (it.get_data() <= this->obj); }
+			bool operator<(const IteratorMap& it) const     { return (_node->value.first > it->first && _node->value.second > it->second); }
+            bool operator>(const IteratorMap& it) const     { return (_node->value.first < it->first && _node->value.second < it->second); }
+            bool operator<=(const IteratorMap& it) const    { return (_node->value.first >= it->first && _node->value.second >= it->second); }
+            bool operator>=(const IteratorMap& it) const    { return (_node->value.first <= it->first && _node->value.second <= it->second); }
 
 			operator ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>()
 			{
@@ -182,10 +182,10 @@ namespace ft
 				return(false);
 			}
 
-			// bool operator<(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const     { return (it.get_data() > this->obj); }
-            // bool operator>(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const     { return (it.get_data() < this->obj); }
-            // bool operator<=(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const    { return (it.get_data() >= this->obj); }
-            // bool operator>=(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const    { return (it.get_data() <= this->obj); }
+			bool operator<(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const		{ return (_node->value.first > it->first && _node->value.second > it->second); }
+            bool operator>(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const		{ return (_node->value.first < it->first && _node->value.second < it->second); }
+            bool operator<=(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const	{ return (_node->value.first >= it->first && _node->value.second >= it->second); }
+            bool operator>=(const ConstIteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const	{ return (_node->value.first <= it->first && _node->value.second <= it->second); }
 
 
 			Pair<Key, T>& operator*() const
@@ -380,10 +380,10 @@ namespace ft
 				return(false);
 			}
 
-			// bool operator<(const IteratorMap& it) const     { return (it.get_data() > this->obj); }
-            // bool operator>(const IteratorMap& it) const     { return (it.get_data() < this->obj); }
-            // bool operator<=(const IteratorMap& it) const    { return (it.get_data() >= this->obj); }
-            // bool operator>=(const IteratorMap& it
+			bool operator<(const IteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const     { return (_node->value.first > it->first && _node->value.second > it->second); }
+            bool operator>(const IteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const     { return (_node->value.first < it->first && _node->value.second < it->second); }
+            bool operator<=(const IteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const    { return (_node->value.first >= it->first && _node->value.second >= it->second); }
+            bool operator>=(const IteratorMap<Key, T, Compare, Node_or_leaf_map>& it) const    { return (_node->value.first <= it->first && _node->value.second <= it->second); }
 
 			Pair<Key, T>& operator*() const
 			{
